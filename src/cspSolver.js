@@ -106,7 +106,7 @@ function checkConstraint(constraint, student, row, col, seating, rows, cols) {
       }
       return true;
       
-    case CONSTRAINT_TYPES.NOT_TOGETHER:
+    case CONSTRAINT_TYPES.NOT_TOGETHER: {
       // Two students should not be adjacent
       const otherStudent = student === student1 ? student2 : student1;
       const otherPos = findStudent(otherStudent, seating);
@@ -116,8 +116,9 @@ function checkConstraint(constraint, student, row, col, seating, rows, cols) {
         return !areAdjacent(row, col, otherRow, otherCol);
       }
       return true; // Other student not assigned yet, constraint can't be violated
+    }
       
-    case CONSTRAINT_TYPES.TOGETHER:
+    case CONSTRAINT_TYPES.TOGETHER: {
       // Two students should be adjacent
       const partnerStudent = student === student1 ? student2 : student1;
       const partnerPos = findStudent(partnerStudent, seating);
@@ -128,6 +129,7 @@ function checkConstraint(constraint, student, row, col, seating, rows, cols) {
       }
       // If partner not assigned yet, we need to check if there's an adjacent empty seat
       return hasAdjacentEmptySeat(row, col, seating, rows, cols);
+    }
       
     default:
       return true;
