@@ -85,7 +85,7 @@ function App() {
     }
   }
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       addStudent()
     }
@@ -110,7 +110,7 @@ function App() {
                 type="text"
                 value={studentInput}
                 onChange={(e) => setStudentInput(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 placeholder="Enter student name"
                 className="flex-1 px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
               />
