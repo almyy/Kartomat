@@ -1,21 +1,45 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Constraint, CONSTRAINT_TYPES, PairConstraint, RowConstraint } from '../../cspSolver'
 import { useStore } from '../../store'
 
 export function ConstraintManager() {
   const constraints = useStore((state) => state.constraints)
   const students = useStore((state) => state.students)
-  const constraintType = useStore((state) => state.constraintType)
-  const student1 = useStore((state) => state.student1)
-  const student2 = useStore((state) => state.student2)
-  const rowConstraint = useStore((state) => state.rowConstraint)
   const rows = useStore((state) => state.rows)
-  const setConstraintType = useStore((state) => state.setConstraintType)
-  const setStudent1 = useStore((state) => state.setStudent1)
-  const setStudent2 = useStore((state) => state.setStudent2)
-  const setRowConstraint = useStore((state) => state.setRowConstraint)
   const addConstraint = useStore((state) => state.addConstraint)
   const removeConstraint = useStore((state) => state.removeConstraint)
+  
+  // Local state for temporary form inputs
+  const [constraintType, setConstraintType] = useState<typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES]>(CONSTRAINT_TYPES.NOT_TOGETHER)
+  const [student1, setStudent1] = useState('')
+  const [student2, setStudent2] = useState('')
+  const [rowConstraint, setRowConstraint] = useState(0)
+
+  const handleAddConstraint = () => {
+    if (constraintType === CONSTRAINT_TYPES.MUST_BE_IN_ROW) {
+      if (student1 && students.includes(student1)) {
+        const newConstraint: RowConstraint = {
+          type: constraintType,
+          student1,
+          row: parseInt(String(rowConstraint))
+        }
+        addConstraint(newConstraint)
+        setStudent1('')
+      }
+    } else {
+      if (student1 && student2 && student1 !== student2 && 
+          students.includes(student1) && students.includes(student2)) {
+        const newConstraint: PairConstraint = {
+          type: constraintType as typeof CONSTRAINT_TYPES.NOT_TOGETHER | typeof CONSTRAINT_TYPES.TOGETHER,
+          student1,
+          student2
+        }
+        addConstraint(newConstraint)
+        setStudent1('')
+        setStudent2('')
+      }
+    }
+  }
 
   const handleRowConstraintChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRowConstraint(parseInt(e.target.value) || 0)
@@ -102,7 +126,7 @@ export function ConstraintManager() {
         )}
 
         <button
-          onClick={addConstraint}
+          onClick={handleAddConstraint}
           className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors"
         >
           Add Constraint

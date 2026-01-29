@@ -1,16 +1,22 @@
-import { KeyboardEvent } from 'react'
+import { KeyboardEvent, useState } from 'react'
 import { useStore } from '../../store'
 
 export function StudentManager() {
   const students = useStore((state) => state.students)
-  const studentInput = useStore((state) => state.studentInput)
-  const setStudentInput = useStore((state) => state.setStudentInput)
   const addStudent = useStore((state) => state.addStudent)
   const removeStudent = useStore((state) => state.removeStudent)
+  
+  // Local state for temporary input
+  const [studentInput, setStudentInput] = useState('')
+
+  const handleAddStudent = () => {
+    addStudent(studentInput)
+    setStudentInput('')
+  }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      addStudent()
+      handleAddStudent()
     }
   }
 
@@ -27,7 +33,7 @@ export function StudentManager() {
           className="flex-1 px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
         />
         <button
-          onClick={addStudent}
+          onClick={handleAddStudent}
           className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors"
         >
           Add
