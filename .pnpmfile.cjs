@@ -1,17 +1,11 @@
 /**
- * pnpm hook to enforce a 1-week cooldown period for new packages
- * This helps protect against supply chain attacks by ensuring packages
- * have been available for at least 1 week before installation
+ * pnpm hook file for custom package resolution logic
+ * Currently minimal - the 1-week security cooldown is enforced
+ * via the 'before' setting in .npmrc, not in this file
  */
 
-const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
-
 function readPackage(pkg, context) {
-  // Skip checks for workspace packages
-  if (pkg.name && pkg.name.startsWith('@workspace/')) {
-    return pkg;
-  }
-
+  // Future custom logic can be added here
   return pkg;
 }
 

@@ -20,7 +20,7 @@ try {
   let npmrcContent = fs.readFileSync(NPMRC_PATH, 'utf8');
 
   // Update the before date
-  const beforeRegex = /before=[\d-:.TZ]+/;
+  const beforeRegex = /before=\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
   if (beforeRegex.test(npmrcContent)) {
     npmrcContent = npmrcContent.replace(beforeRegex, `before=${beforeDate}`);
   } else {
@@ -34,7 +34,9 @@ try {
   console.log(`✓ Updated .npmrc with before date: ${beforeDate}`);
   console.log('  Only packages published before this date will be installed.');
 } catch (error) {
-  console.error('Failed to update .npmrc:', error.message);
-  // Don't fail the install if this script fails
+  console.warn('⚠ Warning: Failed to update .npmrc before date:', error.message);
+  console.warn('  The 1-week security cooldown may not be enforced properly.');
+  console.warn('  You may want to manually update the before date in .npmrc');
+  // Don't fail the install - allow it to proceed with existing .npmrc
   process.exit(0);
 }

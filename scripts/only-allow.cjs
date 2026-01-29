@@ -39,12 +39,15 @@ if (usedPM && usedPM.name !== wantedPM) {
   const useInstead = wantedPM === 'pnpm' 
     ? 'Use "pnpm install" instead.'
     : `Use "${wantedPM} install" instead.`;
+  
+  const version = usedPM.version.length > 10 ? usedPM.version.substring(0, 10) + '...' : usedPM.version;
+  
   console.log();
   console.log(`╔═════════════════════════════════════════════════════════════╗`);
   console.log(`║                                                             ║`);
   console.log(`║   ERROR: This project requires ${wantedPM.padEnd(4)} to be used.         ║`);
   console.log(`║                                                             ║`);
-  console.log(`║   You are currently using ${usedPM.name}@${usedPM.version.padEnd(10)}                 ║`);
+  console.log(`║   You are currently using ${usedPM.name}@${version.padEnd(10)}                 ║`);
   console.log(`║                                                             ║`);
   console.log(`║   ${useInstead.padEnd(59)} ║`);
   console.log(`║                                                             ║`);
