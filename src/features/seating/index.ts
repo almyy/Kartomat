@@ -1,0 +1,1 @@
+export { SeatingDisplay } from './SeatingDisplay'
