@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import { solveSeatingCSP, CONSTRAINT_TYPES } from './cspSolver'
 
 function App() {
@@ -79,40 +78,51 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <h1>Classroom Seating Solver</h1>
-      <p className="subtitle">A Constraint Satisfaction Problem solver for optimal seating arrangements</p>
+    <div className="max-w-7xl mx-auto p-8">
+      <h1 className="text-center mb-2">Classroom Seating Solver</h1>
+      <p className="text-center text-gray-400 mb-8">A Constraint Satisfaction Problem solver for optimal seating arrangements</p>
       
-      <div className="main-container">
-        <div className="input-panel">
+      <div className="grid md:grid-cols-2 gap-8 items-start">
+        <div className="flex flex-col gap-6">
           {/* Students Section */}
-          <div className="section">
-            <h2>Students</h2>
-            <div className="input-group">
+          <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+            <h2 className="mt-0 mb-4 text-xl">Students</h2>
+            <div className="flex gap-2 mb-4">
               <input
                 type="text"
                 value={studentInput}
                 onChange={(e) => setStudentInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addStudent()}
                 placeholder="Enter student name"
+                className="flex-1 px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
               />
-              <button onClick={addStudent}>Add</button>
+              <button 
+                onClick={addStudent}
+                className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors"
+              >
+                Add
+              </button>
             </div>
-            <div className="student-list">
+            <div className="flex flex-wrap gap-2 min-h-[50px]">
               {students.map(name => (
-                <div key={name} className="student-chip">
+                <div key={name} className="flex items-center gap-2 bg-indigo-600/30 px-3 py-2 rounded-full border border-indigo-600/50">
                   {name}
-                  <button onClick={() => removeStudent(name)}>×</button>
+                  <button 
+                    onClick={() => removeStudent(name)}
+                    className="w-5 h-5 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg leading-none"
+                  >
+                    ×
+                  </button>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Classroom Size Section */}
-          <div className="section">
-            <h2>Classroom Size</h2>
-            <div className="size-inputs">
-              <label>
+          <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+            <h2 className="mt-0 mb-4 text-xl">Classroom Size</h2>
+            <div className="flex gap-4 mb-2">
+              <label className="flex flex-col gap-2 flex-1">
                 Rows:
                 <input
                   type="number"
@@ -120,9 +130,10 @@ function App() {
                   max="10"
                   value={rows}
                   onChange={(e) => setRows(parseInt(e.target.value) || 1)}
+                  className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                 />
               </label>
-              <label>
+              <label className="flex flex-col gap-2 flex-1">
                 Columns:
                 <input
                   type="number"
@@ -130,19 +141,21 @@ function App() {
                   max="10"
                   value={cols}
                   onChange={(e) => setCols(parseInt(e.target.value) || 1)}
+                  className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                 />
               </label>
             </div>
-            <p className="info">Total seats: {rows * cols}</p>
+            <p className="text-gray-400 text-sm m-0">Total seats: {rows * cols}</p>
           </div>
 
           {/* Constraints Section */}
-          <div className="section">
-            <h2>Constraints</h2>
-            <div className="constraint-inputs">
+          <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+            <h2 className="mt-0 mb-4 text-xl">Constraints</h2>
+            <div className="flex flex-col gap-2 mb-4">
               <select 
                 value={constraintType} 
                 onChange={(e) => setConstraintType(e.target.value)}
+                className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
               >
                 <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>Not Together</option>
                 <option value={CONSTRAINT_TYPES.TOGETHER}>Must Be Together</option>
@@ -154,6 +167,7 @@ function App() {
                   <select 
                     value={student1} 
                     onChange={(e) => setStudent1(e.target.value)}
+                    className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                   >
                     <option value="">Select student</option>
                     {students.map(s => (
@@ -167,6 +181,7 @@ function App() {
                     value={rowConstraint}
                     onChange={(e) => setRowConstraint(e.target.value)}
                     placeholder="Row number"
+                    className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                   />
                 </>
               ) : (
@@ -174,6 +189,7 @@ function App() {
                   <select 
                     value={student1} 
                     onChange={(e) => setStudent1(e.target.value)}
+                    className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                   >
                     <option value="">Select student 1</option>
                     {students.map(s => (
@@ -183,6 +199,7 @@ function App() {
                   <select 
                     value={student2} 
                     onChange={(e) => setStudent2(e.target.value)}
+                    className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                   >
                     <option value="">Select student 2</option>
                     {students.filter(s => s !== student1).map(s => (
@@ -192,14 +209,24 @@ function App() {
                 </>
               )}
               
-              <button onClick={addConstraint}>Add Constraint</button>
+              <button 
+                onClick={addConstraint}
+                className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors"
+              >
+                Add Constraint
+              </button>
             </div>
 
-            <div className="constraint-list">
+            <div className="flex flex-col gap-2 min-h-[50px]">
               {constraints.map((constraint, index) => (
-                <div key={index} className="constraint-item">
+                <div key={index} className="flex justify-between items-center bg-white/5 px-3 py-3 rounded border border-white/10">
                   {getConstraintDescription(constraint)}
-                  <button onClick={() => removeConstraint(index)}>×</button>
+                  <button 
+                    onClick={() => removeConstraint(index)}
+                    className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg"
+                  >
+                    ×
+                  </button>
                 </div>
               ))}
             </div>
@@ -207,28 +234,32 @@ function App() {
 
           {/* Solve Button */}
           <button 
-            className="solve-button" 
             onClick={solve}
             disabled={students.length === 0}
+            className="bg-green-500/70 hover:bg-green-500/90 text-lg px-4 py-4 font-bold rounded border border-white/20 text-white cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Solve Seating Arrangement
           </button>
         </div>
 
         {/* Results Panel */}
-        <div className="results-panel">
-          <h2>Seating Arrangement</h2>
+        <div className="bg-white/5 rounded-lg p-6 border border-white/10 min-h-[400px]">
+          <h2 className="mt-0 mb-4">Seating Arrangement</h2>
           {seatingResult && (
             <>
               {seatingResult.success ? (
-                <div className="seating-chart">
+                <div className="flex flex-col gap-2">
                   {seatingResult.seating.map((row, rowIndex) => (
-                    <div key={rowIndex} className="seating-row">
-                      <div className="row-label">Row {rowIndex}</div>
+                    <div key={rowIndex} className="flex gap-2 items-center">
+                      <div className="text-sm text-gray-400 min-w-[50px]">Row {rowIndex}</div>
                       {row.map((seat, colIndex) => (
                         <div 
                           key={colIndex} 
-                          className={`seat ${seat ? 'occupied' : 'empty'}`}
+                          className={`flex-1 min-h-[60px] flex items-center justify-center rounded text-sm font-medium border transition-all ${
+                            seat 
+                              ? 'bg-indigo-600/30 border-indigo-600/50 hover:bg-indigo-600/50 hover:scale-105' 
+                              : 'bg-white/[0.02] border-white/10 border-dashed'
+                          }`}
                         >
                           {seat || ''}
                         </div>
@@ -237,14 +268,14 @@ function App() {
                   ))}
                 </div>
               ) : (
-                <div className="error-message">
+                <div className="bg-red-500/20 border border-red-500/50 px-4 py-4 rounded text-red-400">
                   {seatingResult.message}
                 </div>
               )}
             </>
           )}
           {!seatingResult && (
-            <div className="placeholder">
+            <div className="flex items-center justify-center min-h-[300px] text-gray-400 text-center px-8">
               Add students and constraints, then click "Solve" to see the seating arrangement
             </div>
           )}
