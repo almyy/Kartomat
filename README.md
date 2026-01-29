@@ -25,23 +25,27 @@ A 100% client-side web application that solves classroom seating arrangements us
 ### Prerequisites
 
 - Node.js (v20.19.0 or higher)
-- npm
+- pnpm (managed via corepack)
 
 ### Installation
 
+This project uses **pnpm** as its package manager. The project is configured with corepack to automatically use the correct version.
+
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run development server
-npm run dev
+pnpm run dev
 
 # Build for production
-npm run build
+pnpm run build
 
 # Preview production build
-npm run preview
+pnpm run preview
 ```
+
+**Note:** This project enforces the use of pnpm. If you try to use npm, you will see an error message. Additionally, the project implements a 1-week security cooldown for new packages to protect against supply chain attacks.
 
 ### Development
 
