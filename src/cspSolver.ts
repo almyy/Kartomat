@@ -6,7 +6,8 @@
 export const CONSTRAINT_TYPES = {
   NOT_TOGETHER: 'not_together',
   TOGETHER: 'together',
-  MUST_BE_IN_ROW: 'must_be_in_row'
+  MUST_BE_IN_ROW: 'must_be_in_row',
+  FAR_APART: 'far_apart'
 } as const;
 
 export type ConstraintType = typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES];
@@ -26,7 +27,13 @@ export interface RowConstraint extends BaseConstraint {
   row: number;
 }
 
-export type Constraint = PairConstraint | RowConstraint;
+export interface FarApartConstraint extends BaseConstraint {
+  type: typeof CONSTRAINT_TYPES.FAR_APART;
+  student2: string;
+  minDistance: number;
+}
+
+export type Constraint = PairConstraint | RowConstraint | FarApartConstraint;
 
 export interface SeatingResult {
   success: boolean;
@@ -189,6 +196,20 @@ function checkConstraint(
       return hasAdjacentEmptySeat(row, col, seating, rows, cols);
     }
       
+    case CONSTRAINT_TYPES.FAR_APART: {
+      // Two students should be far apart (at least minDistance)
+      const farApartConstraint = constraint as FarApartConstraint;
+      const otherStudent = student === student1 ? farApartConstraint.student2 : student1;
+      const otherPos = findStudent(otherStudent, seating);
+      
+      if (otherPos) {
+        const [otherRow, otherCol] = otherPos;
+        const distance = calculateDistance(row, col, otherRow, otherCol);
+        return distance >= farApartConstraint.minDistance;
+      }
+      return true; // Other student not assigned yet, constraint can't be violated
+    }
+      
     default:
       return true;
   }
@@ -215,6 +236,15 @@ function areAdjacent(row1: number, col1: number, row2: number, col2: number): bo
   const rowDiff = Math.abs(row1 - row2);
   const colDiff = Math.abs(col1 - col2);
   return (rowDiff === 0 && colDiff === 1) || (rowDiff === 1 && colDiff === 0);
+}
+
+/**
+ * Calculate Euclidean distance between two positions in the grid
+ */
+function calculateDistance(row1: number, col1: number, row2: number, col2: number): number {
+  const rowDiff = row1 - row2;
+  const colDiff = col1 - col2;
+  return Math.sqrt(rowDiff * rowDiff + colDiff * colDiff);
 }
 
 /**

@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react'
-import { Constraint, CONSTRAINT_TYPES, PairConstraint, RowConstraint } from '../../cspSolver'
+import { Constraint, CONSTRAINT_TYPES, PairConstraint, RowConstraint, FarApartConstraint } from '../../cspSolver'
 import { useStore } from '../../store'
 
 export function ConstraintManager() {
@@ -14,6 +14,7 @@ export function ConstraintManager() {
   const [student1, setStudent1] = useState('')
   const [student2, setStudent2] = useState('')
   const [rowConstraint, setRowConstraint] = useState(0)
+  const [minDistance, setMinDistance] = useState(3)
 
   const handleAddConstraint = () => {
     if (constraintType === CONSTRAINT_TYPES.MUST_BE_IN_ROW) {
@@ -25,6 +26,19 @@ export function ConstraintManager() {
         }
         addConstraint(newConstraint)
         setStudent1('')
+      }
+    } else if (constraintType === CONSTRAINT_TYPES.FAR_APART) {
+      if (student1 && student2 && student1 !== student2 && 
+          students.includes(student1) && students.includes(student2)) {
+        const newConstraint: FarApartConstraint = {
+          type: constraintType,
+          student1,
+          student2,
+          minDistance: parseFloat(String(minDistance))
+        }
+        addConstraint(newConstraint)
+        setStudent1('')
+        setStudent2('')
       }
     } else {
       if (student1 && student2 && student1 !== student2 && 
@@ -45,6 +59,10 @@ export function ConstraintManager() {
     setRowConstraint(parseInt(e.target.value) || 0)
   }
 
+  const handleMinDistanceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setMinDistance(parseFloat(e.target.value) || 3)
+  }
+
   const getConstraintDescription = (constraint: Constraint): string => {
     switch (constraint.type) {
       case CONSTRAINT_TYPES.NOT_TOGETHER: {
@@ -58,6 +76,10 @@ export function ConstraintManager() {
       case CONSTRAINT_TYPES.MUST_BE_IN_ROW: {
         const rowConstraintTyped = constraint as RowConstraint
         return `${rowConstraintTyped.student1} must sit in row ${rowConstraintTyped.row}`
+      }
+      case CONSTRAINT_TYPES.FAR_APART: {
+        const farApartConstraint = constraint as FarApartConstraint
+        return `${farApartConstraint.student1} and ${farApartConstraint.student2} must sit at least ${farApartConstraint.minDistance} units apart`
       }
       default:
         return 'Unknown constraint'
@@ -76,6 +98,7 @@ export function ConstraintManager() {
           <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>Not Together</option>
           <option value={CONSTRAINT_TYPES.TOGETHER}>Must Be Together</option>
           <option value={CONSTRAINT_TYPES.MUST_BE_IN_ROW}>Must Be In Row</option>
+          <option value={CONSTRAINT_TYPES.FAR_APART}>Far Apart</option>
         </select>
 
         {constraintType === CONSTRAINT_TYPES.MUST_BE_IN_ROW ? (
@@ -97,6 +120,38 @@ export function ConstraintManager() {
               value={rowConstraint}
               onChange={handleRowConstraintChange}
               placeholder="Row number"
+              className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
+            />
+          </>
+        ) : constraintType === CONSTRAINT_TYPES.FAR_APART ? (
+          <>
+            <select
+              value={student1}
+              onChange={(e) => setStudent1(e.target.value)}
+              className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
+            >
+              <option value="">Select student 1</option>
+              {students.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <select
+              value={student2}
+              onChange={(e) => setStudent2(e.target.value)}
+              className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
+            >
+              <option value="">Select student 2</option>
+              {students.filter(s => s !== student1).map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <input
+              type="number"
+              min="1"
+              step="0.5"
+              value={minDistance}
+              onChange={handleMinDistanceChange}
+              placeholder="Minimum distance (e.g., 3)"
               className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
             />
           </>

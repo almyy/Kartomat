@@ -6,10 +6,11 @@ A 100% client-side web application that solves classroom seating arrangements us
 
 - **Add Students**: Enter student names to create your classroom roster
 - **Configure Classroom**: Set the number of rows and columns for your seating chart
-- **Define Constraints**: Add three types of constraints:
+- **Define Constraints**: Add four types of constraints:
   - **Not Together**: Two students should not sit adjacent to each other
   - **Must Be Together**: Two students must sit adjacent to each other
   - **Must Be In Row**: A student must be placed in a specific row
+  - **Far Apart**: Two students must sit at least a specified distance apart (using Euclidean distance)
 - **Solve**: Uses a backtracking CSP algorithm to find valid seating arrangements
 - **Visualize**: See the resulting seating chart with an intuitive grid layout
 
