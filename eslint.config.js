@@ -4,9 +4,9 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from '@typescript-eslint/eslint-plugin'
 import tsparser from '@typescript-eslint/parser'
+import {defineConfig, globalIgnores} from 'eslint/config'
 
-export default [
-  { ignores: ['dist'] },
+export default defineConfig([
   js.configs.recommended,
   {
     files: ['**/*.{js,jsx}'],
@@ -60,4 +60,5 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
-]
+  globalIgnores(['**/node_modules/**', '**/dist/**', '**/build/**', 'playwright.config.ts']),
+]);

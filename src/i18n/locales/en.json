@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "Kartomat",
+    "subtitle": "Smart seating arrangements for the modern classroom"
+  },
+  "students": {
+    "title": "Students",
+    "placeholder": "Enter student name",
+    "addButton": "Add",
+    "removeLabel": "Remove {{name}}"
+  },
+  "classroom": {
+    "title": "Classroom Layout",
+    "rows": "Rows",
+    "columns": "Columns",
+    "toggleInstruction": "Click seats to toggle available/empty spaces:",
+    "availableSeat": "Available seat",
+    "emptySpace": "Empty space",
+    "availableSeats": "Available seats: {{count}}"
+  },
+  "constraints": {
+    "title": "Constraints",
+    "typeLabel": "Constraint Type",
+    "addButton": "Add Constraint",
+    "removeLabel": "Remove constraint",
+    "types": {
+      "notTogether": "Not Together",
+      "together": "Must Be Together",
+      "mustBeInRow": "Must Be In Row",
+      "farApart": "Far Apart",
+      "absolute": "Absolute Placement"
+    },
+    "selectStudent": "Select student",
+    "selectStudent1": "Select student 1",
+    "selectStudent2": "Select student 2",
+    "rowNumber": "Row number",
+    "columnNumber": "Column number",
+    "distanceUnits": "Distance units",
+    "descriptions": {
+      "absolute": "{{student}} must sit at row {{row}}, column {{col}}",
+      "notTogether": "{{student1}} and {{student2}} should NOT sit together",
+      "together": "{{student1}} and {{student2}} MUST sit together",
+      "mustBeInRow": "{{student}} must sit in row {{row}}",
+      "farApart": "{{student1}} and {{student2}} must sit at least {{distance}} units apart",
+      "unknown": "Unknown constraint"
+    }
+  },
+  "solver": {
+    "button": "Generate Seating Plan"
+  },
+  "seating": {
+    "title": "Seating Plan",
+    "row": "Row {{index}}",
+    "emptyMessage": "Add students and constraints, then generate your seating plan",
+    "print": "Print Plan"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "nb": "Norwegian"
+  }
+}

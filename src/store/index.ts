@@ -17,7 +17,7 @@ export const useStore = create<AppStore>()(
       ...createSolverSlice(...a),
     }),
     {
-      name: 'roomy-storage', // localStorage key
+      name: 'kartomat-storage', // localStorage key
       partialize: (state) => ({
         // Only persist these fields
         students: state.students,

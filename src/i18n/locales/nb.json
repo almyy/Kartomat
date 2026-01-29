@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "Kartomat",
+    "subtitle": "Lag smarte klassekart på 1-2-3"
+  },
+  "students": {
+    "title": "Elever",
+    "placeholder": "Skriv inn elevnavn",
+    "addButton": "Legg til",
+    "removeLabel": "Fjern {{name}}"
+  },
+  "classroom": {
+    "title": "Klasserom",
+    "rows": "Rader",
+    "columns": "Kolonner",
+    "toggleInstruction": "Klikk på seter for å veksle mellom tilgjengelige/tomme plasser:",
+    "availableSeat": "Tilgjengelig sete",
+    "emptySpace": "Tom plass",
+    "availableSeats": "Tilgjengelige seter: {{count}}"
+  },
+  "constraints": {
+    "title": "Begrensninger",
+    "typeLabel": "Begrensningstype",
+    "addButton": "Legg til begrensning",
+    "removeLabel": "Fjern begrensning",
+    "types": {
+      "notTogether": "Ikke sammen",
+      "together": "Må være sammen",
+      "mustBeInRow": "Må være i rad",
+      "farApart": "Langt fra hverandre",
+      "absolute": "Absolutt plassering"
+    },
+    "selectStudent": "Velg elev",
+    "selectStudent1": "Velg elev 1",
+    "selectStudent2": "Velg elev 2",
+    "rowNumber": "Radnummer",
+    "columnNumber": "Kolonnenummer",
+    "distanceUnits": "Distanseenheter",
+    "descriptions": {
+      "absolute": "{{student}} må sitte på rad {{row}}, kolonne {{col}}",
+      "notTogether": "{{student1}} og {{student2}} skal IKKE sitte sammen",
+      "together": "{{student1}} og {{student2}} MÅ sitte sammen",
+      "mustBeInRow": "{{student}} må sitte i rad {{row}}",
+      "farApart": "{{student1}} og {{student2}} må sitte minst {{distance}} enheter fra hverandre",
+      "unknown": "Ukjent begrensning"
+    }
+  },
+  "solver": {
+    "button": "Generer klassekart"
+  },
+  "seating": {
+    "title": "Klassekart",
+    "row": "Rad {{index}}",
+    "emptyMessage": "Legg til elever og begrensninger, deretter generer klassekartet",
+    "print": "Skriv ut"
+  },
+  "language": {
+    "label": "Språk",
+    "en": "English",
+    "nb": "Norsk"
+  }
+}

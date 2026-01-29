@@ -7,7 +7,8 @@ export const CONSTRAINT_TYPES = {
   NOT_TOGETHER: 'not_together',
   TOGETHER: 'together',
   MUST_BE_IN_ROW: 'must_be_in_row',
-  FAR_APART: 'far_apart'
+  FAR_APART: 'far_apart',
+  ABSOLUTE: 'absolute'
 } as const;
 
 export type ConstraintType = typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES];
@@ -33,7 +34,13 @@ export interface FarApartConstraint extends BaseConstraint {
   minDistance: number;
 }
 
-export type Constraint = PairConstraint | RowConstraint | FarApartConstraint;
+export interface AbsoluteConstraint extends BaseConstraint {
+  type: typeof CONSTRAINT_TYPES.ABSOLUTE;
+  row: number;
+  col: number;
+}
+
+export type Constraint = PairConstraint | RowConstraint | FarApartConstraint | AbsoluteConstraint;
 
 export interface SeatingResult {
   success: boolean;
@@ -55,21 +62,21 @@ export function solveSeatingCSP(
 ): SeatingResult {
   // Use default layout if not provided (all seats available)
   const seatLayout = layout || Array(rows).fill(null).map(() => Array(cols).fill(true));
-  
+
   // Count available seats
   const availableSeats = seatLayout.flat().filter(seat => seat).length;
-  
+
   if (students.length > availableSeats) {
     return { success: false, message: 'Not enough available seats for all students' };
   }
-  
+
   // Initialize empty seating chart (row, col) -> student name
   const seating: Seating = Array(rows).fill(null).map(() => Array(cols).fill(null));
   const assignedStudents = new Set<string>();
-  
+
   // Try to solve using backtracking
   const solution = backtrack(students, constraints, seating, assignedStudents, rows, cols, seatLayout);
-  
+
   if (solution) {
     return { success: true, seating: solution };
   } else {
@@ -93,44 +100,186 @@ function backtrack(
   if (assigned.size === students.length) {
     return deepCopy(seating);
   }
-  
-  // Select next unassigned student
-  const student = students.find(s => !assigned.has(s));
-  
+
+  // Select next unassigned student using Most Constrained Variable heuristic
+  const student = selectMostConstrainedStudent(students, assigned, constraints);
+
   if (!student) {
     return null;
   }
-  
-  // Try each available seat
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      // Skip unavailable seats (empty spaces)
-      if (!layout[row][col]) {
-        continue;
+
+  // Get valid positions for this student based on constraints
+  const validPositions = getValidPositions(student, constraints, seating, rows, cols, layout);
+
+  // Shuffle positions to introduce randomness - creates different solutions each time
+  shuffleArray(validPositions);
+
+  // Try each valid position
+  for (const [row, col] of validPositions) {
+    // Try assigning student to this seat
+    seating[row][col] = student;
+    assigned.add(student);
+
+    // Check if this assignment satisfies all constraints
+    if (isConsistent(student, row, col, seating, constraints, rows, cols, layout)) {
+      // Recurse
+      const result = backtrack(students, constraints, seating, assigned, rows, cols, layout);
+      if (result) {
+        return result;
       }
-      
-      if (seating[row][col] === null) {
-        // Try assigning student to this seat
-        seating[row][col] = student;
-        assigned.add(student);
-        
-        // Check if this assignment satisfies all constraints
-        if (isConsistent(student, row, col, seating, constraints, rows, cols, layout)) {
-          // Recurse
-          const result = backtrack(students, constraints, seating, assigned, rows, cols, layout);
-          if (result) {
-            return result;
-          }
-        }
-        
-        // Backtrack
-        seating[row][col] = null;
-        assigned.delete(student);
+    }
+
+    // Backtrack
+    seating[row][col] = null;
+    assigned.delete(student);
+  }
+
+  return null;
+}
+
+/**
+ * Select the most constrained unassigned student
+ * Prioritizes students with absolute constraints, then those with together constraints
+ */
+function selectMostConstrainedStudent(
+  students: string[],
+  assigned: Set<string>,
+  constraints: Constraint[],
+): string | undefined {
+  const unassigned = students.filter(s => !assigned.has(s));
+
+  if (unassigned.length === 0) {
+    return undefined;
+  }
+
+  // First, check for students with absolute constraints
+  for (const student of unassigned) {
+    const hasAbsolute = constraints.some(
+      c => c.type === CONSTRAINT_TYPES.ABSOLUTE && c.student1 === student
+    );
+    if (hasAbsolute) {
+      return student;
+    }
+  }
+
+  // Next, prioritize students whose partner in a "together" constraint is already assigned
+  for (const student of unassigned) {
+    const togetherConstraint = constraints.find(
+      c => c.type === CONSTRAINT_TYPES.TOGETHER &&
+           (c.student1 === student || ('student2' in c && c.student2 === student))
+    ) as PairConstraint | undefined;
+
+    if (togetherConstraint) {
+      const partner = togetherConstraint.student1 === student
+        ? togetherConstraint.student2
+        : togetherConstraint.student1;
+
+      if (assigned.has(partner)) {
+        return student;
       }
     }
   }
-  
-  return null;
+
+  // Count constraints for remaining students and pick the most constrained
+  let mostConstrained = unassigned[0];
+  let maxConstraints = 0;
+
+  for (const student of unassigned) {
+    const count = constraints.filter(
+      c => c.student1 === student || ('student2' in c && c.student2 === student)
+    ).length;
+
+    if (count > maxConstraints) {
+      maxConstraints = count;
+      mostConstrained = student;
+    }
+  }
+
+  return mostConstrained;
+}
+
+/**
+ * Get valid positions for a student based on their constraints
+ * This reduces the search space significantly
+ */
+function getValidPositions(
+  student: string,
+  constraints: Constraint[],
+  seating: Seating,
+  rows: number,
+  cols: number,
+  layout: boolean[][],
+): [number, number][] {
+  const positions: [number, number][] = [];
+
+  // Check for absolute constraint - only one valid position
+  const absoluteConstraint = constraints.find(
+    c => c.type === CONSTRAINT_TYPES.ABSOLUTE && c.student1 === student
+  ) as AbsoluteConstraint | undefined;
+
+  if (absoluteConstraint) {
+    const { row, col } = absoluteConstraint;
+    if (layout[row][col] && seating[row][col] === null) {
+      return [[row, col]];
+    }
+    return []; // Constraint cannot be satisfied
+  }
+
+  // Check for row constraint - only positions in that row
+  const rowConstraint = constraints.find(
+    c => c.type === CONSTRAINT_TYPES.MUST_BE_IN_ROW && c.student1 === student
+  ) as RowConstraint | undefined;
+
+  if (rowConstraint) {
+    for (let col = 0; col < cols; col++) {
+      if (layout[rowConstraint.row][col] && seating[rowConstraint.row][col] === null) {
+        positions.push([rowConstraint.row, col]);
+      }
+    }
+    return positions;
+  }
+
+  // Check for together constraint with already-assigned partner
+  const togetherConstraint = constraints.find(
+    c => c.type === CONSTRAINT_TYPES.TOGETHER &&
+         (c.student1 === student || ('student2' in c && c.student2 === student))
+  ) as PairConstraint | undefined;
+
+  if (togetherConstraint) {
+    const partner = togetherConstraint.student1 === student
+      ? togetherConstraint.student2
+      : togetherConstraint.student1;
+
+    const partnerPos = findStudent(partner, seating);
+    if (partnerPos) {
+      // Only consider horizontally adjacent positions to the partner (same row)
+      const [partnerRow, partnerCol] = partnerPos;
+      const directions: [number, number][] = [[0, -1], [0, 1]]; // left and right only
+
+      for (const [dr, dc] of directions) {
+        const newRow = partnerRow + dr;
+        const newCol = partnerCol + dc;
+
+        if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+          if (layout[newRow][newCol] && seating[newRow][newCol] === null) {
+            positions.push([newRow, newCol]);
+          }
+        }
+      }
+      return positions;
+    }
+  }
+
+  // Default: all empty seats
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (layout[row][col] && seating[row][col] === null) {
+        positions.push([row, col]);
+      }
+    }
+  }
+
+  return positions;
 }
 
 /**
@@ -171,8 +320,23 @@ function checkConstraint(
   layout: boolean[][]
 ): boolean {
   const { type, student1 } = constraint;
-  
+
   switch (type) {
+    case CONSTRAINT_TYPES.ABSOLUTE: {
+      // Student must be placed at a specific seat (row, col)
+      const absoluteConstraint = constraint as AbsoluteConstraint;
+      if (student === student1) {
+        // Check if current student is at the required position
+        return row === absoluteConstraint.row && col === absoluteConstraint.col;
+      } else {
+        // Check if current position is reserved for another student
+        if (row === absoluteConstraint.row && col === absoluteConstraint.col) {
+          return false; // This position is reserved for student1
+        }
+      }
+      return true;
+    }
+
     case CONSTRAINT_TYPES.MUST_BE_IN_ROW: {
       // Student must be in a specific row
       const rowConstraint = constraint as RowConstraint;
@@ -181,26 +345,26 @@ function checkConstraint(
       }
       return true;
     }
-      
+
     case CONSTRAINT_TYPES.NOT_TOGETHER: {
       // Two students should not be adjacent
       const pairConstraint = constraint as PairConstraint;
       const otherStudent = student === student1 ? pairConstraint.student2 : student1;
       const otherPos = findStudent(otherStudent, seating);
-      
+
       if (otherPos) {
         const [otherRow, otherCol] = otherPos;
         return !areAdjacent(row, col, otherRow, otherCol);
       }
       return true; // Other student not assigned yet, constraint can't be violated
     }
-      
+
     case CONSTRAINT_TYPES.TOGETHER: {
       // Two students should be adjacent
       const pairConstraint = constraint as PairConstraint;
       const partnerStudent = student === student1 ? pairConstraint.student2 : student1;
       const partnerPos = findStudent(partnerStudent, seating);
-      
+
       if (partnerPos) {
         const [partnerRow, partnerCol] = partnerPos;
         return areAdjacent(row, col, partnerRow, partnerCol);
@@ -208,7 +372,7 @@ function checkConstraint(
       // If partner not assigned yet, we need to check if there's an adjacent empty seat
       return hasAdjacentEmptySeat(row, col, seating, rows, cols, layout);
     }
-      
+
     case CONSTRAINT_TYPES.FAR_APART: {
       // Two students should be far apart (at least minDistance)
       const farApartConstraint = constraint as FarApartConstraint;
@@ -222,7 +386,7 @@ function checkConstraint(
       }
       return true; // Other student not assigned yet, constraint can't be violated
     }
-      
+
     default:
       return true;
   }
@@ -243,12 +407,12 @@ function findStudent(student: string, seating: Seating): [number, number] | null
 }
 
 /**
- * Check if two positions are adjacent (horizontally or vertically)
+ * Check if two positions are adjacent (horizontally on the same row only)
  */
 function areAdjacent(row1: number, col1: number, row2: number, col2: number): boolean {
   const rowDiff = Math.abs(row1 - row2);
   const colDiff = Math.abs(col1 - col2);
-  return (rowDiff === 0 && colDiff === 1) || (rowDiff === 1 && colDiff === 0);
+  return rowDiff === 0 && colDiff === 1;
 }
 
 /**
@@ -261,12 +425,12 @@ function calculateDistance(row1: number, col1: number, row2: number, col2: numbe
 }
 
 function hasAdjacentEmptySeat(row: number, col: number, seating: Seating, rows: number, cols: number, layout: boolean[][]): boolean {
-  const directions: [number, number][] = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-  
+  const directions: [number, number][] = [[0, -1], [0, 1]]; // left and right only
+
   for (const [dr, dc] of directions) {
     const newRow = row + dr;
     const newCol = col + dc;
-    
+
     if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
       // Check if the seat is available in the layout and not yet assigned
       if (layout[newRow][newCol] && seating[newRow][newCol] === null) {
@@ -274,7 +438,7 @@ function hasAdjacentEmptySeat(row: number, col: number, seating: Seating, rows: 
       }
     }
   }
-  
+
   return false;
 }
 
@@ -283,4 +447,14 @@ function hasAdjacentEmptySeat(row: number, col: number, seating: Seating, rows: 
  */
 function deepCopy(arr: Seating): Seating {
   return arr.map(row => [...row]);
+}
+
+/**
+ * Fisher-Yates shuffle algorithm to randomize array in-place
+ */
+function shuffleArray<T>(array: T[]): void {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }

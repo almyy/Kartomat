@@ -1,0 +1,175 @@
+import { Page, expect } from '@playwright/test';
+
+/**
+ * Helper function to add students
+ */
+export async function addStudents(page: Page, studentNames: string[]) {
+  for (const name of studentNames) {
+    await page.getByRole('textbox', { name: '' }).fill(name);
+    await page.getByRole('button', { name: 'Legg til', exact: true }).click({ force: true });
+  }
+}
+
+/**
+ * Helper function to configure classroom size
+ */
+export async function configureClassroom(page: Page, rows: number, cols: number) {
+  // Find the rows input by its label
+  await page.getByRole('spinbutton', { name: 'Rader:' }).fill(String(rows));
+
+  // Find the cols input by its label
+  await page.getByRole('spinbutton', { name: 'Kolonner:' }).fill(String(cols));
+}
+
+/**
+ * Helper function to add a "Not Together" constraint
+ */
+export async function addNotTogetherConstraint(page: Page, student1: string, student2: string) {
+  // Select constraint type
+  await page.getByLabel('Begrensningstype').selectOption('not_together');
+
+  // Select first student
+  await page.locator('#pair-student1').selectOption(student1);
+
+  // Select second student
+  await page.locator('#pair-student2').selectOption(student2);
+
+  // Add constraint
+  await page.getByRole('button', { name: 'Legg til begrensning' }).click();
+}
+
+/**
+ * Helper function to add a "Must Be Together" constraint
+ */
+export async function addTogetherConstraint(page: Page, student1: string, student2: string) {
+  // Select constraint type
+  await page.getByLabel('Begrensningstype').selectOption('together');
+
+  // Select first student
+  await page.locator('#pair-student1').selectOption(student1);
+
+  // Select second student
+  await page.locator('#pair-student2').selectOption(student2);
+
+  // Add constraint
+  await page.getByRole('button', { name: 'Legg til begrensning' }).click();
+}
+
+/**
+ * Helper function to add a "Must Be In Row" constraint
+ */
+export async function addRowConstraint(page: Page, student: string, row: number) {
+  // Select constraint type
+  await page.getByLabel('Begrensningstype').selectOption('must_be_in_row');
+
+  // Select student
+  await page.locator('#row-student').selectOption(student);
+
+  // Enter row number - get the spinbutton in the Constraints section
+  const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
+  await constraintSection.getByRole('spinbutton').fill(String(row));
+
+  // Add constraint
+  await page.getByRole('button', { name: 'Legg til begrensning' }).click();
+}
+
+/**
+ * Helper function to add an "Absolute Placement" constraint
+ */
+export async function addAbsoluteConstraint(page: Page, student: string, row: number, col: number) {
+  // Select constraint type
+  await page.getByLabel('Begrensningstype').selectOption('absolute');
+
+  // Select student
+  await page.locator('#absolute-student').selectOption(student);
+
+  // Enter row number - use placeholder to identify the correct input
+  const rowConstraintInput = page.getByPlaceholder('Radnummer');
+  await rowConstraintInput.fill(String(row));
+
+  // Enter col number - use placeholder to identify the correct input
+  const colConstraintInput = page.getByPlaceholder('Kolonnenummer');
+  await colConstraintInput.fill(String(col));
+
+  // Add constraint
+  await page.getByRole('button', { name: 'Legg til begrensning' }).click();
+}
+
+/**
+ * Helper function to add a "Far Apart" constraint
+ */
+export async function addFarApartConstraint(page: Page, student1: string, student2: string, minDistance: number) {
+  // Select constraint type
+  await page.getByLabel('Begrensningstype').selectOption('far_apart');
+
+  // Select first student
+  await page.locator('#far-apart-student1').selectOption(student1);
+
+  // Select second student
+  await page.locator('#far-apart-student2').selectOption(student2);
+
+  // Enter minimum distance - get the spinbutton in the Constraints section
+  const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
+  await constraintSection.getByRole('spinbutton').fill(String(minDistance));
+
+  // Add constraint
+  await page.getByRole('button', { name: 'Legg til begrensning' }).click();
+}
+
+/**
+ * Helper function to solve and wait for results
+ */
+export async function solveSeating(page: Page) {
+  await page.getByRole('button', { name: 'Generer Klassekart' }).click();
+  // Wait for either success or failure message
+  await page.waitForSelector('.bg-indigo-600\\/30, .bg-red-500\\/20', { timeout: 10000 });
+}
+
+/**
+ * Helper function to verify a student is in the seating chart
+ */
+export async function verifyStudentInSeating(page: Page, studentName: string) {
+  // Look specifically in the seating display area, not the student list
+  const seatingDisplay = page.getByRole('region', { name: 'Klassekart' });
+  const studentSeat = seatingDisplay.locator('.flex-1.min-h-\\[50px\\]').filter({ hasText: new RegExp(`^${studentName}$`) });
+  await expect(studentSeat).toBeVisible();
+}
+
+/**
+ * Helper function to get position of a student in the seating chart
+ */
+export async function getStudentPosition(page: Page, studentName: string) {
+  // Only look in the seating display area
+  const seatingDisplay = page.getByRole('region', { name: 'Klassekart' });
+  const seatingArrangement = seatingDisplay.locator('#seating-arrangement');
+  const rows = await seatingArrangement.locator('> .flex.items-center').all();
+
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const seats = await rows[rowIndex].locator('.flex-1.min-h-\\[50px\\]').all();
+    for (let colIndex = 0; colIndex < seats.length; colIndex++) {
+      const text = await seats[colIndex].textContent();
+      if (text?.trim() === studentName) {
+        return { row: rowIndex, col: colIndex };
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Helper function to check if two positions are adjacent (same row, next to each other)
+ */
+export function areAdjacent(pos1: { row: number; col: number }, pos2: { row: number; col: number }): boolean {
+  const rowDiff = Math.abs(pos1.row - pos2.row);
+  const colDiff = Math.abs(pos1.col - pos2.col);
+  return rowDiff === 0 && colDiff === 1;
+}
+
+/**
+ * Helper function to calculate Euclidean distance between two positions
+ */
+export function calculateDistance(pos1: { row: number; col: number }, pos2: { row: number; col: number }): number {
+  const rowDiff = pos1.row - pos2.row;
+  const colDiff = pos1.col - pos2.col;
+  return Math.sqrt(rowDiff * rowDiff + colDiff * colDiff);
+}

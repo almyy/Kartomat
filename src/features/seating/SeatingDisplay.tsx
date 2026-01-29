@@ -1,25 +1,41 @@
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
+import { PrintButton } from './PrintButton'
+import { CollapsibleSection } from '../../components/CollapsibleSection'
 
 export function SeatingDisplay() {
+  const { t } = useTranslation()
   const seatingResult = useStore((state) => state.seatingResult)
   const layout = useStore((state) => state.layout)
 
+  const handlePrint = () => {
+    window.print()
+  }
+
   return (
-    <div className="bg-white/5 rounded-lg p-6 border border-white/10 min-h-[400px]">
-      <h2 className="mt-0 mb-4">Seating Arrangement</h2>
+    <CollapsibleSection 
+      title={t('seating.title')} 
+      id="seating"
+      className="min-h-[300px] sm:min-h-[400px]"
+    >
+      <div className="flex justify-end mb-3 sm:mb-4 mt-3 sm:mt-4">
+        {seatingResult?.success && seatingResult.seating && (
+          <PrintButton onClick={handlePrint} />
+        )}
+      </div>
       {seatingResult && (
         <>
           {seatingResult.success && seatingResult.seating ? (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5 sm:gap-2 overflow-x-auto" id="seating-arrangement">
               {seatingResult.seating.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex gap-2 items-center">
-                  <div className="text-sm text-gray-400 min-w-[50px]">Row {rowIndex}</div>
+                <div key={rowIndex} className="flex gap-1.5 sm:gap-2 items-center">
+                  <div className="text-xs sm:text-sm text-gray-400 min-w-[40px] sm:min-w-[50px] flex-shrink-0">{t('seating.row', { index: rowIndex })}</div>
                   {row.map((seat, colIndex) => {
                     const isAvailable = layout[rowIndex]?.[colIndex] ?? true
                     return (
                       <div
                         key={colIndex}
-                        className={`flex-1 min-h-[60px] flex items-center justify-center rounded text-sm font-medium border transition-all ${
+                        className={`flex-1 min-h-[50px] sm:min-h-[60px] flex items-center justify-center rounded text-xs sm:text-sm font-medium border transition-all px-1 ${
                           !isAvailable
                             ? 'bg-gray-800/50 border-gray-700/30'
                             : seat
@@ -35,17 +51,17 @@ export function SeatingDisplay() {
               ))}
             </div>
           ) : (
-            <div className="bg-red-500/20 border border-red-500/50 px-4 py-4 rounded text-red-400">
+            <div className="bg-red-500/20 border border-red-500/50 px-3 sm:px-4 py-3 sm:py-4 rounded text-red-400 text-sm sm:text-base">
               {seatingResult.message}
             </div>
           )}
         </>
       )}
       {!seatingResult && (
-        <div className="flex items-center justify-center min-h-[300px] text-gray-400 text-center px-8">
-          Add students and constraints, then click "Solve" to see the seating arrangement
+        <div className="flex items-center justify-center min-h-[250px] sm:min-h-[300px] text-gray-400 text-center px-4 sm:px-8 text-sm sm:text-base">
+          {t('seating.emptyMessage')}
         </div>
       )}
-    </div>
+    </CollapsibleSection>
   )
 }
