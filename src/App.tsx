@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { solveSeatingCSP, CONSTRAINT_TYPES } from './cspSolver'
+import { useState, KeyboardEvent, ChangeEvent } from 'react'
+import { solveSeatingCSP, CONSTRAINT_TYPES, Constraint, SeatingResult, ConstraintType, RowConstraint, PairConstraint } from './cspSolver'
 
 function App() {
-  const [students, setStudents] = useState([])
-  const [studentInput, setStudentInput] = useState('')
-  const [constraints, setConstraints] = useState([])
-  const [rows, setRows] = useState(4)
-  const [cols, setCols] = useState(6)
-  const [seatingResult, setSeatingResult] = useState(null)
+  const [students, setStudents] = useState<string[]>([])
+  const [studentInput, setStudentInput] = useState<string>('')
+  const [constraints, setConstraints] = useState<Constraint[]>([])
+  const [rows, setRows] = useState<number>(4)
+  const [cols, setCols] = useState<number>(6)
+  const [seatingResult, setSeatingResult] = useState<SeatingResult | null>(null)
   
   // Constraint input state
-  const [constraintType, setConstraintType] = useState(CONSTRAINT_TYPES.NOT_TOGETHER)
-  const [student1, setStudent1] = useState('')
-  const [student2, setStudent2] = useState('')
-  const [rowConstraint, setRowConstraint] = useState(0)
+  const [constraintType, setConstraintType] = useState<ConstraintType>(CONSTRAINT_TYPES.NOT_TOGETHER)
+  const [student1, setStudent1] = useState<string>('')
+  const [student2, setStudent2] = useState<string>('')
+  const [rowConstraint, setRowConstraint] = useState<number>(0)
 
   const addStudent = () => {
     const trimmed = studentInput.trim()
@@ -23,39 +23,41 @@ function App() {
     }
   }
 
-  const removeStudent = (name) => {
+  const removeStudent = (name: string) => {
     setStudents(students.filter(s => s !== name))
     // Also remove constraints involving this student
     setConstraints(constraints.filter(c => 
-      c.student1 !== name && c.student2 !== name
+      c.student1 !== name && !('student2' in c && c.student2 === name)
     ))
   }
 
   const addConstraint = () => {
     if (constraintType === CONSTRAINT_TYPES.MUST_BE_IN_ROW) {
       if (student1 && students.includes(student1)) {
-        setConstraints([...constraints, {
+        const newConstraint: RowConstraint = {
           type: constraintType,
           student1,
-          row: parseInt(rowConstraint)
-        }])
+          row: parseInt(String(rowConstraint))
+        }
+        setConstraints([...constraints, newConstraint])
         setStudent1('')
       }
     } else {
       if (student1 && student2 && student1 !== student2 && 
           students.includes(student1) && students.includes(student2)) {
-        setConstraints([...constraints, {
-          type: constraintType,
+        const newConstraint: PairConstraint = {
+          type: constraintType as typeof CONSTRAINT_TYPES.NOT_TOGETHER | typeof CONSTRAINT_TYPES.TOGETHER,
           student1,
           student2
-        }])
+        }
+        setConstraints([...constraints, newConstraint])
         setStudent1('')
         setStudent2('')
       }
     }
   }
 
-  const removeConstraint = (index) => {
+  const removeConstraint = (index: number) => {
     setConstraints(constraints.filter((_, i) => i !== index))
   }
 
@@ -64,17 +66,33 @@ function App() {
     setSeatingResult(result)
   }
 
-  const getConstraintDescription = (constraint) => {
+  const getConstraintDescription = (constraint: Constraint): string => {
     switch (constraint.type) {
-      case CONSTRAINT_TYPES.NOT_TOGETHER:
-        return `${constraint.student1} and ${constraint.student2} should NOT sit together`
-      case CONSTRAINT_TYPES.TOGETHER:
-        return `${constraint.student1} and ${constraint.student2} MUST sit together`
-      case CONSTRAINT_TYPES.MUST_BE_IN_ROW:
-        return `${constraint.student1} must sit in row ${constraint.row}`
+      case CONSTRAINT_TYPES.NOT_TOGETHER: {
+        const pairConstraint = constraint as PairConstraint
+        return `${pairConstraint.student1} and ${pairConstraint.student2} should NOT sit together`
+      }
+      case CONSTRAINT_TYPES.TOGETHER: {
+        const pairConstraint = constraint as PairConstraint
+        return `${pairConstraint.student1} and ${pairConstraint.student2} MUST sit together`
+      }
+      case CONSTRAINT_TYPES.MUST_BE_IN_ROW: {
+        const rowConstraintTyped = constraint as RowConstraint
+        return `${rowConstraintTyped.student1} must sit in row ${rowConstraintTyped.row}`
+      }
       default:
         return 'Unknown constraint'
     }
+  }
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addStudent()
+    }
+  }
+
+  const handleRowConstraintChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setRowConstraint(parseInt(e.target.value) || 0)
   }
 
   return (
@@ -92,7 +110,7 @@ function App() {
                 type="text"
                 value={studentInput}
                 onChange={(e) => setStudentInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && addStudent()}
+                onKeyPress={handleKeyPress}
                 placeholder="Enter student name"
                 className="flex-1 px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
               />
@@ -155,7 +173,7 @@ function App() {
             <div className="flex flex-col gap-2 mb-4">
               <select 
                 value={constraintType} 
-                onChange={(e) => setConstraintType(e.target.value)}
+                onChange={(e) => setConstraintType(e.target.value as ConstraintType)}
                 className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
               >
                 <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>Not Together</option>
@@ -180,7 +198,7 @@ function App() {
                     min="0"
                     max={rows - 1}
                     value={rowConstraint}
-                    onChange={(e) => setRowConstraint(e.target.value)}
+                    onChange={handleRowConstraintChange}
                     placeholder="Row number"
                     className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
                   />
@@ -249,7 +267,7 @@ function App() {
           <h2 className="mt-0 mb-4">Seating Arrangement</h2>
           {seatingResult && (
             <>
-              {seatingResult.success ? (
+              {seatingResult.success && seatingResult.seating ? (
                 <div className="flex flex-col gap-2">
                   {seatingResult.seating.map((row, rowIndex) => (
                     <div key={rowIndex} className="flex gap-2 items-center">
