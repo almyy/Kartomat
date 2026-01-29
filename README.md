@@ -23,7 +23,7 @@ A 100% client-side web application that solves classroom seating arrangements us
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v20.19.0 or higher)
 - npm
 
 ### Installation
