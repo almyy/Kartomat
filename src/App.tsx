@@ -11,10 +11,11 @@ function App() {
   const constraints = useStore((state) => state.constraints)
   const rows = useStore((state) => state.rows)
   const cols = useStore((state) => state.cols)
+  const layout = useStore((state) => state.layout)
   const setSeatingResult = useStore((state) => state.setSeatingResult)
 
   const solve = () => {
-    const result = solveSeatingCSP(students, constraints, rows, cols)
+    const result = solveSeatingCSP(students, constraints, rows, cols, layout)
     setSeatingResult(result)
   }
 

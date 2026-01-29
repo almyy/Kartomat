@@ -23,6 +23,7 @@ export const useStore = create<AppStore>()(
         students: state.students,
         rows: state.rows,
         cols: state.cols,
+        layout: state.layout,
         constraints: state.constraints,
       }),
     }
