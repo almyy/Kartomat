@@ -1,23 +1,16 @@
 import { KeyboardEvent } from 'react'
+import { useStore } from '../../store'
 
-interface StudentManagerProps {
-  students: string[]
-  studentInput: string
-  setStudentInput: (value: string) => void
-  onAddStudent: () => void
-  onRemoveStudent: (name: string) => void
-}
+export function StudentManager() {
+  const students = useStore((state) => state.students)
+  const studentInput = useStore((state) => state.studentInput)
+  const setStudentInput = useStore((state) => state.setStudentInput)
+  const addStudent = useStore((state) => state.addStudent)
+  const removeStudent = useStore((state) => state.removeStudent)
 
-export function StudentManager({
-  students,
-  studentInput,
-  setStudentInput,
-  onAddStudent,
-  onRemoveStudent,
-}: StudentManagerProps) {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onAddStudent()
+      addStudent()
     }
   }
 
@@ -34,7 +27,7 @@ export function StudentManager({
           className="flex-1 px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
         />
         <button
-          onClick={onAddStudent}
+          onClick={addStudent}
           className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors"
         >
           Add
@@ -45,7 +38,7 @@ export function StudentManager({
           <div key={name} className="flex items-center gap-2 bg-indigo-600/30 px-3 py-2 rounded-full border border-indigo-600/50">
             {name}
             <button
-              onClick={() => onRemoveStudent(name)}
+              onClick={() => removeStudent(name)}
               aria-label={`Remove ${name}`}
               className="w-5 h-5 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg leading-none"
             >

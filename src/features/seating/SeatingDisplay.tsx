@@ -1,10 +1,8 @@
-import { SeatingResult } from '../../cspSolver'
+import { useStore } from '../../store'
 
-interface SeatingDisplayProps {
-  seatingResult: SeatingResult | null
-}
+export function SeatingDisplay() {
+  const seatingResult = useStore((state) => state.seatingResult)
 
-export function SeatingDisplay({ seatingResult }: SeatingDisplayProps) {
   return (
     <div className="bg-white/5 rounded-lg p-6 border border-white/10 min-h-[400px]">
       <h2 className="mt-0 mb-4">Seating Arrangement</h2>

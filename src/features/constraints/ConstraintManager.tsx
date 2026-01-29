@@ -1,39 +1,24 @@
 import { ChangeEvent } from 'react'
-import { Constraint, ConstraintType, CONSTRAINT_TYPES, PairConstraint, RowConstraint } from '../../cspSolver'
+import { Constraint, CONSTRAINT_TYPES, PairConstraint, RowConstraint } from '../../cspSolver'
+import { useStore } from '../../store'
 
-interface ConstraintManagerProps {
-  constraints: Constraint[]
-  students: string[]
-  constraintType: ConstraintType
-  student1: string
-  student2: string
-  rowConstraint: number
-  rows: number
-  onConstraintTypeChange: (type: ConstraintType) => void
-  onStudent1Change: (student: string) => void
-  onStudent2Change: (student: string) => void
-  onRowConstraintChange: (row: number) => void
-  onAddConstraint: () => void
-  onRemoveConstraint: (index: number) => void
-}
+export function ConstraintManager() {
+  const constraints = useStore((state) => state.constraints)
+  const students = useStore((state) => state.students)
+  const constraintType = useStore((state) => state.constraintType)
+  const student1 = useStore((state) => state.student1)
+  const student2 = useStore((state) => state.student2)
+  const rowConstraint = useStore((state) => state.rowConstraint)
+  const rows = useStore((state) => state.rows)
+  const setConstraintType = useStore((state) => state.setConstraintType)
+  const setStudent1 = useStore((state) => state.setStudent1)
+  const setStudent2 = useStore((state) => state.setStudent2)
+  const setRowConstraint = useStore((state) => state.setRowConstraint)
+  const addConstraint = useStore((state) => state.addConstraint)
+  const removeConstraint = useStore((state) => state.removeConstraint)
 
-export function ConstraintManager({
-  constraints,
-  students,
-  constraintType,
-  student1,
-  student2,
-  rowConstraint,
-  rows,
-  onConstraintTypeChange,
-  onStudent1Change,
-  onStudent2Change,
-  onRowConstraintChange,
-  onAddConstraint,
-  onRemoveConstraint,
-}: ConstraintManagerProps) {
   const handleRowConstraintChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onRowConstraintChange(parseInt(e.target.value) || 0)
+    setRowConstraint(parseInt(e.target.value) || 0)
   }
 
   const getConstraintDescription = (constraint: Constraint): string => {
@@ -61,7 +46,7 @@ export function ConstraintManager({
       <div className="flex flex-col gap-2 mb-4">
         <select
           value={constraintType}
-          onChange={(e) => onConstraintTypeChange(e.target.value as ConstraintType)}
+          onChange={(e) => setConstraintType(e.target.value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
           className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
         >
           <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>Not Together</option>
@@ -73,7 +58,7 @@ export function ConstraintManager({
           <>
             <select
               value={student1}
-              onChange={(e) => onStudent1Change(e.target.value)}
+              onChange={(e) => setStudent1(e.target.value)}
               className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
             >
               <option value="">Select student</option>
@@ -95,7 +80,7 @@ export function ConstraintManager({
           <>
             <select
               value={student1}
-              onChange={(e) => onStudent1Change(e.target.value)}
+              onChange={(e) => setStudent1(e.target.value)}
               className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
             >
               <option value="">Select student 1</option>
@@ -105,7 +90,7 @@ export function ConstraintManager({
             </select>
             <select
               value={student2}
-              onChange={(e) => onStudent2Change(e.target.value)}
+              onChange={(e) => setStudent2(e.target.value)}
               className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
             >
               <option value="">Select student 2</option>
@@ -117,7 +102,7 @@ export function ConstraintManager({
         )}
 
         <button
-          onClick={onAddConstraint}
+          onClick={addConstraint}
           className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors"
         >
           Add Constraint
@@ -129,7 +114,7 @@ export function ConstraintManager({
           <div key={index} className="flex justify-between items-center bg-white/5 px-3 py-3 rounded border border-white/10">
             {getConstraintDescription(constraint)}
             <button
-              onClick={() => onRemoveConstraint(index)}
+              onClick={() => removeConstraint(index)}
               aria-label="Remove constraint"
               className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg"
             >

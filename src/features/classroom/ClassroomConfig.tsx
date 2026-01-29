@@ -1,16 +1,11 @@
-interface ClassroomConfigProps {
-  rows: number
-  cols: number
-  onRowsChange: (rows: number) => void
-  onColsChange: (cols: number) => void
-}
+import { useStore } from '../../store'
 
-export function ClassroomConfig({
-  rows,
-  cols,
-  onRowsChange,
-  onColsChange,
-}: ClassroomConfigProps) {
+export function ClassroomConfig() {
+  const rows = useStore((state) => state.rows)
+  const cols = useStore((state) => state.cols)
+  const setRows = useStore((state) => state.setRows)
+  const setCols = useStore((state) => state.setCols)
+
   return (
     <div className="bg-white/5 rounded-lg p-6 border border-white/10">
       <h2 className="mt-0 mb-4 text-xl">Classroom Size</h2>
@@ -22,7 +17,7 @@ export function ClassroomConfig({
             min="1"
             max="10"
             value={rows}
-            onChange={(e) => onRowsChange(parseInt(e.target.value) || 1)}
+            onChange={(e) => setRows(parseInt(e.target.value) || 1)}
             className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
           />
         </label>
@@ -33,7 +28,7 @@ export function ClassroomConfig({
             min="1"
             max="10"
             value={cols}
-            onChange={(e) => onColsChange(parseInt(e.target.value) || 1)}
+            onChange={(e) => setCols(parseInt(e.target.value) || 1)}
             className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
           />
         </label>
