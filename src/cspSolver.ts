@@ -214,21 +214,7 @@ function checkConstraint(
       const farApartConstraint = constraint as FarApartConstraint;
       const otherStudent = student === student1 ? farApartConstraint.student2 : student1;
       const otherPos = findStudent(otherStudent, seating);
-      
-      if (otherPos) {
-        const [otherRow, otherCol] = otherPos;
-        const distance = calculateDistance(row, col, otherRow, otherCol);
-        return distance >= farApartConstraint.minDistance;
-      }
-      return true; // Other student not assigned yet, constraint can't be violated
-    }
-      
-    case CONSTRAINT_TYPES.FAR_APART: {
-      // Two students should be far apart (at least minDistance)
-      const farApartConstraint = constraint as FarApartConstraint;
-      const otherStudent = student === student1 ? farApartConstraint.student2 : student1;
-      const otherPos = findStudent(otherStudent, seating);
-      
+
       if (otherPos) {
         const [otherRow, otherCol] = otherPos;
         const distance = calculateDistance(row, col, otherRow, otherCol);
