@@ -109,6 +109,7 @@ function App() {
                   {name}
                   <button 
                     onClick={() => removeStudent(name)}
+                    aria-label={`Remove ${name}`}
                     className="w-5 h-5 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg leading-none"
                   >
                     ×
@@ -223,6 +224,7 @@ function App() {
                   {getConstraintDescription(constraint)}
                   <button 
                     onClick={() => removeConstraint(index)}
+                    aria-label="Remove constraint"
                     className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg"
                   >
                     ×
@@ -258,7 +260,7 @@ function App() {
                           className={`flex-1 min-h-[60px] flex items-center justify-center rounded text-sm font-medium border transition-all ${
                             seat 
                               ? 'bg-indigo-600/30 border-indigo-600/50 hover:bg-indigo-600/50 hover:scale-105' 
-                              : 'bg-white/[0.02] border-white/10 border-dashed'
+                              : 'bg-white/5 border-white/10 border-dashed'
                           }`}
                         >
                           {seat || ''}
