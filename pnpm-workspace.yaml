@@ -1,0 +1,27 @@
+packages:
+  - '.'
+
+# Security: Only allow packages published at least 1 week ago
+# This protects against supply chain attacks on newly published packages
+minimumReleaseAge: 7d
+
+# Exclude well-known, trusted packages from the constraint
+# These are either stable or actively maintained by trusted organizations
+minimumReleaseAgeExclude:
+  - '@tailwindcss/*'
+  - '@esbuild/*'
+  - '@eslint/*'
+  - '@types/*'
+  - '@typescript-eslint/*'
+  - '@vitejs/*'
+  - 'eslint-plugin-*'
+  - 'vite'
+  - 'esbuild'
+  - 'autoprefixer'
+  - 'postcss'
+  - 'typescript'
+  - 'fsevents'
+  - 'globals'
+  - 'react'
+  - 'react-dom'
+  - 'zustand'

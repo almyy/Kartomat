@@ -45,7 +45,7 @@ pnpm run build
 pnpm run preview
 ```
 
-**Note:** This project enforces the use of pnpm. If you try to use npm, you will see an error message. Additionally, the project implements a 1-week security cooldown for new packages to protect against supply chain attacks.
+**Note:** This project enforces the use of pnpm (via `only-allow` in preinstall script). If you try to use npm or yarn, you will see an error message. Additionally, the project implements a 1-week security cooldown (`minimumReleaseAge` in `pnpm-workspace.yaml`) for new packages to protect against supply chain attacks.
 
 ### Development
 

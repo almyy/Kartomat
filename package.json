@@ -5,8 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@10.28.2",
   "scripts": {
-    "preinstall": "node update-npmrc-before.cjs",
-    "prepare": "node scripts/only-allow.cjs pnpm",
+    "preinstall": "npx -y only-allow pnpm",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
