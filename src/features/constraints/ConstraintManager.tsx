@@ -29,12 +29,13 @@ export function ConstraintManager() {
       }
     } else if (constraintType === CONSTRAINT_TYPES.FAR_APART) {
       if (student1 && student2 && student1 !== student2 && 
-          students.includes(student1) && students.includes(student2)) {
+          students.includes(student1) && students.includes(student2) &&
+          minDistance > 0) {
         const newConstraint: FarApartConstraint = {
           type: constraintType,
           student1,
           student2,
-          minDistance: parseFloat(String(minDistance))
+          minDistance
         }
         addConstraint(newConstraint)
         setStudent1('')
@@ -60,7 +61,8 @@ export function ConstraintManager() {
   }
 
   const handleMinDistanceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMinDistance(parseFloat(e.target.value) || 3)
+    const value = parseFloat(e.target.value)
+    setMinDistance(value > 0 ? value : 1)
   }
 
   const getConstraintDescription = (constraint: Constraint): string => {
@@ -151,7 +153,7 @@ export function ConstraintManager() {
               step="0.5"
               value={minDistance}
               onChange={handleMinDistanceChange}
-              placeholder="Minimum distance (e.g., 3)"
+              placeholder="Distance units"
               className="px-2 py-2 rounded border border-white/20 bg-black/30 text-inherit"
             />
           </>
