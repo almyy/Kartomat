@@ -18,7 +18,8 @@ function App() {
   const setSeatingResult = useStore((state) => state.setSeatingResult)
 
   const solve = () => {
-    const result = solveSeatingCSP(students, constraints, rows, cols, layout)
+    const studentNames = students.map(s => s.name)
+    const result = solveSeatingCSP(studentNames, constraints, rows, cols, layout)
     setSeatingResult(result)
   }
 

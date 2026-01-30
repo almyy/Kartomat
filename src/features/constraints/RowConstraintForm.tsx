@@ -22,7 +22,7 @@ export function RowConstraintForm() {
       >
         <option value="">{t('constraints.selectStudent')}</option>
         {students.map(s => (
-          <option key={s} value={s}>{s}</option>
+          <option key={s.name} value={s.name}>{s.name}</option>
         ))}
       </select>
       <input

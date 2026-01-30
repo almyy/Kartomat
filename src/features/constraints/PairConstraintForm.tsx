@@ -22,7 +22,7 @@ export function PairConstraintForm() {
       >
         <option value="">{t('constraints.selectStudent1')}</option>
         {students.map(s => (
-          <option key={s} value={s}>{s}</option>
+          <option key={s.name} value={s.name}>{s.name}</option>
         ))}
       </select>
       <label htmlFor="pair-student2" className="sr-only">{t('constraints.selectStudent2')}</label>
@@ -33,8 +33,8 @@ export function PairConstraintForm() {
         className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent2')}</option>
-        {students.filter(s => s !== pairStudent1).map(s => (
-          <option key={s} value={s}>{s}</option>
+        {students.filter(s => s.name !== pairStudent1).map(s => (
+          <option key={s.name} value={s.name}>{s.name}</option>
         ))}
       </select>
       <button

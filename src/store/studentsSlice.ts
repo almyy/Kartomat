@@ -1,10 +1,12 @@
 import { StateCreator } from 'zustand'
 import { ConstraintsSlice } from './constraintsSlice'
+import { Student, Gender } from '../types/student'
 
 export interface StudentsSlice {
-  students: string[]
+  students: Student[]
   addStudent: (name: string) => void
   removeStudent: (name: string) => void
+  updateStudentGender: (name: string, gender?: Gender) => void
 }
 
 export const createStudentsSlice: StateCreator<
@@ -18,18 +20,25 @@ export const createStudentsSlice: StateCreator<
   addStudent: (name) => 
     set((state) => {
       const trimmed = name.trim()
-      if (trimmed && !state.students.includes(trimmed)) {
-        return { students: [...state.students, trimmed] }
+      if (trimmed && !state.students.some(s => s.name === trimmed)) {
+        return { students: [...state.students, { name: trimmed }] }
       }
       return state
     }),
   
   removeStudent: (name) =>
     set((state) => ({
-      students: state.students.filter(s => s !== name),
+      students: state.students.filter(s => s.name !== name),
       // Also remove constraints involving this student
       constraints: state.constraints.filter(c => 
         c.student1 !== name && !('student2' in c && c.student2 === name)
+      )
+    })),
+  
+  updateStudentGender: (name, gender) =>
+    set((state) => ({
+      students: state.students.map(s => 
+        s.name === name ? { ...s, gender } : s
       )
     })),
 })

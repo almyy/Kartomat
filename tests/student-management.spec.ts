@@ -13,12 +13,12 @@ test.describe('Student Management', () => {
 
     // Verify students are displayed in the student list area (not constraints or seating)
     const studentSection = page.getByRole('region', { name: 'Elever' });
-    await expect(studentSection.getByText('Alice×')).toBeVisible();
-    await expect(studentSection.getByText('Bob×')).toBeVisible();
-    await expect(studentSection.getByText('Charlie×')).toBeVisible();
+    await expect(studentSection.getByText('Alice')).toBeVisible();
+    await expect(studentSection.getByText('Bob')).toBeVisible();
+    await expect(studentSection.getByText('Charlie')).toBeVisible();
 
     // Remove a student
     await page.getByRole('button', { name: 'Fjern Alice' }).click();
-    await expect(studentSection.getByText('Alice×')).not.toBeVisible();
+    await expect(studentSection.getByText('Alice')).not.toBeVisible();
   });
 });

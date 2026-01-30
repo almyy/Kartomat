@@ -7,7 +7,11 @@
     "title": "Elever",
     "placeholder": "Skriv inn elevnavn",
     "addButton": "Legg til",
-    "removeLabel": "Fjern {{name}}"
+    "removeLabel": "Fjern {{name}}",
+    "genderLabel": "Kjønn for {{name}}",
+    "genderNone": "Ikke spesifisert",
+    "genderMale": "Gutt",
+    "genderFemale": "Jente"
   },
   "classroom": {
     "title": "Klasserom",

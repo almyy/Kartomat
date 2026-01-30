@@ -7,7 +7,11 @@
     "title": "Students",
     "placeholder": "Enter student name",
     "addButton": "Add",
-    "removeLabel": "Remove {{name}}"
+    "removeLabel": "Remove {{name}}",
+    "genderLabel": "Gender for {{name}}",
+    "genderNone": "Not specified",
+    "genderMale": "Male",
+    "genderFemale": "Female"
   },
   "classroom": {
     "title": "Classroom Layout",

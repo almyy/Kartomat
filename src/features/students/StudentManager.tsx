@@ -2,12 +2,14 @@ import { KeyboardEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { CollapsibleSection } from '../../components/CollapsibleSection'
+import { Gender } from '../../types/student'
 
 export function StudentManager() {
   const { t } = useTranslation()
   const students = useStore((state) => state.students)
   const addStudent = useStore((state) => state.addStudent)
   const removeStudent = useStore((state) => state.removeStudent)
+  const updateStudentGender = useStore((state) => state.updateStudentGender)
   
   // Local state for temporary input
   const [studentInput, setStudentInput] = useState('')
@@ -20,6 +22,14 @@ export function StudentManager() {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleAddStudent()
+    }
+  }
+
+  const handleGenderChange = (name: string, gender: string) => {
+    if (gender === 'none') {
+      updateStudentGender(name, undefined)
+    } else {
+      updateStudentGender(name, gender as Gender)
     }
   }
 
@@ -41,13 +51,23 @@ export function StudentManager() {
           {t('students.addButton')}
         </button>
       </div>
-      <div className="flex flex-wrap gap-2 min-h-[50px]">
-        {students.map(name => (
-          <div key={name} className="flex items-center gap-2 bg-indigo-600/30 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full border border-indigo-600/50 text-sm sm:text-base">
-            {name}
+      <div className="flex flex-col gap-2 min-h-[50px]">
+        {students.map(student => (
+          <div key={student.name} className="flex items-center gap-2 bg-indigo-600/30 px-2 sm:px-3 py-2 rounded border border-indigo-600/50 text-sm sm:text-base">
+            <span className="flex-1">{student.name}</span>
+            <select
+              value={student.gender || 'none'}
+              onChange={(e) => handleGenderChange(student.name, e.target.value)}
+              className="px-2 py-1 rounded border border-white/20 bg-black/30 text-inherit text-xs sm:text-sm"
+              aria-label={t('students.genderLabel', { name: student.name })}
+            >
+              <option value="none">{t('students.genderNone')}</option>
+              <option value="male">{t('students.genderMale')}</option>
+              <option value="female">{t('students.genderFemale')}</option>
+            </select>
             <button
-              onClick={() => removeStudent(name)}
-              aria-label={t('students.removeLabel', { name })}
+              onClick={() => removeStudent(student.name)}
+              aria-label={t('students.removeLabel', { name: student.name })}
               className="w-5 h-5 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg leading-none flex-shrink-0"
             >
               ×

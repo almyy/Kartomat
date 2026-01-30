@@ -1,5 +1,6 @@
 import { TFunction } from 'i18next'
 import { Constraint, CONSTRAINT_TYPES, PairConstraint, RowConstraint, FarApartConstraint, AbsoluteConstraint } from '../../cspSolver'
+import { Student } from '../../types/student'
 
 export function getConstraintDescription(constraint: Constraint, t: TFunction): string {
   switch (constraint.type) {
@@ -49,11 +50,11 @@ export function isValidAbsolutePosition(row: number, col: number, rows: number, 
   return row >= 0 && row < rows && col >= 0 && col < cols
 }
 
-export function isValidStudentPair(student1: string, student2: string, students: string[]): boolean {
+export function isValidStudentPair(student1: string, student2: string, students: Student[]): boolean {
   return student1 !== '' && student2 !== '' && student1 !== student2 && 
-         students.includes(student1) && students.includes(student2)
+         students.some(s => s.name === student1) && students.some(s => s.name === student2)
 }
 
-export function isValidStudent(student: string, students: string[]): boolean {
-  return student !== '' && students.includes(student)
+export function isValidStudent(student: string, students: Student[]): boolean {
+  return student !== '' && students.some(s => s.name === student)
 }
