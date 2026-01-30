@@ -32,15 +32,17 @@ function App() {
         <LanguageSelector />
       </div>
       
-      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-start">
-        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6">
+      <div className="flex flex-row flex-wrap gap-4 sm:gap-6 lg:gap-8">
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 flex-1 min-w-[300px]">
           <StudentManager />
           <ClassroomConfig />
           <ConstraintManager />
           <SolveButton onSolve={solve} disabled={students.length === 0} />
         </div>
 
-        <SeatingDisplay />
+        <div className="w-full">
+          <SeatingDisplay />
+        </div>
       </div>
     </div>
   )
