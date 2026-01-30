@@ -64,24 +64,28 @@ export function ClassroomConfig() {
 
       <div className="mb-3 sm:mb-4">
         <p className="text-xs sm:text-sm text-gray-400 mb-2">{t('classroom.genderInstruction')}</p>
-        <div className="flex flex-col gap-1 overflow-x-auto">
-          {layout.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex gap-1">
-              {row.map((isAvailable, colIndex) => {
-                const gender = seatGenders[rowIndex][colIndex]
-                return (
-                  <button
-                    key={colIndex}
-                    onClick={() => cycleSeatGender(rowIndex, colIndex)}
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded text-base sm:text-lg font-bold border transition-all flex-shrink-0 ${getSeatStyle(isAvailable, gender)}`}
-                    title={isAvailable ? `${t('classroom.availableSeat')} - ${gender === 'any' ? t('classroom.anyGender') : gender === 'male' ? t('students.genderMale') : t('students.genderFemale')}` : t('classroom.emptySpace')}
-                  >
-                    {isAvailable && getSeatIcon(gender)}
-                  </button>
-                )
-              })}
-            </div>
-          ))}
+        <div 
+          className="grid gap-2 sm:gap-3 w-full max-w-[1280px] mx-auto"
+          style={{
+            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`
+          }}
+        >
+          {layout.map((row, rowIndex) => 
+            row.map((isAvailable, colIndex) => {
+              const gender = seatGenders[rowIndex][colIndex]
+              return (
+                <button
+                  key={`${rowIndex}-${colIndex}`}
+                  onClick={() => cycleSeatGender(rowIndex, colIndex)}
+                  className={`aspect-square rounded text-base sm:text-lg font-bold border transition-all ${getSeatStyle(isAvailable, gender)}`}
+                  title={isAvailable ? `${t('classroom.availableSeat')} - ${gender === 'any' ? t('classroom.anyGender') : gender === 'male' ? t('students.genderMale') : t('students.genderFemale')}` : t('classroom.emptySpace')}
+                >
+                  {isAvailable && getSeatIcon(gender)}
+                </button>
+              )
+            })
+          )}
         </div>
       </div>
 
