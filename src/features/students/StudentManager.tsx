@@ -9,7 +9,7 @@ export function StudentManager() {
   const students = useStore((state) => state.students)
   const addStudent = useStore((state) => state.addStudent)
   const removeStudent = useStore((state) => state.removeStudent)
-  const updateStudentGender = useStore((state) => state.updateStudentGender)
+  const cycleStudentGender = useStore((state) => state.cycleStudentGender)
   
   // Local state for temporary input
   const [studentInput, setStudentInput] = useState('')
@@ -22,17 +22,6 @@ export function StudentManager() {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleAddStudent()
-    }
-  }
-
-  const cycleGender = (name: string, currentGender?: Gender) => {
-    // Cycle: undefined → male → female → undefined
-    if (!currentGender) {
-      updateStudentGender(name, 'male')
-    } else if (currentGender === 'male') {
-      updateStudentGender(name, 'female')
-    } else {
-      updateStudentGender(name, undefined)
     }
   }
 
@@ -93,7 +82,7 @@ export function StudentManager() {
               className={`flex items-center rounded-full border text-sm sm:text-base transition-colors ${genderButton.pillClassName}`}
             >
               <button
-                onClick={() => cycleGender(student.name, student.gender)}
+                onClick={() => cycleStudentGender(student.name)}
                 className={`flex items-center gap-2 flex-1 cursor-pointer outline-none px-3 py-2 rounded-l-full`}
                 aria-label={`${student.name}: ${genderButton.label}. ${t('students.tapToChange')}`}
               >

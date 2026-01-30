@@ -14,8 +14,7 @@ function App() {
   const constraints = useStore((state) => state.constraints)
   const rows = useStore((state) => state.rows)
   const cols = useStore((state) => state.cols)
-  const layout = useStore((state) => state.layout)
-  const seatGenders = useStore((state) => state.seatGenders)
+  const seatState = useStore((state) => state.seatState)
   const setSeatingResult = useStore((state) => state.setSeatingResult)
 
   const solve = () => {
@@ -24,6 +23,15 @@ function App() {
       acc[s.name] = s.gender
       return acc
     }, {} as Record<string, 'male' | 'female' | undefined>)
+    
+    // Convert seatState to layout and seatGenders for solver
+    const layout = seatState.map(row => row.map(state => state !== 'off'))
+    const seatGenders = seatState.map(row => row.map(state => {
+      if (state === 'm') return 'male' as const
+      if (state === 'f') return 'female' as const
+      return 'any' as const
+    }))
+    
     const result = solveSeatingCSP(studentNames, constraints, rows, cols, layout, seatGenders, studentGenders)
     setSeatingResult(result)
   }

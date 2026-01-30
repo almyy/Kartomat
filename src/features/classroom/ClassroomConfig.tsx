@@ -1,38 +1,43 @@
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { CollapsibleSection } from '../../components/CollapsibleSection'
-import { SeatGenderRestriction } from '../../store/classroomSlice'
+import { SeatState } from '../../store/classroomSlice'
 
 export function ClassroomConfig() {
   const { t } = useTranslation()
   const rows = useStore((state) => state.rows)
   const cols = useStore((state) => state.cols)
-  const layout = useStore((state) => state.layout)
-  const seatGenders = useStore((state) => state.seatGenders)
+  const seatState = useStore((state) => state.seatState)
   const setRows = useStore((state) => state.setRows)
   const setCols = useStore((state) => state.setCols)
-  const cycleSeatGender = useStore((state) => state.cycleSeatGender)
+  const cycleSeat = useStore((state) => state.cycleSeat)
 
-  const availableSeats = layout.flat().filter(seat => seat).length
+  const availableSeats = seatState.flat().filter(seat => seat !== 'off').length
 
-  const getSeatStyle = (isAvailable: boolean, gender: SeatGenderRestriction) => {
-    if (!isAvailable) {
+  const getSeatStyle = (state: SeatState) => {
+    if (state === 'off') {
       return 'bg-gray-700/30 border-gray-700/50 hover:bg-gray-700/50'
-    }
-    
-    if (gender === 'male') {
+    } else if (state === 'm') {
       return 'bg-blue-600/30 border-blue-600/50 hover:bg-blue-600/40'
-    } else if (gender === 'female') {
+    } else if (state === 'f') {
       return 'bg-pink-600/30 border-pink-600/50 hover:bg-pink-600/40'
     } else {
       return 'bg-gray-600/30 border-gray-600/50 hover:bg-gray-600/40'
     }
   }
 
-  const getSeatIcon = (gender: SeatGenderRestriction) => {
-    if (gender === 'male') return '♂'
-    if (gender === 'female') return '♀'
-    return '○'
+  const getSeatIcon = (state: SeatState) => {
+    if (state === 'm') return '♂'
+    if (state === 'f') return '♀'
+    if (state === 'n') return '○'
+    return ''
+  }
+
+  const getSeatTitle = (state: SeatState) => {
+    if (state === 'off') return t('classroom.emptySpace')
+    if (state === 'm') return `${t('classroom.availableSeat')} - ${t('students.genderMale')}`
+    if (state === 'f') return `${t('classroom.availableSeat')} - ${t('students.genderFemale')}`
+    return `${t('classroom.availableSeat')} - ${t('classroom.anyGender')}`
   }
 
   return (
@@ -71,20 +76,17 @@ export function ClassroomConfig() {
             gridTemplateRows: `repeat(${rows}, 1fr)`
           }}
         >
-          {layout.map((row, rowIndex) => 
-            row.map((isAvailable, colIndex) => {
-              const gender = seatGenders[rowIndex][colIndex]
-              return (
-                <button
-                  key={`${rowIndex}-${colIndex}`}
-                  onClick={() => cycleSeatGender(rowIndex, colIndex)}
-                  className={`aspect-square rounded text-base sm:text-lg font-bold border transition-all ${getSeatStyle(isAvailable, gender)}`}
-                  title={isAvailable ? `${t('classroom.availableSeat')} - ${gender === 'any' ? t('classroom.anyGender') : gender === 'male' ? t('students.genderMale') : t('students.genderFemale')}` : t('classroom.emptySpace')}
-                >
-                  {isAvailable && getSeatIcon(gender)}
-                </button>
-              )
-            })
+          {seatState.map((row, rowIndex) => 
+            row.map((state, colIndex) => (
+              <button
+                key={`${rowIndex}-${colIndex}`}
+                onClick={() => cycleSeat(rowIndex, colIndex)}
+                className={`aspect-square rounded text-base sm:text-lg font-bold border transition-all ${getSeatStyle(state)}`}
+                title={getSeatTitle(state)}
+              >
+                {getSeatIcon(state)}
+              </button>
+            ))
           )}
         </div>
       </div>

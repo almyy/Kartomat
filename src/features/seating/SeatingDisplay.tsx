@@ -6,7 +6,7 @@ import { CollapsibleSection } from '../../components/CollapsibleSection'
 export function SeatingDisplay() {
   const { t } = useTranslation()
   const seatingResult = useStore((state) => state.seatingResult)
-  const layout = useStore((state) => state.layout)
+  const seatState = useStore((state) => state.seatState)
 
   const handlePrint = () => {
     window.print()
@@ -31,7 +31,8 @@ export function SeatingDisplay() {
                 <div key={rowIndex} className="flex gap-1.5 sm:gap-2 items-center">
                   <div className="text-xs sm:text-sm text-gray-400 min-w-[40px] sm:min-w-[50px] flex-shrink-0">{t('seating.row', { index: rowIndex })}</div>
                   {row.map((seat, colIndex) => {
-                    const isAvailable = layout[rowIndex]?.[colIndex] ?? true
+                    const state = seatState[rowIndex]?.[colIndex]
+                    const isAvailable = state !== 'off'
                     return (
                       <div
                         key={colIndex}

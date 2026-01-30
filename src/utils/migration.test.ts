@@ -113,4 +113,124 @@ describe('localStorage Migration', () => {
     // Should not throw, just log error
     expect(() => migrateLocalStorage()).not.toThrow()
   })
+
+  it('should migrate layout and seatGenders to seatState', () => {
+    // Setup old format with layout and seatGenders
+    const oldFormat = {
+      state: {
+        students: [{ name: 'Alice', gender: 'female' }],
+        rows: 2,
+        cols: 3,
+        layout: [
+          [true, true, false],
+          [true, true, true]
+        ],
+        seatGenders: [
+          ['any', 'male', 'any'],
+          ['female', 'any', 'male']
+        ]
+      },
+      version: 0
+    }
+    mockStorage[storageKey] = JSON.stringify(oldFormat)
+    
+    // Run migration
+    migrateLocalStorage()
+    
+    // Verify migration
+    const stored = mockStorage[storageKey]
+    const parsed = JSON.parse(stored!)
+    
+    // Should have seatState
+    expect(parsed.state.seatState).toEqual([
+      ['n', 'm', 'off'],
+      ['f', 'n', 'm']
+    ])
+    
+    // Should not have old properties
+    expect(parsed.state.layout).toBeUndefined()
+    expect(parsed.state.seatGenders).toBeUndefined()
+  })
+
+  it('should handle combined migration of students and classroom state', () => {
+    // Setup old format with both string students and layout/seatGenders
+    const oldFormat = {
+      state: {
+        students: ['Alice', 'Bob'],
+        rows: 2,
+        cols: 2,
+        layout: [
+          [true, false],
+          [true, true]
+        ],
+        seatGenders: [
+          ['male', 'any'],
+          ['any', 'female']
+        ]
+      },
+      version: 0
+    }
+    mockStorage[storageKey] = JSON.stringify(oldFormat)
+    
+    // Run migration
+    migrateLocalStorage()
+    
+    // Verify both migrations occurred
+    const stored = mockStorage[storageKey]
+    const parsed = JSON.parse(stored!)
+    
+    // Students should be migrated
+    expect(parsed.state.students).toEqual([
+      { name: 'Alice', gender: undefined },
+      { name: 'Bob', gender: undefined }
+    ])
+    
+    // Classroom should be migrated
+    expect(parsed.state.seatState).toEqual([
+      ['m', 'off'],
+      ['n', 'f']
+    ])
+    expect(parsed.state.layout).toBeUndefined()
+    expect(parsed.state.seatGenders).toBeUndefined()
+  })
+
+  it('should not migrate if seatState already exists', () => {
+    // Setup format that already has seatState
+    const newFormat = {
+      state: {
+        students: [{ name: 'Alice', gender: 'female' }],
+        rows: 2,
+        cols: 2,
+        seatState: [
+          ['n', 'm'],
+          ['f', 'off']
+        ],
+        layout: [
+          [true, true],
+          [true, false]
+        ],
+        seatGenders: [
+          ['any', 'male'],
+          ['female', 'any']
+        ]
+      },
+      version: 0
+    }
+    mockStorage[storageKey] = JSON.stringify(newFormat)
+    
+    // Run migration
+    migrateLocalStorage()
+    
+    // Verify seatState is unchanged and old properties remain (not cleaned up)
+    const stored = mockStorage[storageKey]
+    const parsed = JSON.parse(stored!)
+    
+    expect(parsed.state.seatState).toEqual([
+      ['n', 'm'],
+      ['f', 'off']
+    ])
+    // Old properties should still exist since we didn't migrate
+    expect(parsed.state.layout).toBeDefined()
+    expect(parsed.state.seatGenders).toBeDefined()
+  })
 })

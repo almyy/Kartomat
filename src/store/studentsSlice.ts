@@ -7,6 +7,7 @@ export interface StudentsSlice {
   addStudent: (name: string) => void
   removeStudent: (name: string) => void
   updateStudentGender: (name: string, gender?: Gender) => void
+  cycleStudentGender: (name: string) => void
 }
 
 export const createStudentsSlice: StateCreator<
@@ -41,4 +42,20 @@ export const createStudentsSlice: StateCreator<
         s.name === name ? { ...s, gender } : s
       )
     })),
+  
+  cycleStudentGender: (name) =>
+    set((state) => {
+      const cycle: (Gender | undefined)[] = [undefined, 'male', 'female']
+      
+      const newStudents = state.students.map(s => {
+        if (s.name !== name) return s
+        
+        const currentIndex = cycle.indexOf(s.gender)
+        const nextIndex = (currentIndex + 1) % cycle.length
+        
+        return { ...s, gender: cycle[nextIndex] }
+      })
+      
+      return { students: newStudents }
+    }),
 })
