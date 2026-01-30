@@ -11,7 +11,9 @@
     "genderLabel": "Kjønn for {{name}}",
     "genderNone": "Ikke spesifisert",
     "genderMale": "Gutt",
-    "genderFemale": "Jente"
+    "genderFemale": "Jente",
+    "genderInstruction": "Trykk på en elev for å sette kjønn (grå → blå gutt → rosa jente)",
+    "tapToChange": "Trykk for å endre kjønn"
   },
   "classroom": {
     "title": "Klasserom",

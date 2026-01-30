@@ -11,7 +11,9 @@
     "genderLabel": "Gender for {{name}}",
     "genderNone": "Not specified",
     "genderMale": "Male",
-    "genderFemale": "Female"
+    "genderFemale": "Female",
+    "genderInstruction": "Tap a student to set gender (grey → blue boy → pink girl)",
+    "tapToChange": "Tap to change gender"
   },
   "classroom": {
     "title": "Classroom Layout",

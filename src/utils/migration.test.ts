@@ -9,7 +9,7 @@ describe('localStorage Migration', () => {
     mockStorage = {}
     
     // Mock localStorage
-    global.localStorage = {
+    globalThis.localStorage = {
       getItem: vi.fn((key: string) => mockStorage[key] || null),
       setItem: vi.fn((key: string, value: string) => {
         mockStorage[key] = value
