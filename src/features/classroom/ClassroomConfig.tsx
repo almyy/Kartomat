@@ -65,7 +65,7 @@ export function ClassroomConfig() {
       <div className="mb-3 sm:mb-4">
         <p className="text-xs sm:text-sm text-gray-400 mb-2">{t('classroom.genderInstruction')}</p>
         <div 
-          className="grid gap-2 sm:gap-3 w-full max-w-[1280px] mx-auto"
+          className="grid gap-2 sm:gap-3 w-full mx-auto"
           style={{
             gridTemplateColumns: `repeat(${cols}, 1fr)`,
             gridTemplateRows: `repeat(${rows}, 1fr)`

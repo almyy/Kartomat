@@ -24,6 +24,10 @@ body {
   overflow-x: hidden;
 }
 
+#root {
+  width: 100%;
+}
+
 h1 {
   font-size: 1.75rem;
   line-height: 1.2;

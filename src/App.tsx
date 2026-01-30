@@ -30,23 +30,25 @@ function App() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-4 sm:mb-2">
-        <div className="flex-1 w-full">
+      <div className="relative mb-4 sm:mb-2">
+        <div className="absolute top-0 right-0">
+          <LanguageSelector />
+        </div>
+        <div className="w-full">
           <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
           <p className="text-center text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
         </div>
-        <LanguageSelector />
       </div>
       
-      <div className="flex flex-row flex-wrap gap-4 sm:gap-6 lg:gap-8">
-        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 flex-1 min-w-[300px]">
+      <div className="flex flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full max-w-2xl">
           <StudentManager />
           <ClassroomConfig />
           <ConstraintManager />
           <SolveButton onSolve={solve} disabled={students.length === 0} />
         </div>
 
-        <div className="w-full">
+        <div className="w-full max-w-2xl">
           <SeatingDisplay />
         </div>
       </div>
