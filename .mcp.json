@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-playwright"],
+      "description": "Playwright testing server - browser automation, test debugging, and E2E test analysis"
+    },
+    "react": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-react"],
+      "description": "React development server - component analysis, hooks debugging, and React-specific tooling"
+    },
+    "axe": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-axe"],
+      "description": "Accessibility testing with axe-core - WCAG compliance checking and a11y issue detection"
+    },
+    "tailwindcss": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-tailwindcss"],
+      "description": "Tailwind CSS utilities - class suggestions, design token lookups, and utility reference"
+    }
+  }
+}
