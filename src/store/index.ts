@@ -42,6 +42,7 @@ export const useStore = create<AppStore>()(
         rows: state.rows,
         cols: state.cols,
         layout: state.layout,
+        seatGenders: state.seatGenders,
         constraints: state.constraints,
       }),
     }

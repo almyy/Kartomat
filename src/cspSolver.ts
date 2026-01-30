@@ -58,10 +58,13 @@ export function solveSeatingCSP(
   constraints: Constraint[],
   rows: number,
   cols: number,
-  layout?: boolean[][]
+  layout?: boolean[][],
+  seatGenders?: ('male' | 'female' | 'any')[][],
+  studentGenders?: Record<string, 'male' | 'female' | undefined>
 ): SeatingResult {
   // Use default layout if not provided (all seats available)
   const seatLayout = layout || Array(rows).fill(null).map(() => Array(cols).fill(true));
+  const genderRestrictions = seatGenders || Array(rows).fill(null).map(() => Array(cols).fill('any'));
 
   // Count available seats
   const availableSeats = seatLayout.flat().filter(seat => seat).length;
@@ -75,7 +78,7 @@ export function solveSeatingCSP(
   const assignedStudents = new Set<string>();
 
   // Try to solve using backtracking
-  const solution = backtrack(students, constraints, seating, assignedStudents, rows, cols, seatLayout);
+  const solution = backtrack(students, constraints, seating, assignedStudents, rows, cols, seatLayout, genderRestrictions, studentGenders || {});
 
   if (solution) {
     return { success: true, seating: solution };
@@ -94,7 +97,9 @@ function backtrack(
   assigned: Set<string>,
   rows: number,
   cols: number,
-  layout: boolean[][]
+  layout: boolean[][],
+  seatGenders: ('male' | 'female' | 'any')[][],
+  studentGenders: Record<string, 'male' | 'female' | undefined>
 ): Seating | null {
   // Base case: all students assigned
   if (assigned.size === students.length) {
@@ -108,8 +113,8 @@ function backtrack(
     return null;
   }
 
-  // Get valid positions for this student based on constraints
-  const validPositions = getValidPositions(student, constraints, seating, rows, cols, layout);
+  // Get valid positions for this student based on constraints and gender
+  const validPositions = getValidPositions(student, constraints, seating, rows, cols, layout, seatGenders, studentGenders);
 
   // Shuffle positions to introduce randomness - creates different solutions each time
   shuffleArray(validPositions);
@@ -123,7 +128,7 @@ function backtrack(
     // Check if this assignment satisfies all constraints
     if (isConsistent(student, row, col, seating, constraints, rows, cols, layout)) {
       // Recurse
-      const result = backtrack(students, constraints, seating, assigned, rows, cols, layout);
+      const result = backtrack(students, constraints, seating, assigned, rows, cols, layout, seatGenders, studentGenders);
       if (result) {
         return result;
       }
@@ -209,8 +214,19 @@ function getValidPositions(
   rows: number,
   cols: number,
   layout: boolean[][],
+  seatGenders: ('male' | 'female' | 'any')[][],
+  studentGenders: Record<string, 'male' | 'female' | undefined>
 ): [number, number][] {
   const positions: [number, number][] = [];
+  const studentGender = studentGenders[student];
+
+  // Helper to check if student can sit in a seat based on gender
+  const canSitHere = (row: number, col: number): boolean => {
+    const seatRestriction = seatGenders[row][col];
+    if (seatRestriction === 'any') return true;
+    if (!studentGender) return true; // Student with no gender can sit anywhere
+    return seatRestriction === studentGender;
+  };
 
   // Check for absolute constraint - only one valid position
   const absoluteConstraint = constraints.find(
@@ -219,7 +235,7 @@ function getValidPositions(
 
   if (absoluteConstraint) {
     const { row, col } = absoluteConstraint;
-    if (layout[row][col] && seating[row][col] === null) {
+    if (layout[row][col] && seating[row][col] === null && canSitHere(row, col)) {
       return [[row, col]];
     }
     return []; // Constraint cannot be satisfied
@@ -232,7 +248,7 @@ function getValidPositions(
 
   if (rowConstraint) {
     for (let col = 0; col < cols; col++) {
-      if (layout[rowConstraint.row][col] && seating[rowConstraint.row][col] === null) {
+      if (layout[rowConstraint.row][col] && seating[rowConstraint.row][col] === null && canSitHere(rowConstraint.row, col)) {
         positions.push([rowConstraint.row, col]);
       }
     }
@@ -261,7 +277,7 @@ function getValidPositions(
         const newCol = partnerCol + dc;
 
         if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
-          if (layout[newRow][newCol] && seating[newRow][newCol] === null) {
+          if (layout[newRow][newCol] && seating[newRow][newCol] === null && canSitHere(newRow, newCol)) {
             positions.push([newRow, newCol]);
           }
         }
@@ -270,10 +286,10 @@ function getValidPositions(
     }
   }
 
-  // Default: all empty seats
+  // Default: all empty seats that match gender restriction
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      if (layout[row][col] && seating[row][col] === null) {
+      if (layout[row][col] && seating[row][col] === null && canSitHere(row, col)) {
         positions.push([row, col]);
       }
     }

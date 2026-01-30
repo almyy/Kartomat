@@ -19,7 +19,8 @@
     "title": "Classroom Layout",
     "rows": "Rows",
     "columns": "Columns",
-    "toggleInstruction": "Click seats to toggle available/empty spaces:",
+    "genderInstruction": "Tap seat: grey (any) → blue (boys) → pink (girls). Long-press to disable seat.",
+    "anyGender": "Any gender",
     "availableSeat": "Available seat",
     "emptySpace": "Empty space",
     "availableSeats": "Available seats: {{count}}"

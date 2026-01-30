@@ -15,11 +15,16 @@ function App() {
   const rows = useStore((state) => state.rows)
   const cols = useStore((state) => state.cols)
   const layout = useStore((state) => state.layout)
+  const seatGenders = useStore((state) => state.seatGenders)
   const setSeatingResult = useStore((state) => state.setSeatingResult)
 
   const solve = () => {
     const studentNames = students.map(s => s.name)
-    const result = solveSeatingCSP(studentNames, constraints, rows, cols, layout)
+    const studentGenders = students.reduce((acc, s) => {
+      acc[s.name] = s.gender
+      return acc
+    }, {} as Record<string, 'male' | 'female' | undefined>)
+    const result = solveSeatingCSP(studentNames, constraints, rows, cols, layout, seatGenders, studentGenders)
     setSeatingResult(result)
   }
 
