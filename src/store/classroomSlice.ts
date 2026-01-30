@@ -64,20 +64,32 @@ export const createClassroomSlice: StateCreator<
   },
   cycleSeatGender: (row, col) => {
     const { seatGenders, layout } = get()
-    // Only cycle if seat is available
-    if (!layout[row][col]) return
     
-    const newSeatGenders = seatGenders.map((r, rIdx) => 
-      r.map((gender, cIdx) => {
-        if (rIdx === row && cIdx === col) {
-          // Cycle: any → male → female → any
-          if (gender === 'any') return 'male'
-          if (gender === 'male') return 'female'
-          return 'any'
-        }
-        return gender
-      })
-    )
-    set({ seatGenders: newSeatGenders })
+    const newLayout = [...layout]
+    const newSeatGenders = seatGenders.map(r => [...r])
+    
+    const currentGender = seatGenders[row][col]
+    const isAvailable = layout[row][col]
+    
+    // Cycle: any → male → female → off → any
+    if (isAvailable) {
+      if (currentGender === 'any') {
+        newSeatGenders[row][col] = 'male'
+      } else if (currentGender === 'male') {
+        newSeatGenders[row][col] = 'female'
+      } else if (currentGender === 'female') {
+        // Turn off the seat
+        newLayout[row] = [...newLayout[row]]
+        newLayout[row][col] = false
+        newSeatGenders[row][col] = 'any' // Reset to 'any' for when it's turned back on
+      }
+    } else {
+      // Turn seat back on with 'any' gender
+      newLayout[row] = [...newLayout[row]]
+      newLayout[row][col] = true
+      newSeatGenders[row][col] = 'any'
+    }
+    
+    set({ layout: newLayout, seatGenders: newSeatGenders })
   },
 })

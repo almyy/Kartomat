@@ -11,7 +11,6 @@ export function ClassroomConfig() {
   const seatGenders = useStore((state) => state.seatGenders)
   const setRows = useStore((state) => state.setRows)
   const setCols = useStore((state) => state.setCols)
-  const toggleSeat = useStore((state) => state.toggleSeat)
   const cycleSeatGender = useStore((state) => state.cycleSeatGender)
 
   const availableSeats = layout.flat().filter(seat => seat).length
@@ -71,19 +70,14 @@ export function ClassroomConfig() {
               {row.map((isAvailable, colIndex) => {
                 const gender = seatGenders[rowIndex][colIndex]
                 return (
-                  <div key={colIndex} className="relative group">
-                    <button
-                      onClick={() => cycleSeatGender(rowIndex, colIndex)}
-                      onContextMenu={(e) => {
-                        e.preventDefault()
-                        toggleSeat(rowIndex, colIndex)
-                      }}
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded text-base sm:text-lg font-bold border transition-all flex-shrink-0 ${getSeatStyle(isAvailable, gender)}`}
-                      title={isAvailable ? `${t('classroom.availableSeat')} - ${gender === 'any' ? t('classroom.anyGender') : gender === 'male' ? t('students.genderMale') : t('students.genderFemale')}` : t('classroom.emptySpace')}
-                    >
-                      {isAvailable && getSeatIcon(gender)}
-                    </button>
-                  </div>
+                  <button
+                    key={colIndex}
+                    onClick={() => cycleSeatGender(rowIndex, colIndex)}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded text-base sm:text-lg font-bold border transition-all flex-shrink-0 ${getSeatStyle(isAvailable, gender)}`}
+                    title={isAvailable ? `${t('classroom.availableSeat')} - ${gender === 'any' ? t('classroom.anyGender') : gender === 'male' ? t('students.genderMale') : t('students.genderFemale')}` : t('classroom.emptySpace')}
+                  >
+                    {isAvailable && getSeatIcon(gender)}
+                  </button>
                 )
               })}
             </div>

@@ -19,7 +19,7 @@
     "title": "Classroom Layout",
     "rows": "Rows",
     "columns": "Columns",
-    "genderInstruction": "Tap seat: grey (any) → blue (boys) → pink (girls). Long-press to disable seat.",
+    "genderInstruction": "Tap seat: grey (any) → blue (boys) → pink (girls) → off.",
     "anyGender": "Any gender",
     "availableSeat": "Available seat",
     "emptySpace": "Empty space",

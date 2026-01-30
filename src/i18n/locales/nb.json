@@ -19,7 +19,7 @@
     "title": "Klasserom",
     "rows": "Rader",
     "columns": "Kolonner",
-    "genderInstruction": "Trykk på pult: grå (alle) → blå (gutter) → rosa (jenter). Lang-trykk for å deaktivere pult.",
+    "genderInstruction": "Trykk på pult: grå (alle) → blå (gutter) → rosa (jenter) → av.",
     "anyGender": "Alle kjønn",
     "availableSeat": "Tilgjengelig sete",
     "emptySpace": "Tom plass",
