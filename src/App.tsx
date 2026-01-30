@@ -32,7 +32,7 @@ function App() {
         <LanguageSelector />
       </div>
       
-      <div className="grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-start">
+      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-start">
         <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6">
           <StudentManager />
           <ClassroomConfig />
