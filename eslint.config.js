@@ -60,5 +60,5 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
-  globalIgnores(['**/node_modules/**', '**/dist/**', '**/build/**', 'playwright.config.ts']),
+  globalIgnores(['**/node_modules/**', '**/dist/**', '**/build/**', 'playwright.config.ts', 'playwright-report/**', 'vite.config.ts']),
 ]);
