@@ -48,7 +48,8 @@ export const createClassroomSlice: StateCreator<
       const newSeatState = state.seatState.map(r => [...r])
       const current = state.seatState[row][col]
       const currentIndex = cycle.indexOf(current)
-      const nextIndex = (currentIndex + 1) % cycle.length
+      // Handle -1 (not found) by treating as last index so it cycles to 0
+      const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % cycle.length
       newSeatState[row][col] = cycle[nextIndex]
       
       return { seatState: newSeatState }

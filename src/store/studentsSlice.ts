@@ -51,7 +51,8 @@ export const createStudentsSlice: StateCreator<
         if (s.name !== name) return s
         
         const currentIndex = cycle.indexOf(s.gender)
-        const nextIndex = (currentIndex + 1) % cycle.length
+        // Handle -1 (not found) by treating as last index so it cycles to 0
+        const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % cycle.length
         
         return { ...s, gender: cycle[nextIndex] }
       })

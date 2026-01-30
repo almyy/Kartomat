@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { CollapsibleSection } from '../../components/CollapsibleSection'
 import { Gender } from '../../types/student'
+import { useThrottle } from '../../hooks/useThrottle'
 
 export function StudentManager() {
   const { t } = useTranslation()
@@ -13,6 +14,9 @@ export function StudentManager() {
   
   // Local state for temporary input
   const [studentInput, setStudentInput] = useState('')
+  
+  // Throttle the cycle function to prevent rapid clicks
+  const throttledCycleGender = useThrottle(cycleStudentGender, 100)
 
   const handleAddStudent = () => {
     addStudent(studentInput)
@@ -82,7 +86,7 @@ export function StudentManager() {
               className={`flex items-center rounded-full border text-sm sm:text-base transition-colors ${genderButton.pillClassName}`}
             >
               <button
-                onClick={() => cycleStudentGender(student.name)}
+                onClick={() => throttledCycleGender(student.name)}
                 className={`flex items-center gap-2 flex-1 cursor-pointer outline-none px-3 py-2 rounded-l-full`}
                 aria-label={`${student.name}: ${genderButton.label}. ${t('students.tapToChange')}`}
               >

@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { CollapsibleSection } from '../../components/CollapsibleSection'
 import { SeatState } from '../../store/classroomSlice'
+import { useThrottle } from '../../hooks/useThrottle'
 
 export function ClassroomConfig() {
   const { t } = useTranslation()
@@ -11,6 +12,11 @@ export function ClassroomConfig() {
   const setRows = useStore((state) => state.setRows)
   const setCols = useStore((state) => state.setCols)
   const cycleSeat = useStore((state) => state.cycleSeat)
+  
+  // Throttle the cycle function to prevent rapid clicks
+  const throttledCycleSeat = useThrottle((row: number, col: number) => {
+    cycleSeat(row, col)
+  }, 100)
 
   const availableSeats = seatState.flat().filter(seat => seat !== 'off').length
 
@@ -80,7 +86,7 @@ export function ClassroomConfig() {
             row.map((state, colIndex) => (
               <button
                 key={`${rowIndex}-${colIndex}`}
-                onClick={() => cycleSeat(rowIndex, colIndex)}
+                onClick={() => throttledCycleSeat(rowIndex, colIndex)}
                 className={`aspect-square rounded text-base sm:text-lg font-bold border transition-all ${getSeatStyle(state)}`}
                 title={getSeatTitle(state)}
               >
