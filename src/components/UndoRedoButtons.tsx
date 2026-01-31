@@ -46,7 +46,7 @@ export function UndoRedoButtons() {
   }, [canUndo, canRedo, undo, redo])
 
   return (
-    <div className="fixed bottom-4 right-4 flex gap-2 z-50">
+    <div className="fixed bottom-4 right-4 flex gap-2 z-50 print:hidden">
       <Button
         onClick={() => undo()}
         disabled={!canUndo}
