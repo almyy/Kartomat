@@ -19,21 +19,13 @@ function App() {
   const setSeatingResult = useStore((state) => state.setSeatingResult)
 
   const solve = () => {
-    const studentNames = students.map(s => s.name)
-    const studentGenders = students.reduce((acc, s) => {
-      acc[s.name] = s.gender
-      return acc
-    }, {} as Record<string, 'male' | 'female' | undefined>)
+    // Convert seatState to Seat objects for solver
+    const seatLayout = seatState.map(row => row.map(state => ({
+      available: state !== 'off',
+      gender: state === 'm' ? 'male' as const : state === 'f' ? 'female' as const : 'any' as const
+    })))
     
-    // Convert seatState to layout and seatGenders for solver
-    const layout = seatState.map(row => row.map(state => state !== 'off'))
-    const seatGenders = seatState.map(row => row.map(state => {
-      if (state === 'm') return 'male' as const
-      if (state === 'f') return 'female' as const
-      return 'any' as const
-    }))
-    
-    const result = solveSeatingCSP(studentNames, constraints, rows, cols, layout, seatGenders, studentGenders)
+    const result = solveSeatingCSP(students, constraints, rows, cols, seatLayout)
     setSeatingResult(result)
   }
 
