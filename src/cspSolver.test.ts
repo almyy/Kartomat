@@ -524,3 +524,94 @@ describe('CSP Solver - Compact Placement', () => {
     expect(studentsInMultipleRows).toBeGreaterThanOrEqual(4);
   });
 });
+
+describe('CSP Solver - Gender Restrictions', () => {
+  it('should respect seat gender restrictions when placing students', () => {
+    const students = toStudents(['Alice', 'Bob', 'Charlie', 'Diana']);
+    students[0].gender = 'female'; // Alice
+    students[1].gender = 'male';   // Bob
+    students[2].gender = 'male';   // Charlie
+    students[3].gender = 'female'; // Diana
+
+    // Create a layout with gender restrictions
+    const seatLayout: Seat[][] = [
+      [{ available: true, gender: 'female' }, { available: true, gender: 'male' }, { available: true, gender: 'any' }],
+      [{ available: true, gender: 'male' }, { available: true, gender: 'female' }, { available: true, gender: 'any' }]
+    ];
+
+    const result = solveSeatingCSP(students, [], 2, 3, seatLayout);
+
+    expect(result.success).toBe(true);
+
+    // Check that students are placed according to gender restrictions
+    for (let row = 0; row < 2; row++) {
+      for (let col = 0; col < 3; col++) {
+        const studentName = result.seating![row][col];
+        if (studentName) {
+          const student = students.find(s => s.name === studentName)!;
+          const seatGender = seatLayout[row][col].gender;
+          
+          // If seat has gender restriction, student must match
+          if (seatGender !== 'any' && student.gender) {
+            expect(student.gender).toBe(seatGender);
+          }
+        }
+      }
+    }
+  });
+
+  it('should handle students without gender in restricted seats', () => {
+    const students = toStudents(['Alice', 'Bob']);
+    students[0].gender = 'male'; // Alice has gender
+    // Bob has no gender
+
+    // Create a layout with gender restrictions
+    const seatLayout: Seat[][] = [
+      [{ available: true, gender: 'male' }, { available: true, gender: 'female' }],
+      [{ available: true, gender: 'any' }, { available: true, gender: 'any' }]
+    ];
+
+    const result = solveSeatingCSP(students, [], 2, 2, seatLayout);
+
+    expect(result.success).toBe(true);
+
+    // Alice should be in a male seat or any seat
+    let aliceInCorrectSeat = false;
+    for (let row = 0; row < 2; row++) {
+      for (let col = 0; col < 2; col++) {
+        if (result.seating![row][col] === 'Alice') {
+          const seatGender = seatLayout[row][col].gender;
+          aliceInCorrectSeat = seatGender === 'male' || seatGender === 'any';
+        }
+      }
+    }
+    expect(aliceInCorrectSeat).toBe(true);
+
+    // Bob (no gender) can be in any available seat
+    let bobPlaced = false;
+    for (let row = 0; row < 2; row++) {
+      for (let col = 0; col < 2; col++) {
+        if (result.seating![row][col] === 'Bob') {
+          bobPlaced = true;
+        }
+      }
+    }
+    expect(bobPlaced).toBe(true);
+  });
+
+  it('should fail when gender restrictions cannot be satisfied', () => {
+    const students = toStudents(['Alice', 'Bob']);
+    students[0].gender = 'female';
+    students[1].gender = 'female';
+
+    // Only male seats available
+    const seatLayout: Seat[][] = [
+      [{ available: true, gender: 'male' }, { available: true, gender: 'male' }]
+    ];
+
+    const result = solveSeatingCSP(students, [], 1, 2, seatLayout);
+
+    // Should fail because two female students cannot sit in male-only seats
+    expect(result.success).toBe(false);
+  });
+});
