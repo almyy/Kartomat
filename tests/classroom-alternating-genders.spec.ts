@@ -12,7 +12,7 @@ test.describe('Classroom Alternating Genders', () => {
     await configureClassroom(page, 3, 3);
     
     // Click the alternate button
-    await page.getByRole('button', { name: /veksel|alternate/i }).click();
+    await page.getByRole('button', { name: /Annenhvert|alternate/i }).click();
     
     // Get all seat buttons (excluding the button we just clicked)
     const classroomRegion = page.getByRole('region', { name: /klasserom|classroom/i });
@@ -63,7 +63,7 @@ test.describe('Classroom Alternating Genders', () => {
     expect(seat5Title).toMatch(/tom plass|empty space/i);
     
     // Now click the alternate button
-    await page.getByRole('button', { name: /veksel|alternate/i }).click();
+    await page.getByRole('button', { name: /Annenhvert|alternate/i }).click();
     
     // Check that only non-disabled seats have gender icons
     // Seats 0, 2, 3, 4 should have alternating ♀, ♂, ♀, ♂
@@ -93,7 +93,7 @@ test.describe('Classroom Alternating Genders', () => {
     const classroomRegion = page.getByRole('region', { name: /klasserom|classroom/i });
     
     // Click alternate button multiple times
-    const alternateButton = page.getByRole('button', { name: /veksel|alternate/i });
+    const alternateButton = page.getByRole('button', { name: /Annenhvert|alternate/i });
     await alternateButton.click();
     await alternateButton.click();
     

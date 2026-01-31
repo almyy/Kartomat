@@ -24,7 +24,7 @@
     "availableSeat": "Tilgjengelig sete",
     "emptySpace": "Tom plass",
     "availableSeats": "Tilgjengelige seter: {{count}}",
-    "alternateButton": "Veksel jenter & gutter"
+    "alternateButton": "Annenhvert kjønn"
   },
   "constraints": {
     "title": "Begrensninger",
