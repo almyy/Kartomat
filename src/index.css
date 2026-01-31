@@ -65,10 +65,7 @@ h1 {
     display: none !important;
   }
 
-  #root > * > *:not(.flex:has(#seating-arrangement)) {
-    display: none !important;
-  }
-
+  /* These are caught by print:hidden utility classes on elements */
   h1, h2, p, button {
     display: none !important;
   }
