@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { useFarApartConstraintForm } from './useFarApartConstraintForm'
+import { Button } from '../../components'
 
 export function FarApartConstraintForm() {
   const { t } = useTranslation()
@@ -47,12 +48,12 @@ export function FarApartConstraintForm() {
         placeholder={t('constraints.distanceUnits')}
         className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
-      <button
+      <Button
         onClick={handleAddConstraint}
-        className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors text-sm sm:text-base"
+        variant="primary"
       >
         {t('constraints.addButton')}
-      </button>
+      </Button>
     </>
   )
 }

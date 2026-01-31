@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Button } from '../../components'
 
 interface PrintButtonProps {
   onClick: () => void
@@ -8,9 +9,10 @@ export function PrintButton({ onClick }: PrintButtonProps) {
   const { t } = useTranslation()
   
   return (
-    <button
+    <Button
       onClick={onClick}
-      className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors flex items-center gap-2 print:hidden"
+      variant="primary"
+      className="flex items-center gap-2 print:hidden"
       aria-label={t('seating.print')}
     >
       <svg
@@ -28,6 +30,6 @@ export function PrintButton({ onClick }: PrintButtonProps) {
         />
       </svg>
       {t('seating.print')}
-    </button>
+    </Button>
   )
 }
