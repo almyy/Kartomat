@@ -359,3 +359,157 @@ describe('CSP Solver - Mixed Complex Constraints', () => {
     }
   });
 });
+
+describe('CSP Solver - Compact Placement', () => {
+  it('should place students from front to back when there are more seats than students', () => {
+    const students = ['Alice', 'Bob', 'Charlie'];
+    const result = solveSeatingCSP(students, [], 3, 3);
+
+    expect(result.success).toBe(true);
+    
+    // Students should be in the first row(s), not spread out
+    // Count students in each row
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    const row2Count = result.seating![2].filter(s => s !== null).length;
+    
+    // First row should be filled before second row
+    if (row1Count > 0) {
+      expect(row0Count).toBe(3); // First row should be full
+    }
+    
+    // Third row should be empty since we only have 3 students
+    expect(row2Count).toBe(0);
+  });
+
+  it('should place students together from front to back in a large classroom', () => {
+    const students = ['A', 'B', 'C', 'D', 'E'];
+    const result = solveSeatingCSP(students, [], 5, 5); // 25 seats for 5 students
+
+    expect(result.success).toBe(true);
+    
+    // All students should be in the first row (or first two rows if first row has less than 5 columns)
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    const row2Count = result.seating![2].filter(s => s !== null).length;
+    const row3Count = result.seating![3].filter(s => s !== null).length;
+    const row4Count = result.seating![4].filter(s => s !== null).length;
+    
+    // First row should be completely filled
+    expect(row0Count).toBe(5);
+    
+    // All other rows should be empty
+    expect(row1Count).toBe(0);
+    expect(row2Count).toBe(0);
+    expect(row3Count).toBe(0);
+    expect(row4Count).toBe(0);
+  });
+
+  it('should place students front to back without gaps', () => {
+    const students = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    const result = solveSeatingCSP(students, [], 3, 4); // 12 seats for 7 students
+
+    expect(result.success).toBe(true);
+    
+    // Count students in each row
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    const row2Count = result.seating![2].filter(s => s !== null).length;
+    
+    // First row should be filled (4 students)
+    expect(row0Count).toBe(4);
+    
+    // Second row should have remaining students (3 students)
+    expect(row1Count).toBe(3);
+    
+    // Third row should be empty
+    expect(row2Count).toBe(0);
+  });
+
+  it('should still respect constraints while placing front to back', () => {
+    const students = ['Alice', 'Bob', 'Charlie', 'David'];
+    const constraints = [
+      { type: CONSTRAINT_TYPES.ABSOLUTE, student1: 'David', row: 2, col: 2 }
+    ];
+    
+    const result = solveSeatingCSP(students, constraints, 3, 3);
+
+    expect(result.success).toBe(true);
+    
+    // David should be at (2, 2) as constrained
+    expect(result.seating![2][2]).toBe('David');
+    
+    // Other students should fill from front
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    
+    // First row should have students
+    expect(row0Count).toBeGreaterThan(0);
+    
+    // Students should be placed front-to-back except for David
+    expect(result.seating![0][0]).not.toBeNull();
+  });
+
+  it('should produce different arrangements on multiple runs due to randomness', () => {
+    const students = ['A', 'B', 'C', 'D', 'E'];
+    
+    // Run solver multiple times and store actual results
+    const seatingSolutions = [];
+    const serializedSeatings = [];
+    for (let i = 0; i < 10; i++) { // Increased to 10 runs to reduce flakiness
+      const result = solveSeatingCSP(students, [], 3, 5);
+      expect(result.success).toBe(true);
+      seatingSolutions.push(result);
+      serializedSeatings.push(JSON.stringify(result.seating));
+    }
+    
+    // At least some results should be different (not all identical)
+    const uniqueResults = new Set(serializedSeatings);
+    // With 5 students in 15 seats and randomness, we should get some variation
+    // With 10 runs, probability of all identical is extremely low
+    expect(uniqueResults.size).toBeGreaterThan(1);
+    
+    // But all should still be compact (students in first row)
+    for (const result of seatingSolutions) {
+      const row0Count = result.seating![0].filter(s => s !== null).length;
+      expect(row0Count).toBe(5); // All in first row
+    }
+  });
+
+  it('should place individual students in different rows across multiple runs', () => {
+    // Test that the same student doesn't always end up in the same row
+    const students = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Henry'];
+    
+    // Track which rows each student appears in across multiple runs
+    const studentRowAppearances = new Map<string, Set<number>>();
+    students.forEach(s => studentRowAppearances.set(s, new Set()));
+    
+    // Run solver multiple times
+    for (let i = 0; i < 20; i++) {
+      const result = solveSeatingCSP(students, [], 4, 6); // 24 seats for 8 students
+      expect(result.success).toBe(true);
+      
+      // Track which row each student ended up in
+      for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 6; col++) {
+          const student = result.seating![row][col];
+          if (student) {
+            studentRowAppearances.get(student)!.add(row);
+          }
+        }
+      }
+    }
+    
+    // At least some students should have appeared in multiple different rows
+    // With 8 students in 24 seats (filling rows 0-1), students should vary between row 0 and row 1
+    let studentsInMultipleRows = 0;
+    for (const [, rows] of studentRowAppearances) {
+      if (rows.size > 1) {
+        studentsInMultipleRows++;
+      }
+    }
+    
+    // With 20 runs and randomization, at least half the students should appear in different rows
+    // This is a strong indicator that student selection is properly randomized
+    expect(studentsInMultipleRows).toBeGreaterThanOrEqual(4);
+  });
+});

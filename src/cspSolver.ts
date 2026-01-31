@@ -73,12 +73,17 @@ export function solveSeatingCSP(
     return { success: false, message: 'Not enough available seats for all students' };
   }
 
+  // Randomize student order to ensure different students can end up in different rows
+  // This prevents the same students from always being placed in the same rows
+  const shuffledStudents = [...students];
+  shuffleArray(shuffledStudents);
+
   // Initialize empty seating chart (row, col) -> student name
   const seating: Seating = Array(rows).fill(null).map(() => Array(cols).fill(null));
   const assignedStudents = new Set<string>();
 
   // Try to solve using backtracking
-  const solution = backtrack(students, constraints, seating, assignedStudents, rows, cols, seatLayout, genderRestrictions, studentGenders || {});
+  const solution = backtrack(shuffledStudents, constraints, seating, assignedStudents, rows, cols, seatLayout, genderRestrictions, studentGenders || {});
 
   if (solution) {
     return { success: true, seating: solution };
@@ -116,8 +121,9 @@ function backtrack(
   // Get valid positions for this student based on constraints and gender
   const validPositions = getValidPositions(student, constraints, seating, rows, cols, layout, seatGenders, studentGenders);
 
-  // Shuffle positions to introduce randomness - creates different solutions each time
-  shuffleArray(validPositions);
+  // Sort positions front-to-back, left-to-right for compact placement
+  // This ensures students are placed together rather than spread out
+  sortPositionsFrontToBack(validPositions);
 
   // Try each valid position
   for (const [row, col] of validPositions) {
@@ -463,6 +469,38 @@ function hasAdjacentEmptySeat(row: number, col: number, seating: Seating, rows: 
  */
 function deepCopy(arr: Seating): Seating {
   return arr.map(row => [...row]);
+}
+
+/**
+ * Sort positions front-to-back (by row), with randomness within each row
+ * This ensures compact seating arrangement with students placed together
+ * while maintaining variety between different solutions
+ */
+function sortPositionsFrontToBack(positions: [number, number][]): void {
+  // First, sort by row to ensure front-to-back placement
+  positions.sort((a, b) => a[0] - b[0]);
+  
+  // Then shuffle positions within each row to add randomness
+  // Group positions by row
+  const rowGroups = new Map<number, [number, number][]>();
+  for (const pos of positions) {
+    const row = pos[0];
+    if (!rowGroups.has(row)) {
+      rowGroups.set(row, []);
+    }
+    rowGroups.get(row)!.push(pos);
+  }
+  
+  // Shuffle each row's positions
+  for (const rowPositions of rowGroups.values()) {
+    shuffleArray(rowPositions);
+  }
+  
+  // Reconstruct positions array with shuffled rows
+  positions.length = 0;
+  for (const row of Array.from(rowGroups.keys()).sort((a, b) => a - b)) {
+    positions.push(...rowGroups.get(row)!);
+  }
 }
 
 /**
