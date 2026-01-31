@@ -116,8 +116,9 @@ function backtrack(
   // Get valid positions for this student based on constraints and gender
   const validPositions = getValidPositions(student, constraints, seating, rows, cols, layout, seatGenders, studentGenders);
 
-  // Shuffle positions to introduce randomness - creates different solutions each time
-  shuffleArray(validPositions);
+  // Sort positions front-to-back, left-to-right for compact placement
+  // This ensures students are placed together rather than spread out
+  sortPositionsFrontToBack(validPositions);
 
   // Try each valid position
   for (const [row, col] of validPositions) {
@@ -473,4 +474,19 @@ function shuffleArray<T>(array: T[]): void {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
+}
+
+/**
+ * Sort positions front-to-back (by row), left-to-right (by column)
+ * This ensures compact seating arrangement with students placed together
+ */
+function sortPositionsFrontToBack(positions: [number, number][]): void {
+  positions.sort((a, b) => {
+    // First sort by row (front to back)
+    if (a[0] !== b[0]) {
+      return a[0] - b[0];
+    }
+    // Then sort by column (left to right)
+    return a[1] - b[1];
+  });
 }

@@ -359,3 +359,95 @@ describe('CSP Solver - Mixed Complex Constraints', () => {
     }
   });
 });
+
+describe('CSP Solver - Compact Placement', () => {
+  it('should place students from front to back when there are more seats than students', () => {
+    const students = ['Alice', 'Bob', 'Charlie'];
+    const result = solveSeatingCSP(students, [], 3, 3);
+
+    expect(result.success).toBe(true);
+    
+    // Students should be in the first row(s), not spread out
+    // Count students in each row
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    const row2Count = result.seating![2].filter(s => s !== null).length;
+    
+    // First row should be filled before second row
+    if (row1Count > 0) {
+      expect(row0Count).toBe(3); // First row should be full
+    }
+    
+    // Third row should be empty since we only have 3 students
+    expect(row2Count).toBe(0);
+  });
+
+  it('should place students together from front to back in a large classroom', () => {
+    const students = ['A', 'B', 'C', 'D', 'E'];
+    const result = solveSeatingCSP(students, [], 5, 5); // 25 seats for 5 students
+
+    expect(result.success).toBe(true);
+    
+    // All students should be in the first row (or first two rows if first row has less than 5 columns)
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    const row2Count = result.seating![2].filter(s => s !== null).length;
+    const row3Count = result.seating![3].filter(s => s !== null).length;
+    const row4Count = result.seating![4].filter(s => s !== null).length;
+    
+    // First row should be completely filled
+    expect(row0Count).toBe(5);
+    
+    // All other rows should be empty
+    expect(row1Count).toBe(0);
+    expect(row2Count).toBe(0);
+    expect(row3Count).toBe(0);
+    expect(row4Count).toBe(0);
+  });
+
+  it('should place students front to back left to right without gaps', () => {
+    const students = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    const result = solveSeatingCSP(students, [], 3, 4); // 12 seats for 7 students
+
+    expect(result.success).toBe(true);
+    
+    // Check first row is filled left to right
+    expect(result.seating![0][0]).not.toBeNull();
+    expect(result.seating![0][1]).not.toBeNull();
+    expect(result.seating![0][2]).not.toBeNull();
+    expect(result.seating![0][3]).not.toBeNull();
+    
+    // Check second row starts filling
+    expect(result.seating![1][0]).not.toBeNull();
+    expect(result.seating![1][1]).not.toBeNull();
+    expect(result.seating![1][2]).not.toBeNull();
+    
+    // Rest of second row and third row should be empty
+    expect(result.seating![1][3]).toBeNull();
+    expect(result.seating![2].every(s => s === null)).toBe(true);
+  });
+
+  it('should still respect constraints while placing front to back', () => {
+    const students = ['Alice', 'Bob', 'Charlie', 'David'];
+    const constraints = [
+      { type: CONSTRAINT_TYPES.ABSOLUTE, student1: 'David', row: 2, col: 2 }
+    ];
+    
+    const result = solveSeatingCSP(students, constraints, 3, 3);
+
+    expect(result.success).toBe(true);
+    
+    // David should be at (2, 2) as constrained
+    expect(result.seating![2][2]).toBe('David');
+    
+    // Other students should fill from front
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    
+    // First row should have students
+    expect(row0Count).toBeGreaterThan(0);
+    
+    // Students should be placed front-to-back except for David
+    expect(result.seating![0][0]).not.toBeNull();
+  });
+});
