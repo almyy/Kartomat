@@ -23,7 +23,8 @@
     "anyGender": "Any gender",
     "availableSeat": "Available seat",
     "emptySpace": "Empty space",
-    "availableSeats": "Available seats: {{count}}"
+    "availableSeats": "Available seats: {{count}}",
+    "alternateButton": "Alternate Girls & Boys"
   },
   "constraints": {
     "title": "Constraints",
