@@ -508,7 +508,8 @@ describe('CSP Solver - Compact Placement', () => {
       }
     }
     
-    // With 20 runs and randomization, most students should appear in different rows at least sometimes
-    expect(studentsInMultipleRows).toBeGreaterThan(0);
+    // With 20 runs and randomization, at least half the students should appear in different rows
+    // This is a strong indicator that student selection is properly randomized
+    expect(studentsInMultipleRows).toBeGreaterThanOrEqual(4);
   });
 });
