@@ -10,6 +10,7 @@ import { createPairConstraintFormSlice, PairConstraintFormSlice } from './pairCo
 import { createRowConstraintFormSlice, RowConstraintFormSlice } from './rowConstraintFormSlice'
 import { createFarApartConstraintFormSlice, FarApartConstraintFormSlice } from './farApartConstraintFormSlice'
 import { createAbsoluteConstraintFormSlice, AbsoluteConstraintFormSlice } from './absoluteConstraintFormSlice'
+import { createThemeSlice, ThemeSlice } from './themeSlice'
 
 // Combined store type
 export type AppStore = StudentsSlice & 
@@ -20,7 +21,8 @@ export type AppStore = StudentsSlice &
   PairConstraintFormSlice & 
   RowConstraintFormSlice & 
   FarApartConstraintFormSlice & 
-  AbsoluteConstraintFormSlice
+  AbsoluteConstraintFormSlice & 
+  ThemeSlice
 
 export const useStore = create<AppStore>()(
   temporal(
@@ -35,6 +37,7 @@ export const useStore = create<AppStore>()(
         ...createRowConstraintFormSlice(...a),
         ...createFarApartConstraintFormSlice(...a),
         ...createAbsoluteConstraintFormSlice(...a),
+        ...createThemeSlice(...a),
       }),
       {
         name: 'kartomat-storage', // localStorage key
@@ -46,6 +49,7 @@ export const useStore = create<AppStore>()(
           seatState: state.seatState,
           constraints: state.constraints,
           seatingResult: state.seatingResult,
+          theme: state.theme,
         }),
       }
     ),

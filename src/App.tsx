@@ -7,6 +7,8 @@ import { SeatingDisplay } from './features/seating'
 import { SolveButton } from './features/solver'
 import { LanguageSelector } from './components/LanguageSelector'
 import { UndoRedoButtons } from './components/UndoRedoButtons'
+import { ThemeProvider } from './components/ThemeProvider'
+import { ThemeToggle } from './components/ThemeToggle'
 import { useStore } from './store'
 
 function App() {
@@ -30,32 +32,35 @@ function App() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <div className="relative mb-4 sm:mb-2 print:hidden">
-        <div className="absolute top-0 right-0">
-          <LanguageSelector />
+    <ThemeProvider>
+      <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+        <div className="relative mb-4 sm:mb-2 print:hidden">
+          <div className="absolute top-0 right-0 flex gap-2">
+            <ThemeToggle />
+            <LanguageSelector />
+          </div>
+          <div className="w-full">
+            <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
+            <p className="text-center text-gray-400 dark:text-gray-400 light:text-gray-600 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
+          </div>
         </div>
-        <div className="w-full">
-          <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
-          <p className="text-center text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
-        </div>
-      </div>
-      
-      <div className="flex flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
-        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full max-w-2xl print:hidden">
-          <StudentManager />
-          <ClassroomConfig />
-          <ConstraintManager />
-          <SolveButton onSolve={solve} disabled={students.length === 0} />
+        
+        <div className="flex flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
+          <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full max-w-2xl print:hidden">
+            <StudentManager />
+            <ClassroomConfig />
+            <ConstraintManager />
+            <SolveButton onSolve={solve} disabled={students.length === 0} />
+          </div>
+
+          <div className="w-full max-w-2xl">
+            <SeatingDisplay />
+          </div>
         </div>
 
-        <div className="w-full max-w-2xl">
-          <SeatingDisplay />
-        </div>
+        <UndoRedoButtons />
       </div>
-
-      <UndoRedoButtons />
-    </div>
+    </ThemeProvider>
   )
 }
 

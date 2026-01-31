@@ -5,14 +5,36 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Light theme */
+.light {
+  color-scheme: light;
+  --color-bg: 255 255 255;
+  --color-text: 23 23 23;
+  --color-text-secondary: 115 115 115;
+  --color-border: 229 229 229;
+  --color-surface: 249 250 251;
+}
+
+/* Dark theme */
+.dark {
+  color-scheme: dark;
+  --color-bg: 36 36 36;
+  --color-text: 255 255 255;
+  --color-text-secondary: 163 163 163;
+  --color-border: 64 64 64;
+  --color-surface: 48 48 48;
+}
+
+/* Apply theme colors */
+:root {
+  color: rgb(var(--color-text) / 0.87);
+  background-color: rgb(var(--color-bg));
 }
 
 body {
