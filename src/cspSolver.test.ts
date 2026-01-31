@@ -474,4 +474,41 @@ describe('CSP Solver - Compact Placement', () => {
       expect(row0Count).toBe(5); // All in first row
     }
   });
+
+  it('should place individual students in different rows across multiple runs', () => {
+    // Test that the same student doesn't always end up in the same row
+    const students = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Henry'];
+    
+    // Track which rows each student appears in across multiple runs
+    const studentRowAppearances = new Map<string, Set<number>>();
+    students.forEach(s => studentRowAppearances.set(s, new Set()));
+    
+    // Run solver multiple times
+    for (let i = 0; i < 20; i++) {
+      const result = solveSeatingCSP(students, [], 4, 6); // 24 seats for 8 students
+      expect(result.success).toBe(true);
+      
+      // Track which row each student ended up in
+      for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 6; col++) {
+          const student = result.seating![row][col];
+          if (student) {
+            studentRowAppearances.get(student)!.add(row);
+          }
+        }
+      }
+    }
+    
+    // At least some students should have appeared in multiple different rows
+    // With 8 students in 24 seats (filling rows 0-1), students should vary between row 0 and row 1
+    let studentsInMultipleRows = 0;
+    for (const [, rows] of studentRowAppearances) {
+      if (rows.size > 1) {
+        studentsInMultipleRows++;
+      }
+    }
+    
+    // With 20 runs and randomization, most students should appear in different rows at least sometimes
+    expect(studentsInMultipleRows).toBeGreaterThan(0);
+  });
 });

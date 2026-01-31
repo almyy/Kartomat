@@ -73,12 +73,17 @@ export function solveSeatingCSP(
     return { success: false, message: 'Not enough available seats for all students' };
   }
 
+  // Randomize student order to ensure different students can end up in different rows
+  // This prevents the same students from always being placed in the same rows
+  const shuffledStudents = [...students];
+  shuffleArray(shuffledStudents);
+
   // Initialize empty seating chart (row, col) -> student name
   const seating: Seating = Array(rows).fill(null).map(() => Array(cols).fill(null));
   const assignedStudents = new Set<string>();
 
   // Try to solve using backtracking
-  const solution = backtrack(students, constraints, seating, assignedStudents, rows, cols, seatLayout, genderRestrictions, studentGenders || {});
+  const solution = backtrack(shuffledStudents, constraints, seating, assignedStudents, rows, cols, seatLayout, genderRestrictions, studentGenders || {});
 
   if (solution) {
     return { success: true, seating: solution };
