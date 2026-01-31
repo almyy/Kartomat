@@ -58,7 +58,7 @@ export function ClassroomConfig() {
             max="10"
             value={rows}
             onChange={(e) => setRows(parseInt(e.target.value) || 1)}
-            className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+            className="px-3 py-2 rounded border border-gray-300 bg-white dark:border-white/20 dark:bg-black/30 text-inherit text-sm sm:text-base"
           />
         </label>
         <label className="flex flex-col gap-2 flex-1">
@@ -69,7 +69,7 @@ export function ClassroomConfig() {
             max="10"
             value={cols}
             onChange={(e) => setCols(parseInt(e.target.value) || 1)}
-            className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+            className="px-3 py-2 rounded border border-gray-300 bg-white dark:border-white/20 dark:bg-black/30 text-inherit text-sm sm:text-base"
           />
         </label>
       </div>

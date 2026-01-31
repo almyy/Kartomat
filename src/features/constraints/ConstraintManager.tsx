@@ -23,7 +23,7 @@ export function ConstraintManager() {
           id="constraint-type"
           value={constraintType}
           onChange={(e) => setConstraintType(e.target.value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
-          className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+          className="px-3 py-2 rounded border border-gray-300 bg-white dark:border-white/20 dark:bg-black/30 text-inherit text-sm sm:text-base"
         >
           <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>{t('constraints.types.notTogether')}</option>
           <option value={CONSTRAINT_TYPES.TOGETHER}>{t('constraints.types.together')}</option>

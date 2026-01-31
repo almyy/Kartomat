@@ -20,12 +20,12 @@ export function CollapsibleSection({
 
   return (
     <section 
-      className={`bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10 rounded-lg border print:!border-none print:!bg-transparent print:!rounded-none ${className}`}
+      className={`bg-white border-gray-300 dark:bg-gray-900 dark:border-gray-700 rounded-lg border print:!border-none print:!bg-transparent print:!rounded-none ${className}`}
       aria-labelledby={headingId}
     >
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex justify-between items-center p-4 sm:p-6 hover:bg-gray-200 dark:hover:bg-white/5 transition-colors text-left print:hidden"
+        className="w-full flex justify-between items-center p-4 sm:p-6 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left print:hidden"
         aria-expanded={!isCollapsed}
         aria-controls={id}
       >

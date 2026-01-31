@@ -20,7 +20,7 @@ export function FarApartConstraintForm() {
         id="far-apart-student1"
         value={farApartStudent1}
         onChange={(e) => setFarApartStudent1(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border border-gray-300 bg-white dark:border-white/20 dark:bg-black/30 text-inherit text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent1')}</option>
         {students.map(s => (
@@ -32,7 +32,7 @@ export function FarApartConstraintForm() {
         id="far-apart-student2"
         value={farApartStudent2}
         onChange={(e) => setFarApartStudent2(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border border-gray-300 bg-white dark:border-white/20 dark:bg-black/30 text-inherit text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent2')}</option>
         {students.filter(s => s.name !== farApartStudent1).map(s => (
@@ -46,7 +46,7 @@ export function FarApartConstraintForm() {
         value={farApartMinDistance}
         onChange={handleMinDistanceChange}
         placeholder={t('constraints.distanceUnits')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border border-gray-300 bg-white dark:border-white/20 dark:bg-black/30 text-inherit text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}
