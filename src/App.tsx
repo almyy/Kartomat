@@ -6,6 +6,7 @@ import { ConstraintManager } from './features/constraints'
 import { SeatingDisplay } from './features/seating'
 import { SolveButton } from './features/solver'
 import { LanguageSelector } from './components/LanguageSelector'
+import { UndoRedoButtons } from './components/UndoRedoButtons'
 import { useStore } from './store'
 
 function App() {
@@ -60,6 +61,8 @@ function App() {
           <SeatingDisplay />
         </div>
       </div>
+
+      <UndoRedoButtons />
     </div>
   )
 }
