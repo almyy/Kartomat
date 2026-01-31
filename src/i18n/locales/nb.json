@@ -65,5 +65,11 @@
     "label": "Språk",
     "en": "English",
     "nb": "Norsk"
+  },
+  "undoRedo": {
+    "undo": "Angre",
+    "redo": "Gjør om",
+    "undoShortcut": "Angre (Ctrl+Z)",
+    "redoShortcut": "Gjør om (Ctrl+Shift+Z)"
   }
 }

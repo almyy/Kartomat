@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { temporal } from 'zundo'
 import { createStudentsSlice, StudentsSlice } from './studentsSlice'
 import { createClassroomSlice, ClassroomSlice } from './classroomSlice'
 import { createConstraintsSlice, ConstraintsSlice } from './constraintsSlice'
@@ -22,28 +23,42 @@ export type AppStore = StudentsSlice &
   AbsoluteConstraintFormSlice
 
 export const useStore = create<AppStore>()(
-  persist(
-    (...a) => ({
-      ...createStudentsSlice(...a),
-      ...createClassroomSlice(...a),
-      ...createConstraintsSlice(...a),
-      ...createSolverSlice(...a),
-      ...createConstraintTypeSlice(...a),
-      ...createPairConstraintFormSlice(...a),
-      ...createRowConstraintFormSlice(...a),
-      ...createFarApartConstraintFormSlice(...a),
-      ...createAbsoluteConstraintFormSlice(...a),
-    }),
+  temporal(
+    persist(
+      (...a) => ({
+        ...createStudentsSlice(...a),
+        ...createClassroomSlice(...a),
+        ...createConstraintsSlice(...a),
+        ...createSolverSlice(...a),
+        ...createConstraintTypeSlice(...a),
+        ...createPairConstraintFormSlice(...a),
+        ...createRowConstraintFormSlice(...a),
+        ...createFarApartConstraintFormSlice(...a),
+        ...createAbsoluteConstraintFormSlice(...a),
+      }),
+      {
+        name: 'kartomat-storage', // localStorage key
+        partialize: (state) => ({
+          // Only persist these fields
+          students: state.students,
+          rows: state.rows,
+          cols: state.cols,
+          seatState: state.seatState,
+          constraints: state.constraints,
+        }),
+      }
+    ),
     {
-      name: 'kartomat-storage', // localStorage key
+      // Track these fields for undo/redo
       partialize: (state) => ({
-        // Only persist these fields
         students: state.students,
         rows: state.rows,
         cols: state.cols,
         seatState: state.seatState,
         constraints: state.constraints,
       }),
+      limit: 50, // Keep last 50 states
+      equality: (a, b) => JSON.stringify(a) === JSON.stringify(b), // Skip saving duplicate states
     }
   )
 )
