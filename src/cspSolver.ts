@@ -467,16 +467,6 @@ function deepCopy(arr: Seating): Seating {
 }
 
 /**
- * Fisher-Yates shuffle algorithm to randomize array in-place
- */
-function shuffleArray<T>(array: T[]): void {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-/**
  * Sort positions front-to-back (by row), left-to-right (by column)
  * This ensures compact seating arrangement with students placed together
  */

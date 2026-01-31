@@ -442,7 +442,6 @@ describe('CSP Solver - Compact Placement', () => {
     
     // Other students should fill from front
     const row0Count = result.seating![0].filter(s => s !== null).length;
-    const row1Count = result.seating![1].filter(s => s !== null).length;
     
     // First row should have students
     expect(row0Count).toBeGreaterThan(0);
