@@ -17,34 +17,32 @@ export function UndoRedoButtons() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const temporalState = useStore.temporal.getState()
-      
       // Check for Ctrl+Z (undo) or Cmd+Z on Mac
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !event.shiftKey) {
         event.preventDefault()
-        if (temporalState.pastStates.length > 0) {
-          temporalState.undo()
+        if (canUndo) {
+          undo()
         }
       }
       // Check for Ctrl+Shift+Z (redo) or Cmd+Shift+Z on Mac
       else if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'z') {
         event.preventDefault()
-        if (temporalState.futureStates.length > 0) {
-          temporalState.redo()
+        if (canRedo) {
+          redo()
         }
       }
       // Also support Ctrl+Y for redo (common Windows shortcut)
       else if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') {
         event.preventDefault()
-        if (temporalState.futureStates.length > 0) {
-          temporalState.redo()
+        if (canRedo) {
+          redo()
         }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [canUndo, canRedo, undo, redo])
 
   return (
     <div className="fixed bottom-4 right-4 flex gap-2 z-50">
