@@ -29,7 +29,6 @@ export function SeatingDisplay() {
             <div className="flex flex-col gap-1.5 sm:gap-2 overflow-x-auto" id="seating-arrangement">
               {seatingResult.seating.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex gap-1.5 sm:gap-2 items-center">
-                  <div className="text-xs sm:text-sm text-gray-400 min-w-[40px] sm:min-w-[50px] flex-shrink-0">{t('seating.row', { index: rowIndex })}</div>
                   {row.map((seat, colIndex) => {
                     const state = seatState[rowIndex]?.[colIndex]
                     const isAvailable = state !== 'off'

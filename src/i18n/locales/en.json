@@ -58,7 +58,6 @@
   },
   "seating": {
     "title": "Seating Plan",
-    "row": "Row {{index}}",
     "emptyMessage": "Add students and constraints, then generate your seating plan",
     "print": "Print Plan"
   },

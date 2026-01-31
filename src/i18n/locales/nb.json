@@ -58,7 +58,6 @@
   },
   "seating": {
     "title": "Klassekart",
-    "row": "Rad {{index}}",
     "emptyMessage": "Legg til elever og begrensninger, deretter generer klassekartet",
     "print": "Skriv ut"
   },
