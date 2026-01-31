@@ -57,6 +57,7 @@ export const useStore = create<AppStore>()(
         cols: state.cols,
         seatState: state.seatState,
         constraints: state.constraints,
+        seatingResult: state.seatingResult,
       }),
       limit: 50, // Keep last 50 states
       equality: (a, b) => JSON.stringify(a) === JSON.stringify(b), // Skip saving duplicate states
