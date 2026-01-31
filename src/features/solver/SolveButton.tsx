@@ -15,6 +15,7 @@ export function SolveButton({ onSolve, disabled }: SolveButtonProps) {
       disabled={disabled}
       variant="success"
       size="lg"
+      className="font-bold"
     >
       {t('solver.button')}
     </Button>

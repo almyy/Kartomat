@@ -33,7 +33,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     children, 
     ...props 
   }, ref) => {
-    const baseClasses = 'rounded border font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+    const baseClasses = 'rounded border cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
     const widthClass = fullWidth ? 'w-full' : ''
     
     const buttonClasses = [
