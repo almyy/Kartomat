@@ -11,6 +11,7 @@ export interface ClassroomSlice {
   setCols: (cols: number) => void
   setSeatState: (seatState: SeatState[][]) => void
   cycleSeat: (row: number, col: number) => void
+  alternateGenders: () => void
 }
 
 // Helper to create default seat state (all neutral/available)
@@ -51,6 +52,24 @@ export const createClassroomSlice: StateCreator<
       // Handle -1 (not found) by treating as last index so it cycles to 0
       const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % cycle.length
       newSeatState[row][col] = cycle[nextIndex]
+      
+      return { seatState: newSeatState }
+    }),
+  alternateGenders: () =>
+    set((state) => {
+      const newSeatState = state.seatState.map(r => [...r])
+      let genderIndex = 0
+      const genders: SeatState[] = ['f', 'm']
+      
+      // Iterate through all seats and alternate genders for non-disabled seats
+      for (let row = 0; row < state.rows; row++) {
+        for (let col = 0; col < state.cols; col++) {
+          if (newSeatState[row][col] !== 'off') {
+            newSeatState[row][col] = genders[genderIndex % 2]
+            genderIndex++
+          }
+        }
+      }
       
       return { seatState: newSeatState }
     }),

@@ -12,6 +12,7 @@ export function ClassroomConfig() {
   const setRows = useStore((state) => state.setRows)
   const setCols = useStore((state) => state.setCols)
   const cycleSeat = useStore((state) => state.cycleSeat)
+  const alternateGenders = useStore((state) => state.alternateGenders)
   
   // Throttle the cycle function to prevent rapid clicks
   const throttledCycleSeat = useThrottle((row: number, col: number) => {
@@ -74,7 +75,15 @@ export function ClassroomConfig() {
       </div>
 
       <div className="mb-3 sm:mb-4">
-        <p className="text-xs sm:text-sm text-gray-400 mb-2">{t('classroom.genderInstruction')}</p>
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-xs sm:text-sm text-gray-400">{t('classroom.genderInstruction')}</p>
+          <button
+            onClick={alternateGenders}
+            className="px-3 py-1 rounded border border-white/20 bg-purple-600/70 text-white cursor-pointer hover:bg-purple-600/90 transition-colors text-xs sm:text-sm whitespace-nowrap"
+          >
+            {t('classroom.alternateButton')}
+          </button>
+        </div>
         <div 
           className="grid gap-2 sm:gap-3 w-full mx-auto"
           style={{
