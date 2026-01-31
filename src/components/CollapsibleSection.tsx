@@ -20,12 +20,12 @@ export function CollapsibleSection({
 
   return (
     <section 
-      className={`bg-white/5 rounded-lg border border-white/10 ${className}`}
+      className={`bg-white/5 rounded-lg border border-white/10 print:!border-none print:!bg-transparent print:!rounded-none ${className}`}
       aria-labelledby={headingId}
     >
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex justify-between items-center p-4 sm:p-6 hover:bg-white/5 transition-colors text-left"
+        className="w-full flex justify-between items-center p-4 sm:p-6 hover:bg-white/5 transition-colors text-left print:hidden"
         aria-expanded={!isCollapsed}
         aria-controls={id}
       >
@@ -51,11 +51,11 @@ export function CollapsibleSection({
       
       <div
         id={id}
-        className={`overflow-hidden transition-all duration-300 ${
+        className={`overflow-hidden transition-all duration-300 print:!max-h-full print:!overflow-visible ${
           isCollapsed ? 'max-h-0' : 'max-h-[2000px]'
         }`}
       >
-        <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+        <div className="px-4 pb-4 sm:px-6 sm:pb-6 print:!p-0">
           {children}
         </div>
       </div>
