@@ -467,16 +467,43 @@ function deepCopy(arr: Seating): Seating {
 }
 
 /**
- * Sort positions front-to-back (by row), left-to-right (by column)
+ * Sort positions front-to-back (by row), with randomness within each row
  * This ensures compact seating arrangement with students placed together
+ * while maintaining variety between different solutions
  */
 function sortPositionsFrontToBack(positions: [number, number][]): void {
-  positions.sort((a, b) => {
-    // First sort by row (front to back)
-    if (a[0] !== b[0]) {
-      return a[0] - b[0];
+  // First, sort by row to ensure front-to-back placement
+  positions.sort((a, b) => a[0] - b[0]);
+  
+  // Then shuffle positions within each row to add randomness
+  // Group positions by row
+  const rowGroups = new Map<number, [number, number][]>();
+  for (const pos of positions) {
+    const row = pos[0];
+    if (!rowGroups.has(row)) {
+      rowGroups.set(row, []);
     }
-    // Then sort by column (left to right)
-    return a[1] - b[1];
-  });
+    rowGroups.get(row)!.push(pos);
+  }
+  
+  // Shuffle each row's positions
+  for (const rowPositions of rowGroups.values()) {
+    shuffleArray(rowPositions);
+  }
+  
+  // Reconstruct positions array with shuffled rows
+  positions.length = 0;
+  for (const row of Array.from(rowGroups.keys()).sort((a, b) => a - b)) {
+    positions.push(...rowGroups.get(row)!);
+  }
+}
+
+/**
+ * Fisher-Yates shuffle algorithm to randomize array in-place
+ */
+function shuffleArray<T>(array: T[]): void {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }

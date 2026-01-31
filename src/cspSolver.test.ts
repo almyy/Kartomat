@@ -405,26 +405,25 @@ describe('CSP Solver - Compact Placement', () => {
     expect(row4Count).toBe(0);
   });
 
-  it('should place students front to back left to right without gaps', () => {
+  it('should place students front to back without gaps', () => {
     const students = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
     const result = solveSeatingCSP(students, [], 3, 4); // 12 seats for 7 students
 
     expect(result.success).toBe(true);
     
-    // Check first row is filled left to right
-    expect(result.seating![0][0]).not.toBeNull();
-    expect(result.seating![0][1]).not.toBeNull();
-    expect(result.seating![0][2]).not.toBeNull();
-    expect(result.seating![0][3]).not.toBeNull();
+    // Count students in each row
+    const row0Count = result.seating![0].filter(s => s !== null).length;
+    const row1Count = result.seating![1].filter(s => s !== null).length;
+    const row2Count = result.seating![2].filter(s => s !== null).length;
     
-    // Check second row starts filling
-    expect(result.seating![1][0]).not.toBeNull();
-    expect(result.seating![1][1]).not.toBeNull();
-    expect(result.seating![1][2]).not.toBeNull();
+    // First row should be filled (4 students)
+    expect(row0Count).toBe(4);
     
-    // Rest of second row and third row should be empty
-    expect(result.seating![1][3]).toBeNull();
-    expect(result.seating![2].every(s => s === null)).toBe(true);
+    // Second row should have remaining students (3 students)
+    expect(row1Count).toBe(3);
+    
+    // Third row should be empty
+    expect(row2Count).toBe(0);
   });
 
   it('should still respect constraints while placing front to back', () => {
@@ -448,5 +447,30 @@ describe('CSP Solver - Compact Placement', () => {
     
     // Students should be placed front-to-back except for David
     expect(result.seating![0][0]).not.toBeNull();
+  });
+
+  it('should produce different arrangements on multiple runs due to randomness', () => {
+    const students = ['A', 'B', 'C', 'D', 'E'];
+    
+    // Run solver multiple times
+    const results = [];
+    for (let i = 0; i < 5; i++) {
+      const result = solveSeatingCSP(students, [], 3, 5);
+      expect(result.success).toBe(true);
+      results.push(JSON.stringify(result.seating));
+    }
+    
+    // At least some results should be different (not all identical)
+    const uniqueResults = new Set(results);
+    // With 5 students in 15 seats and randomness, we should get some variation
+    // (Though it's possible to get same result by chance, very unlikely with 5 runs)
+    expect(uniqueResults.size).toBeGreaterThan(1);
+    
+    // But all should still be compact (students in first row)
+    for (let i = 0; i < results.length; i++) {
+      const result = solveSeatingCSP(students, [], 3, 5);
+      const row0Count = result.seating![0].filter(s => s !== null).length;
+      expect(row0Count).toBe(5); // All in first row
+    }
   });
 });
