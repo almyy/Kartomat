@@ -1,9 +1,20 @@
 import { describe, it, expect } from 'vitest';
-import {solveSeatingCSP, CONSTRAINT_TYPES, Constraint} from './cspSolver';
+import {solveSeatingCSP, CONSTRAINT_TYPES, Constraint, Seat} from './cspSolver';
+import { Student } from './types/student';
+
+// Helper function to convert string array to Student array
+function toStudents(names: string[]): Student[] {
+  return names.map(name => ({ name }));
+}
+
+// Helper function to convert simple layout to Seat array
+function toSeats(layout: boolean[][]): Seat[][] {
+  return layout.map(row => row.map(available => ({ available, gender: 'any' as const })));
+}
 
 describe('CSP Solver - Basic Functionality', () => {
   it('should solve a simple 2x2 classroom with 3 students', () => {
-    const result = solveSeatingCSP(['Alice', 'Bob', 'Charlie'], [], 2, 2);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob', 'Charlie']), [], 2, 2);
 
     expect(result.success).toBe(true);
     expect(result.seating).toBeDefined();
@@ -14,7 +25,7 @@ describe('CSP Solver - Basic Functionality', () => {
   });
 
   it('should fail when there are not enough seats', () => {
-    const result = solveSeatingCSP(['Alice', 'Bob', 'Charlie'], [], 1, 1);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob', 'Charlie']), [], 1, 1);
 
     expect(result.success).toBe(false);
     expect(result.message).toContain('Not enough available seats');
@@ -34,7 +45,7 @@ describe('CSP Solver - Absolute Constraints', () => {
       { type: CONSTRAINT_TYPES.ABSOLUTE, student1: 'Alice', row: 1, col: 1 }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
     expect(result.seating![1][1]).toBe('Alice');
@@ -46,7 +57,7 @@ describe('CSP Solver - Absolute Constraints', () => {
       { type: CONSTRAINT_TYPES.ABSOLUTE, student1: 'Bob', row: 2, col: 2 }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob', 'Charlie'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob', 'Charlie']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
     expect(result.seating![0][0]).toBe('Alice');
@@ -59,7 +70,7 @@ describe('CSP Solver - Absolute Constraints', () => {
       { type: CONSTRAINT_TYPES.ABSOLUTE, student1: 'Bob', row: 0, col: 0 }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], constraints, 2, 2);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), constraints, 2, 2);
 
     expect(result.success).toBe(false);
   });
@@ -71,7 +82,7 @@ describe('CSP Solver - Together Constraints', () => {
       { type: CONSTRAINT_TYPES.TOGETHER, student1: 'Alice', student2: 'Bob' }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob', 'Charlie'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob', 'Charlie']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
 
@@ -103,7 +114,7 @@ describe('CSP Solver - Together Constraints', () => {
       { type: CONSTRAINT_TYPES.TOGETHER, student1: 'Alice', student2: 'Bob' }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
     expect(result.seating![0][0]).toBe('Alice');
@@ -121,7 +132,7 @@ describe('CSP Solver - Not Together Constraints', () => {
       { type: CONSTRAINT_TYPES.NOT_TOGETHER, student1: 'Alice', student2: 'Bob' }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
 
@@ -154,7 +165,7 @@ describe('CSP Solver - Row Constraints', () => {
       { type: CONSTRAINT_TYPES.MUST_BE_IN_ROW, student1: 'Alice', row: 1 }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
 
@@ -177,7 +188,7 @@ describe('CSP Solver - Row Constraints', () => {
       { type: CONSTRAINT_TYPES.MUST_BE_IN_ROW, student1: 'Bob', row: 2 }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob', 'Charlie'], constraints, 3, 3);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob', 'Charlie']), constraints, 3, 3);
 
     expect(result.success).toBe(true);
 
@@ -201,7 +212,7 @@ describe('CSP Solver - Far Apart Constraints', () => {
       { type: CONSTRAINT_TYPES.FAR_APART, student1: 'Alice', student2: 'Bob', minDistance: 3 }
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], constraints, 5, 5);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), constraints, 5, 5);
 
     expect(result.success).toBe(true);
 
@@ -236,7 +247,7 @@ describe('CSP Solver - Custom Layouts', () => {
       [false, true, true]
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob', 'Charlie'], [], 3, 3, layout);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob', 'Charlie']), [], 3, 3, toSeats(layout));
 
     expect(result.success).toBe(true);
 
@@ -251,7 +262,7 @@ describe('CSP Solver - Custom Layouts', () => {
       [false, false]
     ];
 
-    const result = solveSeatingCSP(['Alice', 'Bob'], [], 2, 2, layout);
+    const result = solveSeatingCSP(toStudents(['Alice', 'Bob']), [], 2, 2, toSeats(layout));
 
     expect(result.success).toBe(false);
     expect(result.message).toContain('Not enough available seats');
@@ -260,7 +271,7 @@ describe('CSP Solver - Custom Layouts', () => {
 
 describe('CSP Solver - Performance Bug Fix', () => {
   it('should solve the problematic 26-student case quickly', () => {
-    const students = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+    const students = toStudents("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(''));
     const layout = [
       [true, true, false, true, true, false, true, true],
       [true, true, false, true, true, false, true, true],
@@ -278,7 +289,7 @@ describe('CSP Solver - Performance Bug Fix', () => {
     ];
 
     const startTime = Date.now();
-    const result = solveSeatingCSP(students, constraints, 5, 8, layout);
+    const result = solveSeatingCSP(students, constraints, 5, 8, toSeats(layout));
     const elapsed = Date.now() - startTime;
 
     // Should complete in under 1 second (was hanging before)
@@ -307,7 +318,7 @@ describe('CSP Solver - Performance Bug Fix', () => {
   });
 
   it('should handle large classrooms efficiently', () => {
-    const students = Array.from({ length: 50 }, (_, i) => `Student${i + 1}`);
+    const students = toStudents(Array.from({ length: 50 }, (_, i) => `Student${i + 1}`));
 
     const startTime = Date.now();
     const result = solveSeatingCSP(students, [], 10, 10);
@@ -329,7 +340,7 @@ describe('CSP Solver - Mixed Complex Constraints', () => {
     ];
 
     const result = solveSeatingCSP(
-      ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+      toStudents(['Alice', 'Bob', 'Charlie', 'David', 'Eve']),
       constraints,
       3,
       3
@@ -362,7 +373,7 @@ describe('CSP Solver - Mixed Complex Constraints', () => {
 
 describe('CSP Solver - Compact Placement', () => {
   it('should place students from front to back when there are more seats than students', () => {
-    const students = ['Alice', 'Bob', 'Charlie'];
+    const students = toStudents(['Alice', 'Bob', 'Charlie']);
     const result = solveSeatingCSP(students, [], 3, 3);
 
     expect(result.success).toBe(true);
@@ -383,7 +394,7 @@ describe('CSP Solver - Compact Placement', () => {
   });
 
   it('should place students together from front to back in a large classroom', () => {
-    const students = ['A', 'B', 'C', 'D', 'E'];
+    const students = toStudents(['A', 'B', 'C', 'D', 'E']);
     const result = solveSeatingCSP(students, [], 5, 5); // 25 seats for 5 students
 
     expect(result.success).toBe(true);
@@ -406,7 +417,7 @@ describe('CSP Solver - Compact Placement', () => {
   });
 
   it('should place students front to back without gaps', () => {
-    const students = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    const students = toStudents(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
     const result = solveSeatingCSP(students, [], 3, 4); // 12 seats for 7 students
 
     expect(result.success).toBe(true);
@@ -427,7 +438,7 @@ describe('CSP Solver - Compact Placement', () => {
   });
 
   it('should still respect constraints while placing front to back', () => {
-    const students = ['Alice', 'Bob', 'Charlie', 'David'];
+    const students = toStudents(['Alice', 'Bob', 'Charlie', 'David']);
     const constraints = [
       { type: CONSTRAINT_TYPES.ABSOLUTE, student1: 'David', row: 2, col: 2 }
     ];
@@ -450,7 +461,7 @@ describe('CSP Solver - Compact Placement', () => {
   });
 
   it('should produce different arrangements on multiple runs due to randomness', () => {
-    const students = ['A', 'B', 'C', 'D', 'E'];
+    const students = toStudents(['A', 'B', 'C', 'D', 'E']);
     
     // Run solver multiple times and store actual results
     const seatingSolutions = [];
@@ -477,11 +488,11 @@ describe('CSP Solver - Compact Placement', () => {
 
   it('should place individual students in different rows across multiple runs', () => {
     // Test that the same student doesn't always end up in the same row
-    const students = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Henry'];
+    const students = toStudents(['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Henry']);
     
     // Track which rows each student appears in across multiple runs
     const studentRowAppearances = new Map<string, Set<number>>();
-    students.forEach(s => studentRowAppearances.set(s, new Set()));
+    students.forEach(s => studentRowAppearances.set(s.name, new Set()));
     
     // Run solver multiple times
     for (let i = 0; i < 20; i++) {
