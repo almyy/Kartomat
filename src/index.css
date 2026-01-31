@@ -10,16 +10,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  /* Default theme colors (light) */
-  --color-bg: 255 255 255;
-  --color-text: 23 23 23;
-  --color-text-secondary: 115 115 115;
-  --color-border: 229 229 229;
-  --color-surface: 249 250 251;
-}
-
-/* Light theme */
-.light {
+  /* Default theme colors (light mode) */
   color-scheme: light;
   --color-bg: 255 255 255;
   --color-text: 23 23 23;
