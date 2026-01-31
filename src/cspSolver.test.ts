@@ -452,23 +452,24 @@ describe('CSP Solver - Compact Placement', () => {
   it('should produce different arrangements on multiple runs due to randomness', () => {
     const students = ['A', 'B', 'C', 'D', 'E'];
     
-    // Run solver multiple times
+    // Run solver multiple times and store actual results
     const results = [];
+    const resultStrings = [];
     for (let i = 0; i < 5; i++) {
       const result = solveSeatingCSP(students, [], 3, 5);
       expect(result.success).toBe(true);
-      results.push(JSON.stringify(result.seating));
+      results.push(result);
+      resultStrings.push(JSON.stringify(result.seating));
     }
     
     // At least some results should be different (not all identical)
-    const uniqueResults = new Set(results);
+    const uniqueResults = new Set(resultStrings);
     // With 5 students in 15 seats and randomness, we should get some variation
     // (Though it's possible to get same result by chance, very unlikely with 5 runs)
     expect(uniqueResults.size).toBeGreaterThan(1);
     
     // But all should still be compact (students in first row)
-    for (let i = 0; i < results.length; i++) {
-      const result = solveSeatingCSP(students, [], 3, 5);
+    for (const result of results) {
       const row0Count = result.seating![0].filter(s => s !== null).length;
       expect(row0Count).toBe(5); // All in first row
     }
