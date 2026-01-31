@@ -41,7 +41,7 @@ function App() {
           </div>
           <div className="w-full">
             <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
-            <p className="text-center text-gray-400 dark:text-gray-400 light:text-gray-600 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
+            <p className="text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
           </div>
         </div>
         

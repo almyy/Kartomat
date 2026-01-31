@@ -9,6 +9,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* Default theme colors (light) */
+  --color-bg: 255 255 255;
+  --color-text: 23 23 23;
+  --color-text-secondary: 115 115 115;
+  --color-border: 229 229 229;
+  --color-surface: 249 250 251;
 }
 
 /* Light theme */
@@ -32,7 +39,7 @@
 }
 
 /* Apply theme colors */
-:root {
+body {
   color: rgb(var(--color-text) / 0.87);
   background-color: rgb(var(--color-bg));
 }
