@@ -1,7 +1,7 @@
 import { KeyboardEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
-import { CollapsibleSection } from '../../components/CollapsibleSection'
+import { CollapsibleSection, Button } from '../../components'
 import { Gender } from '../../types/student'
 import { useThrottle } from '../../hooks/useThrottle'
 
@@ -65,12 +65,13 @@ export function StudentManager() {
           placeholder={t('students.placeholder')}
           className="flex-1 px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
         />
-        <button
+        <Button
           onClick={handleAddStudent}
-          className="px-4 py-2 rounded border border-white/20 bg-indigo-600/70 text-white cursor-pointer hover:bg-indigo-600/90 transition-colors text-sm sm:text-base whitespace-nowrap"
+          variant="primary"
+          className="whitespace-nowrap"
         >
           {t('students.addButton')}
-        </button>
+        </Button>
       </div>
       
       <p className="text-xs sm:text-sm text-gray-400 mb-2">

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Button } from '../../components'
 
 interface SolveButtonProps {
   onSolve: () => void
@@ -9,12 +10,13 @@ export function SolveButton({ onSolve, disabled }: SolveButtonProps) {
   const { t } = useTranslation()
   
   return (
-    <button
+    <Button
       onClick={onSolve}
       disabled={disabled}
-      className="bg-green-500/70 hover:bg-green-500/90 text-base sm:text-lg px-4 py-3 sm:py-4 font-bold rounded border border-white/20 text-white cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      variant="success"
+      size="lg"
     >
       {t('solver.button')}
-    </button>
+    </Button>
   )
 }

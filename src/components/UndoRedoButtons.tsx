@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStoreWithEqualityFn } from 'zustand/traditional'
 import { useStore } from '../store'
+import { Button } from './Button'
 
 export function UndoRedoButtons() {
   const { t } = useTranslation()
@@ -46,11 +47,12 @@ export function UndoRedoButtons() {
 
   return (
     <div className="fixed bottom-4 right-4 flex gap-2 z-50">
-      <button
+      <Button
         onClick={() => undo()}
         disabled={!canUndo}
         title={t('undoRedo.undoShortcut')}
-        className="px-4 py-2 rounded bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg backdrop-blur-sm border border-white/20"
+        variant="secondary"
+        className="shadow-lg backdrop-blur-sm"
         aria-label={t('undoRedo.undo')}
       >
         <span className="flex items-center gap-2">
@@ -70,12 +72,13 @@ export function UndoRedoButtons() {
           </svg>
           <span className="hidden sm:inline">{t('undoRedo.undo')}</span>
         </span>
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => redo()}
         disabled={!canRedo}
         title={t('undoRedo.redoShortcut')}
-        className="px-4 py-2 rounded bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg backdrop-blur-sm border border-white/20"
+        variant="secondary"
+        className="shadow-lg backdrop-blur-sm"
         aria-label={t('undoRedo.redo')}
       >
         <span className="flex items-center gap-2">
@@ -95,7 +98,7 @@ export function UndoRedoButtons() {
           </svg>
           <span className="hidden sm:inline">{t('undoRedo.redo')}</span>
         </span>
-      </button>
+      </Button>
     </div>
   )
 }
