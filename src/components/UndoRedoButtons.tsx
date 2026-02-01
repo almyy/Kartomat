@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStoreWithEqualityFn } from 'zustand/traditional'
 import { useStore } from '../store'
-import { Button } from './Button'
+import { IconButton, HStack } from '@chakra-ui/react'
 
 export function UndoRedoButtons() {
   const { t } = useTranslation()
@@ -46,59 +46,64 @@ export function UndoRedoButtons() {
   }, [canUndo, canRedo, undo, redo])
 
   return (
-    <div className="fixed bottom-4 right-4 flex gap-2 z-50 print:hidden">
-      <Button
+    <HStack 
+      position="fixed" 
+      bottom={4} 
+      right={4} 
+      gap={2} 
+      zIndex={50}
+      className="print:hidden"
+    >
+      <IconButton
         onClick={() => undo()}
         disabled={!canUndo}
         title={t('undoRedo.undoShortcut')}
-        variant="secondary"
-        className="shadow-lg backdrop-blur-sm"
+        variant="subtle"
+        colorPalette="gray"
         aria-label={t('undoRedo.undo')}
       >
-        <span className="flex items-center gap-2">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-5 w-5" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" 
-            />
-          </svg>
-          <span className="hidden sm:inline">{t('undoRedo.undo')}</span>
-        </span>
-      </Button>
-      <Button
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-5 w-5" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          width="20"
+          height="20"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" 
+          />
+        </svg>
+      </IconButton>
+      <IconButton
         onClick={() => redo()}
         disabled={!canRedo}
         title={t('undoRedo.redoShortcut')}
-        variant="secondary"
-        className="shadow-lg backdrop-blur-sm"
+        variant="subtle"
+        colorPalette="gray"
         aria-label={t('undoRedo.redo')}
       >
-        <span className="flex items-center gap-2">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-5 w-5" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M21 10h-10a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6" 
-            />
-          </svg>
-          <span className="hidden sm:inline">{t('undoRedo.redo')}</span>
-        </span>
-      </Button>
-    </div>
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-5 w-5" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          width="20"
+          height="20"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M21 10h-10a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6" 
+          />
+        </svg>
+      </IconButton>
+    </HStack>
   )
 }

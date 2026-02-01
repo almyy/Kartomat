@@ -1,26 +1,27 @@
-import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react'
+import { Button as ChakraButton } from '@chakra-ui/react'
+import { forwardRef, ReactNode } from 'react'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps {
   variant?: ButtonVariant
   size?: ButtonSize
   children: ReactNode
   fullWidth?: boolean
+  onClick?: () => void
+  disabled?: boolean
+  className?: string
+  title?: string
+  'aria-label'?: string
+  type?: 'button' | 'submit' | 'reset'
 }
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-indigo-600/70 hover:bg-indigo-600/90 text-white border-white/20',
-  secondary: 'bg-white/10 hover:bg-white/20 border-white/20',
-  danger: 'bg-red-500/70 hover:bg-red-500/90 text-white border-0',
-  success: 'bg-green-500/70 hover:bg-green-500/90 text-white border-white/20'
-}
-
-const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-xs sm:text-sm',
-  md: 'px-4 py-2 text-sm sm:text-base',
-  lg: 'px-4 py-3 sm:py-4 text-base sm:text-lg'
+const variantMap: Record<ButtonVariant, { variant: 'solid' | 'subtle' | 'outline' | 'ghost', colorPalette: string }> = {
+  primary: { variant: 'solid', colorPalette: 'blue' },
+  secondary: { variant: 'subtle', colorPalette: 'gray' },
+  danger: { variant: 'solid', colorPalette: 'red' },
+  success: { variant: 'solid', colorPalette: 'green' }
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -33,26 +34,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     children, 
     ...props 
   }, ref) => {
-    const baseClasses = 'rounded border cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-    const widthClass = fullWidth ? 'w-full' : ''
+    const { variant: chakraVariant, colorPalette } = variantMap[variant]
     
-    const buttonClasses = [
-      baseClasses,
-      variantClasses[variant],
-      sizeClasses[size],
-      widthClass,
-      className
-    ].filter(Boolean).join(' ')
-
     return (
-      <button
+      <ChakraButton
         ref={ref}
-        className={buttonClasses}
+        variant={chakraVariant}
+        colorPalette={colorPalette}
+        size={size}
+        width={fullWidth ? 'full' : undefined}
         disabled={disabled}
+        className={className}
         {...props}
       >
         {children}
-      </button>
+      </ChakraButton>
     )
   }
 )
