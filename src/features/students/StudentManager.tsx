@@ -1,6 +1,6 @@
 import { KeyboardEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Accordion, Button } from '@mantine/core'
+import { Accordion, Button, TextInput, Title, Text } from '@mantine/core'
 import { useStore } from '../../store'
 import { Gender } from '../../types/student'
 import { useThrottle } from '../../hooks/useThrottle'
@@ -57,17 +57,16 @@ export function StudentManager() {
   return (
     <Accordion.Item value="students">
       <Accordion.Control>
-        <h2 className="mt-0 mb-0 text-lg sm:text-xl">{t('students.title')}</h2>
+        <Title order={2} size="h3">{t('students.title')}</Title>
       </Accordion.Control>
       <Accordion.Panel>
         <div className="flex flex-col sm:flex-row gap-2 mb-3 sm:mb-4 mt-3 sm:mt-4">
-          <input
-            type="text"
+          <TextInput
             value={studentInput}
             onChange={(e) => setStudentInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={t('students.placeholder')}
-            className="flex-1 px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+            className="flex-1"
           />
           <Button
             onClick={handleAddStudent}
@@ -77,9 +76,9 @@ export function StudentManager() {
           </Button>
         </div>
         
-        <p className="text-xs sm:text-sm text-gray-400 mb-2">
+        <Text size="sm" c="dimmed" mb="xs">
           {t('students.genderInstruction')}
-        </p>
+        </Text>
         
         <div className="flex flex-wrap gap-2 min-h-[50px]">
           {students.map(student => {
@@ -94,7 +93,7 @@ export function StudentManager() {
                   className={`flex items-center gap-2 flex-1 cursor-pointer outline-none px-3 py-2 rounded-l-full`}
                   aria-label={`${student.name}: ${genderButton.label}. ${t('students.tapToChange')}`}
                 >
-                  <span>{student.name}</span>
+                  <Text span>{student.name}</Text>
                   <span
                     className={`w-6 h-6 rounded-full flex items-center justify-center ${genderButton.iconClassName} border-0 text-base font-bold transition-colors flex-shrink-0`}
                     title={genderButton.label}

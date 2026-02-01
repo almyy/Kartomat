@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Accordion } from '@mantine/core'
+import { Accordion, Title, Text } from '@mantine/core'
 import { solveSeatingCSP } from './cspSolver'
 import { StudentManager } from './features/students'
 import { ClassroomConfig } from './features/classroom'
@@ -37,8 +37,8 @@ function App() {
           <LanguageSelector />
         </div>
         <div className="w-full">
-          <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
-          <p className="text-center text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
+          <Title order={1} ta="center" mb="xs">{t('app.title')}</Title>
+          <Text ta="center" c="dimmed" size="sm" mb="xl">{t('app.subtitle')}</Text>
         </div>
       </div>
       

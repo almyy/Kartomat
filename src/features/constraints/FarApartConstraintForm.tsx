@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '@mantine/core'
+import { Button, Select, NumberInput } from '@mantine/core'
 import { useStore } from '../../store'
 import { useFarApartConstraintForm } from './useFarApartConstraintForm'
 
@@ -11,42 +11,36 @@ export function FarApartConstraintForm() {
   const farApartMinDistance = useStore((state) => state.farApartMinDistance)
   const setFarApartStudent1 = useStore((state) => state.setFarApartStudent1)
   const setFarApartStudent2 = useStore((state) => state.setFarApartStudent2)
-  const { handleAddConstraint, handleMinDistanceChange } = useFarApartConstraintForm()
+  const setFarApartMinDistance = useStore((state) => state.setFarApartMinDistance)
+  const { handleAddConstraint } = useFarApartConstraintForm()
 
   return (
     <>
-      <label htmlFor="far-apart-student1" className="sr-only">{t('constraints.selectStudent1')}</label>
-      <select
-        id="far-apart-student1"
+      <Select
+        label={t('constraints.selectStudent1')}
         value={farApartStudent1}
-        onChange={(e) => setFarApartStudent1(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent1')}</option>
-        {students.map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
-      <label htmlFor="far-apart-student2" className="sr-only">{t('constraints.selectStudent2')}</label>
-      <select
-        id="far-apart-student2"
+        onChange={(value) => setFarApartStudent1(value || '')}
+        data={[
+          { value: '', label: t('constraints.selectStudent1') },
+          ...students.map(s => ({ value: s.name, label: s.name }))
+        ]}
+      />
+      <Select
+        label={t('constraints.selectStudent2')}
         value={farApartStudent2}
-        onChange={(e) => setFarApartStudent2(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent2')}</option>
-        {students.filter(s => s.name !== farApartStudent1).map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
-      <input
-        type="number"
-        min="1"
-        step="0.5"
+        onChange={(value) => setFarApartStudent2(value || '')}
+        data={[
+          { value: '', label: t('constraints.selectStudent2') },
+          ...students.filter(s => s.name !== farApartStudent1).map(s => ({ value: s.name, label: s.name }))
+        ]}
+      />
+      <NumberInput
+        label={t('constraints.distanceUnits')}
+        min={1}
+        step={0.5}
         value={farApartMinDistance}
-        onChange={handleMinDistanceChange}
+        onChange={(value) => setFarApartMinDistance(typeof value === 'number' ? value : 3)}
         placeholder={t('constraints.distanceUnits')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}

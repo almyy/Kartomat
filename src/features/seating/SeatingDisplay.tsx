@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Accordion } from '@mantine/core'
+import { Accordion, Title, Text } from '@mantine/core'
 import { useStore } from '../../store'
 import { PrintButton } from './PrintButton'
 
@@ -16,7 +16,7 @@ export function SeatingDisplay() {
     <Accordion variant="separated" defaultValue="seating">
       <Accordion.Item value="seating" className="min-h-[300px] sm:min-h-[400px]">
         <Accordion.Control>
-          <h2 className="mt-0 mb-0 text-lg sm:text-xl">{t('seating.title')}</h2>
+          <Title order={2} size="h3">{t('seating.title')}</Title>
         </Accordion.Control>
         <Accordion.Panel>
           <div className="flex justify-end mb-3 sm:mb-4 mt-3 sm:mt-4">
@@ -52,16 +52,16 @@ export function SeatingDisplay() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-red-500/20 border border-red-500/50 px-3 sm:px-4 py-3 sm:py-4 rounded text-red-400 text-sm sm:text-base">
+                <Text c="red" p="md" className="bg-red-500/20 border border-red-500/50 rounded">
                   {seatingResult.message}
-                </div>
+                </Text>
               )}
             </>
           )}
           {!seatingResult && (
-            <div className="flex items-center justify-center min-h-[250px] sm:min-h-[300px] text-gray-400 text-center px-4 sm:px-8 text-sm sm:text-base">
+            <Text ta="center" c="dimmed" py="xl">
               {t('seating.emptyMessage')}
-            </div>
+            </Text>
           )}
         </Accordion.Panel>
       </Accordion.Item>

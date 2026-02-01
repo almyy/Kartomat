@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Accordion } from '@mantine/core'
+import { Accordion, Select, Title, Text } from '@mantine/core'
 import { CONSTRAINT_TYPES } from '../../cspSolver'
 import { useStore } from '../../store'
 import { getConstraintDescription } from './constraintUtils'
@@ -18,23 +18,22 @@ export function ConstraintManager() {
   return (
     <Accordion.Item value="constraints">
       <Accordion.Control>
-        <h2 className="mt-0 mb-0 text-lg sm:text-xl">{t('constraints.title')}</h2>
+        <Title order={2} size="h3">{t('constraints.title')}</Title>
       </Accordion.Control>
       <Accordion.Panel>
         <div className="flex flex-col gap-2 mb-3 sm:mb-4 mt-3 sm:mt-4">
-          <label htmlFor="constraint-type" className="sr-only">{t('constraints.typeLabel')}</label>
-          <select
-            id="constraint-type"
+          <Select
+            label={t('constraints.typeLabel')}
             value={constraintType}
-            onChange={(e) => setConstraintType(e.target.value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
-            className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-          >
-            <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>{t('constraints.types.notTogether')}</option>
-            <option value={CONSTRAINT_TYPES.TOGETHER}>{t('constraints.types.together')}</option>
-            <option value={CONSTRAINT_TYPES.MUST_BE_IN_ROW}>{t('constraints.types.mustBeInRow')}</option>
-            <option value={CONSTRAINT_TYPES.FAR_APART}>{t('constraints.types.farApart')}</option>
-            <option value={CONSTRAINT_TYPES.ABSOLUTE}>{t('constraints.types.absolute')}</option>
-          </select>
+            onChange={(value) => setConstraintType(value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
+            data={[
+              { value: CONSTRAINT_TYPES.NOT_TOGETHER, label: t('constraints.types.notTogether') },
+              { value: CONSTRAINT_TYPES.TOGETHER, label: t('constraints.types.together') },
+              { value: CONSTRAINT_TYPES.MUST_BE_IN_ROW, label: t('constraints.types.mustBeInRow') },
+              { value: CONSTRAINT_TYPES.FAR_APART, label: t('constraints.types.farApart') },
+              { value: CONSTRAINT_TYPES.ABSOLUTE, label: t('constraints.types.absolute') }
+            ]}
+          />
 
           {constraintType === CONSTRAINT_TYPES.ABSOLUTE ? (
             <AbsoluteConstraintForm />
@@ -49,8 +48,8 @@ export function ConstraintManager() {
 
         <div className="flex flex-col gap-2 min-h-[50px]">
           {constraints.map((constraint, index) => (
-            <div key={index} className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10 text-sm sm:text-base">
-              <span className="break-words">{getConstraintDescription(constraint, t)}</span>
+            <div key={index} className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10">
+              <Text size="sm">{getConstraintDescription(constraint, t)}</Text>
               <button
                 onClick={() => removeConstraint(index)}
                 aria-label={t('constraints.removeLabel')}

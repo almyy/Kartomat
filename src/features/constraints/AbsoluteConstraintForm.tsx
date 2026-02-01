@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '@mantine/core'
+import { Button, Select, NumberInput } from '@mantine/core'
 import { useStore } from '../../store'
 import { useAbsoluteConstraintForm } from './useAbsoluteConstraintForm'
 
@@ -12,39 +12,36 @@ export function AbsoluteConstraintForm() {
   const absoluteRow = useStore((state) => state.absoluteRow)
   const absoluteCol = useStore((state) => state.absoluteCol)
   const setAbsoluteStudent = useStore((state) => state.setAbsoluteStudent)
-  const { handleAddConstraint, handleRowChange, handleColChange } = useAbsoluteConstraintForm()
+  const setAbsoluteRow = useStore((state) => state.setAbsoluteRow)
+  const setAbsoluteCol = useStore((state) => state.setAbsoluteCol)
+  const { handleAddConstraint } = useAbsoluteConstraintForm()
 
   return (
     <>
-      <label htmlFor="absolute-student" className="sr-only">{t('constraints.selectStudent')}</label>
-      <select
-        id="absolute-student"
+      <Select
+        label={t('constraints.selectStudent')}
         value={absoluteStudent}
-        onChange={(e) => setAbsoluteStudent(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent')}</option>
-        {students.map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
-      <input
-        type="number"
-        min="0"
+        onChange={(value) => setAbsoluteStudent(value || '')}
+        data={[
+          { value: '', label: t('constraints.selectStudent') },
+          ...students.map(s => ({ value: s.name, label: s.name }))
+        ]}
+      />
+      <NumberInput
+        label={t('constraints.rowNumber')}
+        min={0}
         max={rows - 1}
         value={absoluteRow}
-        onChange={handleRowChange}
+        onChange={(value) => setAbsoluteRow(typeof value === 'number' ? value : 0)}
         placeholder={t('constraints.rowNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
-      <input
-        type="number"
-        min="0"
+      <NumberInput
+        label={t('constraints.columnNumber')}
+        min={0}
         max={cols - 1}
         value={absoluteCol}
-        onChange={handleColChange}
+        onChange={(value) => setAbsoluteCol(typeof value === 'number' ? value : 0)}
         placeholder={t('constraints.columnNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}
