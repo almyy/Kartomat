@@ -26,9 +26,16 @@ export function CollapsibleSection({
       defaultValue={defaultValue}
       variant="outline"
       className={className}
+      borderWidth={2}
+      borderColor="whiteAlpha.200"
+      borderRadius="lg"
+      bg="whiteAlpha.50"
     >
-      <Accordion.Item value={itemId}>
-        <Accordion.ItemTrigger>
+      <Accordion.Item value={itemId} borderWidth={0}>
+        <Accordion.ItemTrigger
+          _hover={{ bg: 'whiteAlpha.100' }}
+          transition="background 0.2s"
+        >
           <Heading as="h2" size="lg" flex={1}>
             {title}
           </Heading>

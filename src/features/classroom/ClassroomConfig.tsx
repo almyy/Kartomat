@@ -24,13 +24,29 @@ export function ClassroomConfig() {
 
   const getSeatStyle = (state: SeatState) => {
     if (state === 'off') {
-      return 'bg-gray-700/30 border-gray-700/50 hover:bg-gray-700/50'
+      return {
+        backgroundColor: 'rgba(55, 65, 81, 0.3)',
+        borderColor: 'rgba(55, 65, 81, 0.5)',
+        _hover: { backgroundColor: 'rgba(55, 65, 81, 0.5)' }
+      }
     } else if (state === 'm') {
-      return 'bg-blue-600/30 border-blue-600/50 hover:bg-blue-600/40'
+      return {
+        backgroundColor: 'rgba(37, 99, 235, 0.3)',
+        borderColor: 'rgba(37, 99, 235, 0.5)',
+        _hover: { backgroundColor: 'rgba(37, 99, 235, 0.4)' }
+      }
     } else if (state === 'f') {
-      return 'bg-pink-600/30 border-pink-600/50 hover:bg-pink-600/40'
+      return {
+        backgroundColor: 'rgba(219, 39, 119, 0.3)',
+        borderColor: 'rgba(219, 39, 119, 0.5)',
+        _hover: { backgroundColor: 'rgba(219, 39, 119, 0.4)' }
+      }
     } else {
-      return 'bg-gray-600/30 border-gray-600/50 hover:bg-gray-600/40'
+      return {
+        backgroundColor: 'rgba(75, 85, 99, 0.3)',
+        borderColor: 'rgba(75, 85, 99, 0.5)',
+        _hover: { backgroundColor: 'rgba(75, 85, 99, 0.4)' }
+      }
     }
   }
 
@@ -93,16 +109,30 @@ export function ClassroomConfig() {
           mx="auto"
         >
           {seatState.map((row, rowIndex) => 
-            row.map((state, colIndex) => (
-              <button
-                key={`${rowIndex}-${colIndex}`}
-                onClick={() => throttledCycleSeat(rowIndex, colIndex)}
-                className={`aspect-square rounded text-base sm:text-lg font-bold border transition-all ${getSeatStyle(state)}`}
-                title={getSeatTitle(state)}
-              >
-                {getSeatIcon(state)}
-              </button>
-            ))
+            row.map((state, colIndex) => {
+              const seatStyle = getSeatStyle(state)
+              return (
+                <Box
+                  as="button"
+                  key={`${rowIndex}-${colIndex}`}
+                  onClick={() => throttledCycleSeat(rowIndex, colIndex)}
+                  aspectRatio={1}
+                  borderRadius="md"
+                  fontSize={{ base: 'base', sm: 'lg' }}
+                  fontWeight="bold"
+                  border="1px solid"
+                  transition="all 0.2s"
+                  cursor="pointer"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  title={getSeatTitle(state)}
+                  {...seatStyle}
+                >
+                  {getSeatIcon(state)}
+                </Box>
+              )
+            })
           )}
         </Grid>
       </Box>

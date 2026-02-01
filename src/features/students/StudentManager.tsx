@@ -4,7 +4,7 @@ import { useStore } from '../../store'
 import { CollapsibleSection, Button } from '../../components'
 import { Gender } from '../../types/student'
 import { useThrottle } from '../../hooks/useThrottle'
-import { HStack, Input, Text, Flex } from '@chakra-ui/react'
+import { HStack, Input, Text, Flex, Box } from '@chakra-ui/react'
 
 export function StudentManager() {
   const { t } = useTranslation()
@@ -81,34 +81,77 @@ export function StudentManager() {
         {students.map(student => {
           const genderButton = getGenderButton(student.gender)
           return (
-            <div 
-              key={student.name} 
-              className={`flex items-center rounded-full border text-sm sm:text-base transition-colors ${genderButton.pillClassName}`}
+            <Box
+              key={student.name}
+              display="flex"
+              alignItems="center"
+              borderRadius="full"
+              border="1px solid"
+              fontSize={{ base: 'sm', sm: 'base' }}
+              transition="colors 0.2s"
+              className={genderButton.pillClassName}
             >
-              <button
+              <Box
+                as="button"
                 onClick={() => throttledCycleGender(student.name)}
-                className={`flex items-center gap-2 flex-1 cursor-pointer outline-none px-3 py-2 rounded-l-full`}
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flex={1}
+                cursor="pointer"
+                outline="none"
+                px={3}
+                py={2}
+                borderLeftRadius="full"
                 aria-label={`${student.name}: ${genderButton.label}. ${t('students.tapToChange')}`}
               >
                 <span>{student.name}</span>
-                <span
-                  className={`w-6 h-6 rounded-full flex items-center justify-center ${genderButton.iconClassName} border-0 text-base font-bold transition-colors flex-shrink-0`}
+                <Box
+                  as="span"
+                  w={6}
+                  h={6}
+                  borderRadius="full"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  className={genderButton.iconClassName}
+                  border="0"
+                  fontSize="base"
+                  fontWeight="bold"
+                  transition="colors 0.2s"
+                  flexShrink={0}
                   title={genderButton.label}
                 >
                   {genderButton.icon}
-                </span>
-              </button>
-              <button
+                </Box>
+              </Box>
+              <Box
+                as="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   removeStudent(student.name)
                 }}
                 aria-label={t('students.removeLabel', { name: student.name })}
-                className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 active:bg-red-600 border-0 text-lg leading-none flex-shrink-0 mr-2"
+                w={6}
+                h={6}
+                borderRadius="full"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                bg="red.500"
+                opacity={0.7}
+                _hover={{ opacity: 0.9 }}
+                _active={{ bg: 'red.600' }}
+                border="0"
+                fontSize="lg"
+                lineHeight="none"
+                flexShrink={0}
+                mr={2}
+                cursor="pointer"
               >
                 ×
-              </button>
-            </div>
+              </Box>
+            </Box>
           )
         })}
       </Flex>
