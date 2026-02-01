@@ -5,7 +5,7 @@ import { Page, expect } from '@playwright/test';
  */
 export async function addStudents(page: Page, studentNames: string[]) {
   for (const name of studentNames) {
-    await page.getByRole('textbox', { name: '' }).fill(name);
+    await page.getByRole('textbox', { name: 'Skriv inn elevnavn' }).fill(name);
     await page.getByRole('button', { name: 'Legg til', exact: true }).click({ force: true });
   }
 }
@@ -15,10 +15,22 @@ export async function addStudents(page: Page, studentNames: string[]) {
  */
 export async function configureClassroom(page: Page, rows: number, cols: number) {
   // Find the rows input by its label
-  await page.getByRole('spinbutton', { name: 'Rader:' }).fill(String(rows));
+  await page.getByRole('textbox', { name: 'Rader:' }).fill(String(rows));
 
   // Find the cols input by its label
-  await page.getByRole('spinbutton', { name: 'Kolonner:' }).fill(String(cols));
+  await page.getByRole('textbox', { name: 'Kolonner:' }).fill(String(cols));
+}
+
+/**
+ * Helper function to select an option in a Mantine Select component
+ */
+async function selectMantineOption(page: Page, label: string, optionText: string) {
+  // Click on the select to open dropdown
+  await page.getByRole('textbox', { name: label }).click();
+  // Wait a bit for dropdown to appear
+  await page.waitForTimeout(200);
+  // Click on the option
+  await page.getByRole('option', { name: optionText }).click();
 }
 
 /**
@@ -26,13 +38,13 @@ export async function configureClassroom(page: Page, rows: number, cols: number)
  */
 export async function addNotTogetherConstraint(page: Page, student1: string, student2: string) {
   // Select constraint type
-  await page.getByLabel('Begrensningstype').selectOption('not_together');
+  await selectMantineOption(page, 'Begrensningstype', 'Ikke sammen');
 
   // Select first student
-  await page.locator('#pair-student1').selectOption(student1);
+  await selectMantineOption(page, 'Velg elev 1', student1);
 
   // Select second student
-  await page.locator('#pair-student2').selectOption(student2);
+  await selectMantineOption(page, 'Velg elev 2', student2);
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -43,13 +55,13 @@ export async function addNotTogetherConstraint(page: Page, student1: string, stu
  */
 export async function addTogetherConstraint(page: Page, student1: string, student2: string) {
   // Select constraint type
-  await page.getByLabel('Begrensningstype').selectOption('together');
+  await selectMantineOption(page, 'Begrensningstype', 'Må være sammen');
 
   // Select first student
-  await page.locator('#pair-student1').selectOption(student1);
+  await selectMantineOption(page, 'Velg elev 1', student1);
 
   // Select second student
-  await page.locator('#pair-student2').selectOption(student2);
+  await selectMantineOption(page, 'Velg elev 2', student2);
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -60,14 +72,14 @@ export async function addTogetherConstraint(page: Page, student1: string, studen
  */
 export async function addRowConstraint(page: Page, student: string, row: number) {
   // Select constraint type
-  await page.getByLabel('Begrensningstype').selectOption('must_be_in_row');
+  await selectMantineOption(page, 'Begrensningstype', 'Må være i rad');
 
   // Select student
-  await page.locator('#row-student').selectOption(student);
+  await selectMantineOption(page, 'Velg elev', student);
 
   // Enter row number - get the spinbutton in the Constraints section
   const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
-  await constraintSection.getByRole('spinbutton').fill(String(row));
+  await constraintSection.getByRole('textbox', { name: 'Radnummer' }).fill(String(row));
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -78,18 +90,16 @@ export async function addRowConstraint(page: Page, student: string, row: number)
  */
 export async function addAbsoluteConstraint(page: Page, student: string, row: number, col: number) {
   // Select constraint type
-  await page.getByLabel('Begrensningstype').selectOption('absolute');
+  await selectMantineOption(page, 'Begrensningstype', 'Absolutt plassering');
 
   // Select student
-  await page.locator('#absolute-student').selectOption(student);
+  await selectMantineOption(page, 'Velg elev', student);
 
-  // Enter row number - use placeholder to identify the correct input
-  const rowConstraintInput = page.getByPlaceholder('Radnummer');
-  await rowConstraintInput.fill(String(row));
+  // Enter row number
+  await page.getByRole('textbox', { name: 'Radnummer' }).fill(String(row));
 
-  // Enter col number - use placeholder to identify the correct input
-  const colConstraintInput = page.getByPlaceholder('Kolonnenummer');
-  await colConstraintInput.fill(String(col));
+  // Enter col number
+  await page.getByRole('textbox', { name: 'Kolonnenummer' }).fill(String(col));
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -100,17 +110,17 @@ export async function addAbsoluteConstraint(page: Page, student: string, row: nu
  */
 export async function addFarApartConstraint(page: Page, student1: string, student2: string, minDistance: number) {
   // Select constraint type
-  await page.getByLabel('Begrensningstype').selectOption('far_apart');
+  await selectMantineOption(page, 'Begrensningstype', 'Langt fra hverandre');
 
   // Select first student
-  await page.locator('#far-apart-student1').selectOption(student1);
+  await selectMantineOption(page, 'Velg elev 1', student1);
 
   // Select second student
-  await page.locator('#far-apart-student2').selectOption(student2);
+  await selectMantineOption(page, 'Velg elev 2', student2);
 
   // Enter minimum distance - get the spinbutton in the Constraints section
   const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
-  await constraintSection.getByRole('spinbutton').fill(String(minDistance));
+  await constraintSection.getByRole('textbox', { name: 'Avstandsenheter' }).fill(String(minDistance));
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
