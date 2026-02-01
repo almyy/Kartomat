@@ -1,6 +1,6 @@
 import { KeyboardEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Accordion, Button, TextInput, Title, Text, Pill } from '@mantine/core'
+import { Accordion, Button, TextInput, Title, Text, Badge, CloseButton, Group } from '@mantine/core'
 import { useStore } from '../../store'
 import { Gender } from '../../types/student'
 import { useThrottle } from '../../hooks/useThrottle'
@@ -77,18 +77,27 @@ export function StudentManager() {
           {t('students.genderInstruction')}
         </Text>
         
-        <Pill.Group>
+        <Group gap="xs">
           {students.map(student => {
             const genderConfig = getGenderConfig(student.gender)
             return (
-              <Pill
+              <Badge
                 key={student.name}
-                withRemoveButton
-                onRemove={() => removeStudent(student.name)}
-                onClick={() => throttledCycleGender(student.name)}
-                style={{ cursor: 'pointer' }}
                 color={genderConfig.color}
                 size="lg"
+                variant="light"
+                style={{ cursor: 'pointer', paddingRight: '0.25rem' }}
+                onClick={() => throttledCycleGender(student.name)}
+                rightSection={
+                  <CloseButton
+                    size="xs"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      removeStudent(student.name)
+                    }}
+                    aria-label={t('students.removeLabel', { name: student.name })}
+                  />
+                }
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   {student.name}
@@ -96,10 +105,10 @@ export function StudentManager() {
                     {genderConfig.icon}
                   </span>
                 </span>
-              </Pill>
+              </Badge>
             )
           })}
-        </Pill.Group>
+        </Group>
       </Accordion.Panel>
     </Accordion.Item>
   )
