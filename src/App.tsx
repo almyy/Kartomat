@@ -37,7 +37,7 @@ function App() {
           <LanguageSelector />
         </Box>
         <Box width="full">
-          <Heading textAlign="center" mb={{ base: 1, sm: 2 }}>{t('app.title')}</Heading>
+          <Heading as="h1" textAlign="center" mb={{ base: 1, sm: 2 }}>{t('app.title')}</Heading>
           <Text textAlign="center" color="gray.400" fontSize={{ base: 'sm', sm: 'base' }} mb={{ base: 4, sm: 8 }}>{t('app.subtitle')}</Text>
         </Box>
       </Box>

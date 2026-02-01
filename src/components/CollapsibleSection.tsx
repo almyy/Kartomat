@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Accordion } from '@chakra-ui/react'
+import { Accordion, Heading } from '@chakra-ui/react'
 
 interface CollapsibleSectionProps {
   title: string
@@ -27,9 +27,9 @@ export function CollapsibleSection({
     >
       <Accordion.Item value={id || 'item'}>
         <Accordion.ItemTrigger>
-          <span style={{ flex: 1, fontSize: '1.125rem', fontWeight: 600 }}>
+          <Heading as="h2" size="lg" flex={1}>
             {title}
-          </span>
+          </Heading>
           <Accordion.ItemIndicator />
         </Accordion.ItemTrigger>
         <Accordion.ItemContent>
