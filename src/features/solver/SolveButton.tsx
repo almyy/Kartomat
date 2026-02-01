@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '../../components'
+import { Button } from '@mantine/core'
 
 interface SolveButtonProps {
   onSolve: () => void
@@ -13,9 +13,10 @@ export function SolveButton({ onSolve, disabled }: SolveButtonProps) {
     <Button
       onClick={onSolve}
       disabled={disabled}
-      variant="success"
+      color="teal"
       size="lg"
       className="font-bold"
+      fullWidth
     >
       {t('solver.button')}
     </Button>

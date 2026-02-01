@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { Button } from '@mantine/core'
 import { useStore } from '../../store'
 import { useRowConstraintForm } from './useRowConstraintForm'
-import { Button } from '../../components'
 
 export function RowConstraintForm() {
   const { t } = useTranslation()
@@ -37,7 +37,6 @@ export function RowConstraintForm() {
       />
       <Button
         onClick={handleAddConstraint}
-        variant="primary"
       >
         {t('constraints.addButton')}
       </Button>

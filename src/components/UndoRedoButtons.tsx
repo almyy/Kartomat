@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@mantine/core'
 import { useStoreWithEqualityFn } from 'zustand/traditional'
 import { useStore } from '../store'
-import { Button } from './Button'
 
 export function UndoRedoButtons() {
   const { t } = useTranslation()
@@ -51,7 +51,7 @@ export function UndoRedoButtons() {
         onClick={() => undo()}
         disabled={!canUndo}
         title={t('undoRedo.undoShortcut')}
-        variant="secondary"
+        variant="default"
         className="shadow-lg backdrop-blur-sm"
         aria-label={t('undoRedo.undo')}
       >
@@ -77,7 +77,7 @@ export function UndoRedoButtons() {
         onClick={() => redo()}
         disabled={!canRedo}
         title={t('undoRedo.redoShortcut')}
-        variant="secondary"
+        variant="default"
         className="shadow-lg backdrop-blur-sm"
         aria-label={t('undoRedo.redo')}
       >

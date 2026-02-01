@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { Button } from '@mantine/core'
 import { useStore } from '../../store'
 import { usePairConstraintForm } from './usePairConstraintForm'
-import { Button } from '../../components'
 
 export function PairConstraintForm() {
   const { t } = useTranslation()
@@ -40,7 +40,6 @@ export function PairConstraintForm() {
       </select>
       <Button
         onClick={handleAddConstraint}
-        variant="primary"
       >
         {t('constraints.addButton')}
       </Button>

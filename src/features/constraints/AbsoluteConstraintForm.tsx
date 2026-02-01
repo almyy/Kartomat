@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { Button } from '@mantine/core'
 import { useStore } from '../../store'
 import { useAbsoluteConstraintForm } from './useAbsoluteConstraintForm'
-import { Button } from '../../components'
 
 export function AbsoluteConstraintForm() {
   const { t } = useTranslation()
@@ -48,7 +48,6 @@ export function AbsoluteConstraintForm() {
       />
       <Button
         onClick={handleAddConstraint}
-        variant="primary"
       >
         {t('constraints.addButton')}
       </Button>

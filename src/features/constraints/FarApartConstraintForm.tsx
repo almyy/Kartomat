@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { Button } from '@mantine/core'
 import { useStore } from '../../store'
 import { useFarApartConstraintForm } from './useFarApartConstraintForm'
-import { Button } from '../../components'
 
 export function FarApartConstraintForm() {
   const { t } = useTranslation()
@@ -50,7 +50,6 @@ export function FarApartConstraintForm() {
       />
       <Button
         onClick={handleAddConstraint}
-        variant="primary"
       >
         {t('constraints.addButton')}
       </Button>

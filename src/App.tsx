@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Accordion } from '@mantine/core'
 import { solveSeatingCSP } from './cspSolver'
 import { StudentManager } from './features/students'
 import { ClassroomConfig } from './features/classroom'
@@ -43,9 +44,11 @@ function App() {
       
       <div className="flex flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
         <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full max-w-2xl print:hidden">
-          <StudentManager />
-          <ClassroomConfig />
-          <ConstraintManager />
+          <Accordion variant="separated" multiple defaultValue={['students', 'classroom', 'constraints']}>
+            <StudentManager />
+            <ClassroomConfig />
+            <ConstraintManager />
+          </Accordion>
           <SolveButton onSolve={solve} disabled={students.length === 0} />
         </div>
 
