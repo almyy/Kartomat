@@ -41,7 +41,7 @@ export function SeatingDisplay() {
                                 ? 'bg-gray-800/50 border-gray-700/30'
                                 : seat
                                 ? 'bg-indigo-600/30 border-indigo-600/50 hover:bg-indigo-600/50 hover:scale-105'
-                                : 'bg-white/5 border-white/10 border-dashed'
+                                : 'bg-gray-700/20 border-gray-500/40 border-dashed'
                             }`}
                           >
                             {isAvailable ? (seat || '') : ''}

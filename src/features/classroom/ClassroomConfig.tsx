@@ -95,7 +95,7 @@ export function ClassroomConfig() {
                 <button
                   key={`${rowIndex}-${colIndex}`}
                   onClick={() => throttledCycleSeat(rowIndex, colIndex)}
-                  className={`aspect-square rounded text-base sm:text-lg font-bold border transition-all ${getSeatStyle(state)}`}
+                  className={`aspect-square rounded text-xl sm:text-2xl font-bold border transition-all ${getSeatStyle(state)}`}
                   title={getSeatTitle(state)}
                 >
                   {getSeatIcon(state)}

@@ -101,7 +101,7 @@ export function StudentManager() {
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   {student.name}
-                  <span title={genderConfig.label}>
+                  <span title={genderConfig.label} style={{ fontSize: '1.25rem' }}>
                     {genderConfig.icon}
                   </span>
                 </span>
