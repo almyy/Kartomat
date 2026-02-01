@@ -29,8 +29,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     variant = 'primary', 
     size = 'md', 
     fullWidth = false,
-    className = '', 
-    disabled = false,
     children, 
     ...props 
   }, ref) => {
@@ -43,8 +41,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         colorPalette={colorPalette}
         size={size}
         width={fullWidth ? 'full' : undefined}
-        disabled={disabled}
-        className={className}
         {...props}
       >
         {children}

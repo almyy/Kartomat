@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { Accordion, Heading } from '@chakra-ui/react'
 
 interface CollapsibleSectionProps {
@@ -16,7 +16,9 @@ export function CollapsibleSection({
   id,
   className = ''
 }: CollapsibleSectionProps) {
-  const defaultValue = defaultCollapsed ? [] : [id || 'item']
+  // Use provided id or generate a unique one based on title
+  const itemId = useMemo(() => id || `section-${title.toLowerCase().replace(/\s+/g, '-')}`, [id, title])
+  const defaultValue = defaultCollapsed ? [] : [itemId]
 
   return (
     <Accordion.Root 
@@ -25,7 +27,7 @@ export function CollapsibleSection({
       variant="outline"
       className={className}
     >
-      <Accordion.Item value={id || 'item'}>
+      <Accordion.Item value={itemId}>
         <Accordion.ItemTrigger>
           <Heading as="h2" size="lg" flex={1}>
             {title}
