@@ -4,6 +4,7 @@ import { useStore } from '../../store'
 import { CollapsibleSection, Button } from '../../components'
 import { Gender } from '../../types/student'
 import { useThrottle } from '../../hooks/useThrottle'
+import { HStack, Input, Text, Flex } from '@chakra-ui/react'
 
 export function StudentManager() {
   const { t } = useTranslation()
@@ -55,30 +56,28 @@ export function StudentManager() {
   }
 
   return (
-    <CollapsibleSection title={t('students.title')} id="students">{' '}
-      <div className="flex flex-col sm:flex-row gap-2 mb-3 sm:mb-4 mt-3 sm:mt-4">
-        <input
-          type="text"
+    <CollapsibleSection title={t('students.title')} id="students">
+      <HStack gap={2} mb={4} mt={4} flexDirection={{ base: 'column', sm: 'row' }}>
+        <Input
           value={studentInput}
           onChange={(e) => setStudentInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={t('students.placeholder')}
-          className="flex-1 px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+          flex={1}
         />
         <Button
           onClick={handleAddStudent}
           variant="primary"
-          className="whitespace-nowrap"
         >
           {t('students.addButton')}
         </Button>
-      </div>
+      </HStack>
       
-      <p className="text-xs sm:text-sm text-gray-400 mb-2">
+      <Text fontSize={{ base: 'xs', sm: 'sm' }} color="gray.400" mb={2}>
         {t('students.genderInstruction')}
-      </p>
+      </Text>
       
-      <div className="flex flex-wrap gap-2 min-h-[50px]">
+      <Flex flexWrap="wrap" gap={2} minH="50px">
         {students.map(student => {
           const genderButton = getGenderButton(student.gender)
           return (
@@ -112,7 +111,7 @@ export function StudentManager() {
             </div>
           )
         })}
-      </div>
+      </Flex>
     </CollapsibleSection>
   )
 }

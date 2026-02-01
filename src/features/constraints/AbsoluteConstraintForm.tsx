@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { useAbsoluteConstraintForm } from './useAbsoluteConstraintForm'
 import { Button } from '../../components'
+import { NativeSelect, Input } from '@chakra-ui/react'
 
 export function AbsoluteConstraintForm() {
   const { t } = useTranslation()
@@ -17,34 +18,34 @@ export function AbsoluteConstraintForm() {
   return (
     <>
       <label htmlFor="absolute-student" className="sr-only">{t('constraints.selectStudent')}</label>
-      <select
-        id="absolute-student"
-        value={absoluteStudent}
-        onChange={(e) => setAbsoluteStudent(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent')}</option>
-        {students.map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
-      <input
+      <NativeSelect.Root>
+        <NativeSelect.Field
+          id="absolute-student"
+          value={absoluteStudent}
+          onChange={(e) => setAbsoluteStudent(e.target.value)}
+        >
+          <option value="">{t('constraints.selectStudent')}</option>
+          {students.map(s => (
+            <option key={s.name} value={s.name}>{s.name}</option>
+          ))}
+        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+      </NativeSelect.Root>
+      <Input
         type="number"
-        min="0"
+        min={0}
         max={rows - 1}
         value={absoluteRow}
         onChange={handleRowChange}
         placeholder={t('constraints.rowNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
-      <input
+      <Input
         type="number"
-        min="0"
+        min={0}
         max={cols - 1}
         value={absoluteCol}
         onChange={handleColChange}
         placeholder={t('constraints.columnNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}

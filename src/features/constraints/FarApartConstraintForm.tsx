@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { useFarApartConstraintForm } from './useFarApartConstraintForm'
 import { Button } from '../../components'
+import { NativeSelect, Input } from '@chakra-ui/react'
 
 export function FarApartConstraintForm() {
   const { t } = useTranslation()
@@ -16,37 +17,40 @@ export function FarApartConstraintForm() {
   return (
     <>
       <label htmlFor="far-apart-student1" className="sr-only">{t('constraints.selectStudent1')}</label>
-      <select
-        id="far-apart-student1"
-        value={farApartStudent1}
-        onChange={(e) => setFarApartStudent1(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent1')}</option>
-        {students.map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
+      <NativeSelect.Root>
+        <NativeSelect.Field
+          id="far-apart-student1"
+          value={farApartStudent1}
+          onChange={(e) => setFarApartStudent1(e.target.value)}
+        >
+          <option value="">{t('constraints.selectStudent1')}</option>
+          {students.map(s => (
+            <option key={s.name} value={s.name}>{s.name}</option>
+          ))}
+        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+      </NativeSelect.Root>
       <label htmlFor="far-apart-student2" className="sr-only">{t('constraints.selectStudent2')}</label>
-      <select
-        id="far-apart-student2"
-        value={farApartStudent2}
-        onChange={(e) => setFarApartStudent2(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent2')}</option>
-        {students.filter(s => s.name !== farApartStudent1).map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
-      <input
+      <NativeSelect.Root>
+        <NativeSelect.Field
+          id="far-apart-student2"
+          value={farApartStudent2}
+          onChange={(e) => setFarApartStudent2(e.target.value)}
+        >
+          <option value="">{t('constraints.selectStudent2')}</option>
+          {students.filter(s => s.name !== farApartStudent1).map(s => (
+            <option key={s.name} value={s.name}>{s.name}</option>
+          ))}
+        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+      </NativeSelect.Root>
+      <Input
         type="number"
-        min="1"
-        step="0.5"
+        min={1}
+        step={0.5}
         value={farApartMinDistance}
         onChange={handleMinDistanceChange}
         placeholder={t('constraints.distanceUnits')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}

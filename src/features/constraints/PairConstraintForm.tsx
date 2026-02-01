@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 import { usePairConstraintForm } from './usePairConstraintForm'
 import { Button } from '../../components'
+import { NativeSelect } from '@chakra-ui/react'
 
 export function PairConstraintForm() {
   const { t } = useTranslation()
@@ -15,29 +16,33 @@ export function PairConstraintForm() {
   return (
     <>
       <label htmlFor="pair-student1" className="sr-only">{t('constraints.selectStudent1')}</label>
-      <select
-        id="pair-student1"
-        value={pairStudent1}
-        onChange={(e) => setPairStudent1(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent1')}</option>
-        {students.map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
+      <NativeSelect.Root>
+        <NativeSelect.Field
+          id="pair-student1"
+          value={pairStudent1}
+          onChange={(e) => setPairStudent1(e.target.value)}
+        >
+          <option value="">{t('constraints.selectStudent1')}</option>
+          {students.map(s => (
+            <option key={s.name} value={s.name}>{s.name}</option>
+          ))}
+        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+      </NativeSelect.Root>
       <label htmlFor="pair-student2" className="sr-only">{t('constraints.selectStudent2')}</label>
-      <select
-        id="pair-student2"
-        value={pairStudent2}
-        onChange={(e) => setPairStudent2(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent2')}</option>
-        {students.filter(s => s.name !== pairStudent1).map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
+      <NativeSelect.Root>
+        <NativeSelect.Field
+          id="pair-student2"
+          value={pairStudent2}
+          onChange={(e) => setPairStudent2(e.target.value)}
+        >
+          <option value="">{t('constraints.selectStudent2')}</option>
+          {students.filter(s => s.name !== pairStudent1).map(s => (
+            <option key={s.name} value={s.name}>{s.name}</option>
+          ))}
+        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+      </NativeSelect.Root>
       <Button
         onClick={handleAddConstraint}
         variant="primary"

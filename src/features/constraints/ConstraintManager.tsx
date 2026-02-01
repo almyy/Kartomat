@@ -7,6 +7,7 @@ import { PairConstraintForm } from './PairConstraintForm'
 import { RowConstraintForm } from './RowConstraintForm'
 import { FarApartConstraintForm } from './FarApartConstraintForm'
 import { AbsoluteConstraintForm } from './AbsoluteConstraintForm'
+import { VStack, HStack, Text, NativeSelect, IconButton } from '@chakra-ui/react'
 
 export function ConstraintManager() {
   const { t } = useTranslation()
@@ -17,20 +18,22 @@ export function ConstraintManager() {
 
   return (
     <CollapsibleSection title={t('constraints.title')} id="constraints">
-      <div className="flex flex-col gap-2 mb-3 sm:mb-4 mt-3 sm:mt-4">
+      <VStack gap={2} mb={{ base: 3, sm: 4 }} mt={{ base: 3, sm: 4 }} alignItems="stretch">
         <label htmlFor="constraint-type" className="sr-only">{t('constraints.typeLabel')}</label>
-        <select
-          id="constraint-type"
-          value={constraintType}
-          onChange={(e) => setConstraintType(e.target.value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
-          className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-        >
-          <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>{t('constraints.types.notTogether')}</option>
-          <option value={CONSTRAINT_TYPES.TOGETHER}>{t('constraints.types.together')}</option>
-          <option value={CONSTRAINT_TYPES.MUST_BE_IN_ROW}>{t('constraints.types.mustBeInRow')}</option>
-          <option value={CONSTRAINT_TYPES.FAR_APART}>{t('constraints.types.farApart')}</option>
-          <option value={CONSTRAINT_TYPES.ABSOLUTE}>{t('constraints.types.absolute')}</option>
-        </select>
+        <NativeSelect.Root>
+          <NativeSelect.Field
+            id="constraint-type"
+            value={constraintType}
+            onChange={(e) => setConstraintType(e.target.value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
+          >
+            <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>{t('constraints.types.notTogether')}</option>
+            <option value={CONSTRAINT_TYPES.TOGETHER}>{t('constraints.types.together')}</option>
+            <option value={CONSTRAINT_TYPES.MUST_BE_IN_ROW}>{t('constraints.types.mustBeInRow')}</option>
+            <option value={CONSTRAINT_TYPES.FAR_APART}>{t('constraints.types.farApart')}</option>
+            <option value={CONSTRAINT_TYPES.ABSOLUTE}>{t('constraints.types.absolute')}</option>
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
 
         {constraintType === CONSTRAINT_TYPES.ABSOLUTE ? (
           <AbsoluteConstraintForm />
@@ -41,22 +44,37 @@ export function ConstraintManager() {
         ) : (
           <PairConstraintForm />
         )}
-      </div>
+      </VStack>
 
-      <div className="flex flex-col gap-2 min-h-[50px]">
+      <VStack gap={2} minH="50px" alignItems="stretch">
         {constraints.map((constraint, index) => (
-          <div key={index} className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10 text-sm sm:text-base">
-            <span className="break-words">{getConstraintDescription(constraint, t)}</span>
-            <button
+          <HStack 
+            key={index} 
+            justifyContent="space-between" 
+            alignItems="center" 
+            gap={2} 
+            bg="whiteAlpha.50" 
+            px={{ base: 2, sm: 3 }} 
+            py={{ base: 2, sm: 3 }} 
+            borderRadius="md" 
+            borderWidth={1} 
+            borderColor="whiteAlpha.100"
+            fontSize={{ base: 'sm', sm: 'base' }}
+          >
+            <Text wordBreak="break-words" flex={1}>{getConstraintDescription(constraint, t)}</Text>
+            <IconButton
               onClick={() => removeConstraint(index)}
               aria-label={t('constraints.removeLabel')}
-              className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg flex-shrink-0"
+              colorPalette="red"
+              variant="solid"
+              size="sm"
+              flexShrink={0}
             >
               ×
-            </button>
-          </div>
+            </IconButton>
+          </HStack>
         ))}
-      </div>
+      </VStack>
     </CollapsibleSection>
   )
 }
