@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { addStudents, configureClassroom, solveSeating, verifyStudentInSeating } from './test-helpers';
+import {addStudents, selectMantineOption, configureClassroom, solveSeating, verifyStudentInSeating} from './test-helpers';
 
 test.describe('Edge Cases', () => {
   test.beforeEach(async ({ page }) => {
@@ -41,9 +41,9 @@ test.describe('Edge Cases', () => {
     await addStudents(page, ['Alice', 'Bob', 'Charlie']);
 
     // We need to manually add a constraint via UI since we're testing the remove button
-    await page.getByLabel('Begrensningstype').selectOption('not_together');
-    await page.locator('#pair-student1').selectOption('Alice');
-    await page.locator('#pair-student2').selectOption('Bob');
+    await selectMantineOption(page, 'Begrensningstype', /Ikke sammen/i);
+    await selectMantineOption(page, 'Velg elev 1', 'Alice');
+    await selectMantineOption(page, 'Velg elev 2', 'Bob');
     await page.getByRole('button', { name: 'Legg til begrensning' }).click();
     // Verify constraint is displayed (Norwegian text)
     await expect(page.getByText('Alice og Bob skal IKKE sitte sammen')).toBeVisible();

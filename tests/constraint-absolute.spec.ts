@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { addStudents, configureClassroom, addAbsoluteConstraint, solveSeating, getStudentPosition } from './test-helpers';
+import {
+  addStudents,
+  configureClassroom,
+  addAbsoluteConstraint,
+  solveSeating,
+  getStudentPosition,
+  selectMantineOption
+} from './test-helpers';
 
 test.describe('Absolute Placement Constraint', () => {
   test.beforeEach(async ({ page }) => {
@@ -57,8 +64,9 @@ test.describe('Absolute Placement Constraint', () => {
     await addAbsoluteConstraint(page, 'Alice', 1, 1);
     
     // Add conflicting row constraint for Alice (row 0)
-    await page.getByLabel('Begrensningstype').selectOption('must_be_in_row');
-    await page.locator('#row-student').selectOption('Alice');
+    await selectMantineOption(page, 'Begrensningstype', /Må være i rad|must be in row/i);
+    await selectMantineOption(page, 'Velg elev', 'Alice');
+
     const rowConstraintInput = page.getByPlaceholder('Radnummer');
     await rowConstraintInput.fill('0');
     await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -91,9 +99,10 @@ test.describe('Absolute Placement Constraint', () => {
     await addAbsoluteConstraint(page, 'Alice', 1, 1);
     
     // Add together constraint for Alice and Bob
-    await page.getByLabel('Begrensningstype').selectOption('together');
-    await page.locator('#pair-student1').selectOption('Alice');
-    await page.locator('#pair-student2').selectOption('Bob');
+    await selectMantineOption(page, 'Begrensningstype', /Må være sammen|Must be together/i);
+    await selectMantineOption(page, 'Velg elev 1', 'Alice');
+    await selectMantineOption(page, 'Velg elev 2', 'Bob');
+
     await page.getByRole('button', { name: 'Legg til begrensning' }).click();
     
     await solveSeating(page);

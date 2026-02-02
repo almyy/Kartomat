@@ -52,8 +52,8 @@ test.describe('Print functionality', () => {
     await expect(seatingArrangement).toBeVisible()
     
     // Verify student names appear in the seats
-    await expect(page.locator('#seating-arrangement')).toContainText('Anna')
-    await expect(page.locator('#seating-arrangement')).toContainText('Bjørn')
-    await expect(page.locator('#seating-arrangement')).toContainText('Carl')
+    await expect(seatingArrangement).toContainText('Anna')
+    await expect(seatingArrangement).toContainText('Bjørn')
+    await expect(seatingArrangement).toContainText('Carl')
   })
 })

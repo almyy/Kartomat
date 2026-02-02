@@ -154,8 +154,8 @@ test.describe('Undo/Redo Functionality', () => {
 
   test('should undo/redo classroom configuration changes', async ({ page }) => {
     // Initial values should be 4 rows and 6 cols
-    const rowsInput = page.getByRole('spinbutton', { name: 'Rader:' });
-    const colsInput = page.getByRole('spinbutton', { name: 'Kolonner:' });
+    const rowsInput = page.getByRole('textbox', { name: 'Rader:' });
+    const colsInput = page.getByRole('textbox', { name: 'Kolonner:' });
     
     await expect(rowsInput).toHaveValue('4');
     await expect(colsInput).toHaveValue('6');

@@ -80,11 +80,11 @@ test.describe('Mixed Constraints', () => {
     await addStudents(page, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']);
 
     // Add complex constraints
-    await addNotTogetherConstraint(page, 'A', 'B');
-    await addTogetherConstraint(page, 'C', 'D');
-    await addNotTogetherConstraint(page, 'E', 'F');
-    await addRowConstraint(page, 'G', 0);
-    await addRowConstraint(page, 'H', 4);
+    await addNotTogetherConstraint(page, 'A', 'B', true);
+    await addTogetherConstraint(page, 'C', 'D', true);
+    await addNotTogetherConstraint(page, 'E', 'F', true);
+    await addRowConstraint(page, 'G', 0, true);
+    await addRowConstraint(page, 'H', 4, true);
 
     await solveSeating(page);
 

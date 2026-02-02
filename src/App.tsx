@@ -50,6 +50,8 @@ function App() {
             <ConstraintManager />
           </Accordion>
           <SolveButton onSolve={solve} disabled={students.length === 0} />
+        </div>
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full">
           <SeatingDisplay />
         </div>
       </div>

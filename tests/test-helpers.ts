@@ -24,27 +24,27 @@ export async function configureClassroom(page: Page, rows: number, cols: number)
 /**
  * Helper function to select an option in a Mantine Select component
  */
-async function selectMantineOption(page: Page, label: string, optionText: string) {
+export async function selectMantineOption(page: Page, label: string, optionText: string | RegExp, exact?: boolean) {
   // Click on the select to open dropdown
   await page.getByRole('textbox', { name: label }).click();
   // Wait a bit for dropdown to appear
   await page.waitForTimeout(200);
   // Click on the option
-  await page.getByRole('option', { name: optionText }).click();
+  await page.getByRole('option', { name: optionText, exact }).click();
 }
 
 /**
  * Helper function to add a "Not Together" constraint
  */
-export async function addNotTogetherConstraint(page: Page, student1: string, student2: string) {
+export async function addNotTogetherConstraint(page: Page, student1: string, student2: string, exact?: boolean) {
   // Select constraint type
   await selectMantineOption(page, 'Begrensningstype', 'Ikke sammen');
 
   // Select first student
-  await selectMantineOption(page, 'Velg elev 1', student1);
+  await selectMantineOption(page, 'Velg elev 1', student1, exact);
 
   // Select second student
-  await selectMantineOption(page, 'Velg elev 2', student2);
+  await selectMantineOption(page, 'Velg elev 2', student2, exact);
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -53,15 +53,15 @@ export async function addNotTogetherConstraint(page: Page, student1: string, stu
 /**
  * Helper function to add a "Must Be Together" constraint
  */
-export async function addTogetherConstraint(page: Page, student1: string, student2: string) {
+export async function addTogetherConstraint(page: Page, student1: string, student2: string, exact?: boolean) {
   // Select constraint type
   await selectMantineOption(page, 'Begrensningstype', 'Må være sammen');
 
   // Select first student
-  await selectMantineOption(page, 'Velg elev 1', student1);
+  await selectMantineOption(page, 'Velg elev 1', student1, exact);
 
   // Select second student
-  await selectMantineOption(page, 'Velg elev 2', student2);
+  await selectMantineOption(page, 'Velg elev 2', student2, exact);
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
@@ -70,12 +70,12 @@ export async function addTogetherConstraint(page: Page, student1: string, studen
 /**
  * Helper function to add a "Must Be In Row" constraint
  */
-export async function addRowConstraint(page: Page, student: string, row: number) {
+export async function addRowConstraint(page: Page, student: string, row: number, exact?: boolean) {
   // Select constraint type
   await selectMantineOption(page, 'Begrensningstype', 'Må være i rad');
 
   // Select student
-  await selectMantineOption(page, 'Velg elev', student);
+  await selectMantineOption(page, 'Velg elev', student, exact);
 
   // Enter row number - get the spinbutton in the Constraints section
   const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
@@ -120,7 +120,7 @@ export async function addFarApartConstraint(page: Page, student1: string, studen
 
   // Enter minimum distance - get the spinbutton in the Constraints section
   const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
-  await constraintSection.getByRole('textbox', { name: 'Avstandsenheter' }).fill(String(minDistance));
+  await constraintSection.getByRole('textbox', { name: 'Distanseenheter' }).fill(String(minDistance));
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();
