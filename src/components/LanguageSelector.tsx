@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconChevronDown } from '@tabler/icons-react'
 import { Group, Image, Menu, UnstyledButton } from '@mantine/core'
-import classes from './LanguageSelector.module.css'
 
 const data = [
   { value: 'nb', label: 'Norsk', image: `${import.meta.env.BASE_URL}flags/nb.svg` },
@@ -44,12 +43,20 @@ export function LanguageSelector() {
       withinPortal
     >
       <Menu.Target>
-        <UnstyledButton className={classes.control} data-expanded={opened || undefined}>
+        <UnstyledButton
+          className="w-[200px] flex justify-between items-center px-4 py-2 rounded-md border border-gray-200 dark:border-gray-700 transition-colors duration-150 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 data-[expanded]:bg-gray-100 dark:data-[expanded]:bg-gray-700"
+          data-expanded={opened || undefined}
+        >
           <Group gap="xs">
             <Image src={selected.image} w={22} h={22} alt="" />
-            <span className={classes.label}>{selected.label}</span>
+            <span className="font-medium text-sm">{selected.label}</span>
           </Group>
-          <IconChevronDown size={16} className={classes.icon} stroke={1.5} />
+          <IconChevronDown
+            size={16}
+            className="transition-transform duration-150 data-[expanded]:rotate-180"
+            data-expanded={opened || undefined}
+            stroke={1.5}
+          />
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>{items}</Menu.Dropdown>
