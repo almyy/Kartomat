@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (.dark *);
+
 @theme {
   --color-surface-light: #ffffff;
   --color-surface-dark: #242424;
