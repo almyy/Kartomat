@@ -14,7 +14,7 @@ export function SeatingDisplay() {
 
   return (
     <Accordion variant="separated" defaultValue="seating">
-      <Accordion.Item value="seating" className="min-h-[300px] sm:min-h-[400px]">
+      <Accordion.Item value="seating">
         <Accordion.Control>
           <Title order={2} size="h3">{t('seating.title')}</Title>
         </Accordion.Control>

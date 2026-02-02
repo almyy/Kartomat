@@ -43,16 +43,13 @@ function App() {
       </div>
       
       <div className="flex flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
-        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full max-w-2xl print:hidden">
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full print:hidden">
           <Accordion variant="separated" multiple defaultValue={['students', 'classroom', 'constraints']}>
             <StudentManager />
             <ClassroomConfig />
             <ConstraintManager />
           </Accordion>
           <SolveButton onSolve={solve} disabled={students.length === 0} />
-        </div>
-
-        <div className="w-full max-w-2xl">
           <SeatingDisplay />
         </div>
       </div>
