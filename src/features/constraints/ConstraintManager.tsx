@@ -33,6 +33,7 @@ export function ConstraintManager() {
               { value: CONSTRAINT_TYPES.FAR_APART, label: t('constraints.types.farApart') },
               { value: CONSTRAINT_TYPES.ABSOLUTE, label: t('constraints.types.absolute') }
             ]}
+            allowDeselect={false}
           />
 
           {constraintType === CONSTRAINT_TYPES.ABSOLUTE ? (

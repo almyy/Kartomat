@@ -24,6 +24,7 @@ export function FarApartConstraintForm() {
           { value: '', label: t('constraints.selectStudent1') },
           ...students.map(s => ({ value: s.name, label: s.name }))
         ]}
+        allowDeselect={false}
       />
       <Select
         label={t('constraints.selectStudent2')}
@@ -33,6 +34,7 @@ export function FarApartConstraintForm() {
           { value: '', label: t('constraints.selectStudent2') },
           ...students.filter(s => s.name !== farApartStudent1).map(s => ({ value: s.name, label: s.name }))
         ]}
+        allowDeselect={false}
       />
       <NumberInput
         label={t('constraints.distanceUnits')}

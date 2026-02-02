@@ -23,6 +23,7 @@ export function RowConstraintForm() {
           { value: '', label: t('constraints.selectStudent') },
           ...students.map(s => ({ value: s.name, label: s.name }))
         ]}
+        allowDeselect={false}
       />
       <NumberInput
         label={t('constraints.rowNumber')}

@@ -18,6 +18,7 @@ export function LanguageSelector() {
         ]}
         size="xs"
         w={120}
+        allowDeselect={false}
       />
     </div>
   )

@@ -22,6 +22,7 @@ export function PairConstraintForm() {
           { value: '', label: t('constraints.selectStudent1') },
           ...students.map(s => ({ value: s.name, label: s.name }))
         ]}
+        allowDeselect={false}
       />
       <Select
         label={t('constraints.selectStudent2')}
@@ -31,6 +32,7 @@ export function PairConstraintForm() {
           { value: '', label: t('constraints.selectStudent2') },
           ...students.filter(s => s.name !== pairStudent1).map(s => ({ value: s.name, label: s.name }))
         ]}
+        allowDeselect={false}
       />
       <Button
         onClick={handleAddConstraint}
