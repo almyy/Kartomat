@@ -1,5 +1,5 @@
 packages:
-  - '.'
+  - "."
 
 # Security: Only allow packages published at least 1 week ago
 # This protects against supply chain attacks on newly published packages

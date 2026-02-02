@@ -1,1 +1,1 @@
-export { ConstraintManager } from './ConstraintManager'
+export { ConstraintManager } from "./ConstraintManager";

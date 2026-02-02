@@ -1,1 +1,1 @@
-export { SolveButton } from './SolveButton'
+export { SolveButton } from "./SolveButton";

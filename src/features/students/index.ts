@@ -1,1 +1,1 @@
-export { StudentManager } from './StudentManager'
+export { StudentManager } from "./StudentManager";

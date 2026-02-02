@@ -94,6 +94,7 @@ The application uses an optimized backtracking algorithm with the Most Constrain
 ### Performance Optimizations
 
 The solver uses several techniques to handle complex scenarios efficiently:
+
 - **Absolute constraints**: Placed first with only 1 valid position
 - **Together constraints**: Partners placed immediately adjacent to each other
 - **Row constraints**: Only positions in the specified row are considered

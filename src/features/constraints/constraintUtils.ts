@@ -1,60 +1,84 @@
-import { TFunction } from 'i18next'
-import { Constraint, CONSTRAINT_TYPES, PairConstraint, RowConstraint, FarApartConstraint, AbsoluteConstraint } from '../../cspSolver'
-import { Student } from '../../types/student'
+import { TFunction } from "i18next";
+import {
+  Constraint,
+  CONSTRAINT_TYPES,
+  PairConstraint,
+  RowConstraint,
+  FarApartConstraint,
+  AbsoluteConstraint,
+} from "../../cspSolver";
+import { Student } from "../../types/student";
 
-export function getConstraintDescription(constraint: Constraint, t: TFunction): string {
+export function getConstraintDescription(
+  constraint: Constraint,
+  t: TFunction,
+): string {
   switch (constraint.type) {
     case CONSTRAINT_TYPES.ABSOLUTE: {
-      const absoluteConstraint = constraint as AbsoluteConstraint
-      return t('constraints.descriptions.absolute', {
+      const absoluteConstraint = constraint as AbsoluteConstraint;
+      return t("constraints.descriptions.absolute", {
         student: absoluteConstraint.student1,
         row: absoluteConstraint.row,
-        col: absoluteConstraint.col
-      })
+        col: absoluteConstraint.col,
+      });
     }
     case CONSTRAINT_TYPES.NOT_TOGETHER: {
-      const pairConstraint = constraint as PairConstraint
-      return t('constraints.descriptions.notTogether', {
+      const pairConstraint = constraint as PairConstraint;
+      return t("constraints.descriptions.notTogether", {
         student1: pairConstraint.student1,
-        student2: pairConstraint.student2
-      })
+        student2: pairConstraint.student2,
+      });
     }
     case CONSTRAINT_TYPES.TOGETHER: {
-      const pairConstraint = constraint as PairConstraint
-      return t('constraints.descriptions.together', {
+      const pairConstraint = constraint as PairConstraint;
+      return t("constraints.descriptions.together", {
         student1: pairConstraint.student1,
-        student2: pairConstraint.student2
-      })
+        student2: pairConstraint.student2,
+      });
     }
     case CONSTRAINT_TYPES.MUST_BE_IN_ROW: {
-      const rowConstraintTyped = constraint as RowConstraint
-      return t('constraints.descriptions.mustBeInRow', {
+      const rowConstraintTyped = constraint as RowConstraint;
+      return t("constraints.descriptions.mustBeInRow", {
         student: rowConstraintTyped.student1,
-        row: rowConstraintTyped.row
-      })
+        row: rowConstraintTyped.row,
+      });
     }
     case CONSTRAINT_TYPES.FAR_APART: {
-      const farApartConstraint = constraint as FarApartConstraint
-      return t('constraints.descriptions.farApart', {
+      const farApartConstraint = constraint as FarApartConstraint;
+      return t("constraints.descriptions.farApart", {
         student1: farApartConstraint.student1,
         student2: farApartConstraint.student2,
-        distance: farApartConstraint.minDistance
-      })
+        distance: farApartConstraint.minDistance,
+      });
     }
     default:
-      return t('constraints.descriptions.unknown')
+      return t("constraints.descriptions.unknown");
   }
 }
 
-export function isValidAbsolutePosition(row: number, col: number, rows: number, cols: number): boolean {
-  return row >= 0 && row < rows && col >= 0 && col < cols
+export function isValidAbsolutePosition(
+  row: number,
+  col: number,
+  rows: number,
+  cols: number,
+): boolean {
+  return row >= 0 && row < rows && col >= 0 && col < cols;
 }
 
-export function isValidStudentPair(student1: string, student2: string, students: Student[]): boolean {
-  return student1 !== '' && student2 !== '' && student1 !== student2 && 
-         students.some(s => s.name === student1) && students.some(s => s.name === student2)
+export function isValidStudentPair(
+  student1: string,
+  student2: string,
+  students: Student[],
+): boolean {
+  return (
+    student1 !== "" &&
+    student2 !== "" &&
+    student1 !== student2 &&
+    students.some((s) => s.name === student1) &&
+    students.some((s) => s.name === student2)
+  );
 }
 
 export function isValidStudent(student: string, students: Student[]): boolean {
-  return student !== '' && students.some(s => s.name === student)
+  return student !== "" && students.some((s) => s.name === student);
 }

@@ -1,37 +1,58 @@
-import { useTranslation } from 'react-i18next'
-import { Accordion, Select, Title, Text } from '@mantine/core'
-import { CONSTRAINT_TYPES } from '../../cspSolver'
-import { useStore } from '../../store'
-import { getConstraintDescription } from './constraintUtils'
-import { PairConstraintForm } from './PairConstraintForm'
-import { RowConstraintForm } from './RowConstraintForm'
-import { FarApartConstraintForm } from './FarApartConstraintForm'
-import { AbsoluteConstraintForm } from './AbsoluteConstraintForm'
+import { useTranslation } from "react-i18next";
+import { Accordion, Select, Title, Text } from "@mantine/core";
+import { CONSTRAINT_TYPES } from "../../cspSolver";
+import { useStore } from "../../store";
+import { getConstraintDescription } from "./constraintUtils";
+import { PairConstraintForm } from "./PairConstraintForm";
+import { RowConstraintForm } from "./RowConstraintForm";
+import { FarApartConstraintForm } from "./FarApartConstraintForm";
+import { AbsoluteConstraintForm } from "./AbsoluteConstraintForm";
 
 export function ConstraintManager() {
-  const { t } = useTranslation()
-  const constraints = useStore((state) => state.constraints)
-  const removeConstraint = useStore((state) => state.removeConstraint)
-  const constraintType = useStore((state) => state.constraintType)
-  const setConstraintType = useStore((state) => state.setConstraintType)
+  const { t } = useTranslation();
+  const constraints = useStore((state) => state.constraints);
+  const removeConstraint = useStore((state) => state.removeConstraint);
+  const constraintType = useStore((state) => state.constraintType);
+  const setConstraintType = useStore((state) => state.setConstraintType);
 
   return (
     <Accordion.Item value="constraints">
       <Accordion.Control>
-        <Title order={2} size="h3">{t('constraints.title')}</Title>
+        <Title order={2} size="h3">
+          {t("constraints.title")}
+        </Title>
       </Accordion.Control>
       <Accordion.Panel>
         <div className="flex flex-col gap-2 mb-3 sm:mb-4 mt-3 sm:mt-4">
           <Select
-            label={t('constraints.typeLabel')}
+            label={t("constraints.typeLabel")}
             value={constraintType}
-            onChange={(value) => setConstraintType(value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
+            onChange={(value) =>
+              setConstraintType(
+                value as (typeof CONSTRAINT_TYPES)[keyof typeof CONSTRAINT_TYPES],
+              )
+            }
             data={[
-              { value: CONSTRAINT_TYPES.NOT_TOGETHER, label: t('constraints.types.notTogether') },
-              { value: CONSTRAINT_TYPES.TOGETHER, label: t('constraints.types.together') },
-              { value: CONSTRAINT_TYPES.MUST_BE_IN_ROW, label: t('constraints.types.mustBeInRow') },
-              { value: CONSTRAINT_TYPES.FAR_APART, label: t('constraints.types.farApart') },
-              { value: CONSTRAINT_TYPES.ABSOLUTE, label: t('constraints.types.absolute') }
+              {
+                value: CONSTRAINT_TYPES.NOT_TOGETHER,
+                label: t("constraints.types.notTogether"),
+              },
+              {
+                value: CONSTRAINT_TYPES.TOGETHER,
+                label: t("constraints.types.together"),
+              },
+              {
+                value: CONSTRAINT_TYPES.MUST_BE_IN_ROW,
+                label: t("constraints.types.mustBeInRow"),
+              },
+              {
+                value: CONSTRAINT_TYPES.FAR_APART,
+                label: t("constraints.types.farApart"),
+              },
+              {
+                value: CONSTRAINT_TYPES.ABSOLUTE,
+                label: t("constraints.types.absolute"),
+              },
             ]}
             allowDeselect={false}
           />
@@ -49,11 +70,14 @@ export function ConstraintManager() {
 
         <div className="flex flex-col gap-2 min-h-[50px]">
           {constraints.map((constraint, index) => (
-            <div key={index} className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10">
+            <div
+              key={index}
+              className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10"
+            >
               <Text size="sm">{getConstraintDescription(constraint, t)}</Text>
               <button
                 onClick={() => removeConstraint(index)}
-                aria-label={t('constraints.removeLabel')}
+                aria-label={t("constraints.removeLabel")}
                 className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg shrink-0 leading-none"
               >
                 ×
@@ -63,5 +87,5 @@ export function ConstraintManager() {
         </div>
       </Accordion.Panel>
     </Accordion.Item>
-  )
+  );
 }

@@ -1,18 +1,18 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { MantineProvider } from '@mantine/core'
-import './index.css'
-import './i18n'
-import App from './App.tsx'
-import { migrateLocalStorage } from './utils/migration'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { MantineProvider } from "@mantine/core";
+import "./index.css";
+import "./i18n";
+import App from "./App.tsx";
+import { migrateLocalStorage } from "./utils/migration";
 
 // Run migrations before app starts
-migrateLocalStorage()
+migrateLocalStorage();
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <MantineProvider>
       <App />
     </MantineProvider>
   </StrictMode>,
-)
+);

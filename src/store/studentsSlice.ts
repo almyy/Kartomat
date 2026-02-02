@@ -1,13 +1,13 @@
-import { StateCreator } from 'zustand'
-import { ConstraintsSlice } from './constraintsSlice'
-import { Student, Gender } from '../types/student'
+import { StateCreator } from "zustand";
+import { ConstraintsSlice } from "./constraintsSlice";
+import { Student, Gender } from "../types/student";
 
 export interface StudentsSlice {
-  students: Student[]
-  addStudent: (name: string) => void
-  removeStudent: (name: string) => void
-  updateStudentGender: (name: string, gender?: Gender) => void
-  cycleStudentGender: (name: string) => void
+  students: Student[];
+  addStudent: (name: string) => void;
+  removeStudent: (name: string) => void;
+  updateStudentGender: (name: string, gender?: Gender) => void;
+  cycleStudentGender: (name: string) => void;
 }
 
 export const createStudentsSlice: StateCreator<
@@ -17,46 +17,47 @@ export const createStudentsSlice: StateCreator<
   StudentsSlice
 > = (set) => ({
   students: [],
-  
-  addStudent: (name) => 
+
+  addStudent: (name) =>
     set((state) => {
-      const trimmed = name.trim()
-      if (trimmed && !state.students.some(s => s.name === trimmed)) {
-        return { students: [...state.students, { name: trimmed }] }
+      const trimmed = name.trim();
+      if (trimmed && !state.students.some((s) => s.name === trimmed)) {
+        return { students: [...state.students, { name: trimmed }] };
       }
-      return state
+      return state;
     }),
-  
+
   removeStudent: (name) =>
     set((state) => ({
-      students: state.students.filter(s => s.name !== name),
+      students: state.students.filter((s) => s.name !== name),
       // Also remove constraints involving this student
-      constraints: state.constraints.filter(c => 
-        c.student1 !== name && !('student2' in c && c.student2 === name)
-      )
+      constraints: state.constraints.filter(
+        (c) => c.student1 !== name && !("student2" in c && c.student2 === name),
+      ),
     })),
-  
+
   updateStudentGender: (name, gender) =>
     set((state) => ({
-      students: state.students.map(s => 
-        s.name === name ? { ...s, gender } : s
-      )
+      students: state.students.map((s) =>
+        s.name === name ? { ...s, gender } : s,
+      ),
     })),
-  
+
   cycleStudentGender: (name) =>
     set((state) => {
-      const cycle: (Gender | undefined)[] = [undefined, 'male', 'female']
-      
-      const newStudents = state.students.map(s => {
-        if (s.name !== name) return s
-        
-        const currentIndex = cycle.indexOf(s.gender)
+      const cycle: (Gender | undefined)[] = [undefined, "male", "female"];
+
+      const newStudents = state.students.map((s) => {
+        if (s.name !== name) return s;
+
+        const currentIndex = cycle.indexOf(s.gender);
         // Handle -1 (not found) by treating as last index so it cycles to 0
-        const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % cycle.length
-        
-        return { ...s, gender: cycle[nextIndex] }
-      })
-      
-      return { students: newStudents }
+        const nextIndex =
+          currentIndex === -1 ? 0 : (currentIndex + 1) % cycle.length;
+
+        return { ...s, gender: cycle[nextIndex] };
+      });
+
+      return { students: newStudents };
     }),
-})
+});

@@ -1,26 +1,41 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { temporal } from 'zundo'
-import { createStudentsSlice, StudentsSlice } from './studentsSlice'
-import { createClassroomSlice, ClassroomSlice } from './classroomSlice'
-import { createConstraintsSlice, ConstraintsSlice } from './constraintsSlice'
-import { createSolverSlice, SolverSlice } from './solverSlice'
-import { createConstraintTypeSlice, ConstraintTypeSlice } from './constraintTypeSlice'
-import { createPairConstraintFormSlice, PairConstraintFormSlice } from './pairConstraintFormSlice'
-import { createRowConstraintFormSlice, RowConstraintFormSlice } from './rowConstraintFormSlice'
-import { createFarApartConstraintFormSlice, FarApartConstraintFormSlice } from './farApartConstraintFormSlice'
-import { createAbsoluteConstraintFormSlice, AbsoluteConstraintFormSlice } from './absoluteConstraintFormSlice'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { temporal } from "zundo";
+import { createStudentsSlice, StudentsSlice } from "./studentsSlice";
+import { createClassroomSlice, ClassroomSlice } from "./classroomSlice";
+import { createConstraintsSlice, ConstraintsSlice } from "./constraintsSlice";
+import { createSolverSlice, SolverSlice } from "./solverSlice";
+import {
+  createConstraintTypeSlice,
+  ConstraintTypeSlice,
+} from "./constraintTypeSlice";
+import {
+  createPairConstraintFormSlice,
+  PairConstraintFormSlice,
+} from "./pairConstraintFormSlice";
+import {
+  createRowConstraintFormSlice,
+  RowConstraintFormSlice,
+} from "./rowConstraintFormSlice";
+import {
+  createFarApartConstraintFormSlice,
+  FarApartConstraintFormSlice,
+} from "./farApartConstraintFormSlice";
+import {
+  createAbsoluteConstraintFormSlice,
+  AbsoluteConstraintFormSlice,
+} from "./absoluteConstraintFormSlice";
 
 // Combined store type
-export type AppStore = StudentsSlice & 
-  ClassroomSlice & 
-  ConstraintsSlice & 
-  SolverSlice & 
-  ConstraintTypeSlice & 
-  PairConstraintFormSlice & 
-  RowConstraintFormSlice & 
-  FarApartConstraintFormSlice & 
-  AbsoluteConstraintFormSlice
+export type AppStore = StudentsSlice &
+  ClassroomSlice &
+  ConstraintsSlice &
+  SolverSlice &
+  ConstraintTypeSlice &
+  PairConstraintFormSlice &
+  RowConstraintFormSlice &
+  FarApartConstraintFormSlice &
+  AbsoluteConstraintFormSlice;
 
 export const useStore = create<AppStore>()(
   temporal(
@@ -37,7 +52,7 @@ export const useStore = create<AppStore>()(
         ...createAbsoluteConstraintFormSlice(...a),
       }),
       {
-        name: 'kartomat-storage', // localStorage key
+        name: "kartomat-storage", // localStorage key
         partialize: (state) => ({
           // Only persist these fields
           students: state.students,
@@ -47,7 +62,7 @@ export const useStore = create<AppStore>()(
           constraints: state.constraints,
           seatingResult: state.seatingResult,
         }),
-      }
+      },
     ),
     {
       // Track these fields for undo/redo
@@ -61,6 +76,6 @@ export const useStore = create<AppStore>()(
       }),
       limit: 50, // Keep last 50 states
       equality: (a, b) => JSON.stringify(a) === JSON.stringify(b), // Skip saving duplicate states
-    }
-  )
-)
+    },
+  ),
+);

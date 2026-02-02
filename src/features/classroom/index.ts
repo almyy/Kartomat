@@ -1,1 +1,1 @@
-export { ClassroomConfig } from './ClassroomConfig'
+export { ClassroomConfig } from "./ClassroomConfig";

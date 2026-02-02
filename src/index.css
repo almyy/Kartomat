@@ -20,7 +20,10 @@
   }
 
   /* These are caught by print:hidden utility classes on elements */
-  h1, h2, p, button {
+  h1,
+  h2,
+  p,
+  button {
     display: none !important;
   }
 

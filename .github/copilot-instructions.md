@@ -7,6 +7,7 @@ Kartomat is a client-side classroom seating solver using Constraint Satisfaction
 ## Build, Test, and Lint Commands
 
 ### Package Manager
+
 This project **requires pnpm** (enforced via preinstall script). Using npm or yarn will fail.
 
 ```bash
@@ -37,25 +38,31 @@ pnpm test:headed          # Run Playwright in headed mode
 ```
 
 ### Running Single Tests
+
 - **Vitest**: `pnpm test:unit -- <filename>` or use `.only` in test files
 - **Playwright**: `pnpm test -- <spec-file>` or `pnpm test -- --grep "test name"`
 
 ## Architecture
 
 ### State Management - Zustand Slices Pattern
+
 State is organized into domain slices (`src/store/`):
+
 - `studentsSlice.ts` - Student roster management
 - `classroomSlice.ts` - Grid dimensions and layout
 - `constraintsSlice.ts` - Seating constraints
 - `solverSlice.ts` - Solution state and error messages
 
 **Slices are combined** in `src/store/index.ts` using Zustand middleware:
+
 - `persist` middleware for localStorage persistence
 - Only specific fields are persisted (see `partialize` config)
 - localStorage key: `kartomat-storage`
 
 ### Feature-Based Organization
+
 Features are co-located in `src/features/` with their components and logic:
+
 ```
 features/
   ├── students/        # Student management UI
@@ -68,7 +75,9 @@ features/
 Each feature exports through `index.ts` for clean imports.
 
 ### CSP Solver Architecture
+
 The constraint solver (`src/cspSolver.ts`) implements:
+
 - **Backtracking algorithm** with Most Constrained Variable (MCV) heuristic
 - **Constraint types** defined as const object (`CONSTRAINT_TYPES`)
 - **Smart placement order**: Absolute constraints → most constrained students → least constrained
@@ -77,7 +86,9 @@ The constraint solver (`src/cspSolver.ts`) implements:
 The solver is **pure** - no side effects, only returns `SeatingResult` object.
 
 ### Internationalization
+
 i18next setup in `src/i18n/`:
+
 - Translation files in `locales/` (JSON format)
 - Language switching persisted to localStorage
 - Use `useTranslation()` hook in components, `t()` function for keys
@@ -85,17 +96,21 @@ i18next setup in `src/i18n/`:
 ## Key Conventions
 
 ### TypeScript Usage
+
 - **Strict mode enabled** in tsconfig.json
 - Use explicit types for constraint interfaces (see `cspSolver.ts`)
 - TypeScript-first: all new files should be `.ts` or `.tsx`
 
 ### Component Patterns
+
 - Functional components only (React 19)
 - Use Zustand selectors: `useStore((state) => state.fieldName)`
 - Keep components focused on presentation; business logic in solver or slices
 
 ### Constraint Type System
+
 When adding/modifying constraints:
+
 1. Add type to `CONSTRAINT_TYPES` const object
 2. Create corresponding TypeScript interface extending `BaseConstraint`
 3. Add to discriminated union: `export type Constraint = ...`
@@ -103,22 +118,26 @@ When adding/modifying constraints:
 5. Update UI constraint manager
 
 ### Testing Structure
+
 - **Unit tests** (`*.test.ts` in `src/`): Test CSP solver logic, constraints, algorithms
 - **E2E tests** (`tests/*.spec.ts`): Test user workflows per feature/constraint type
 - Playwright runs against dev server (auto-started via `webServer` config)
 - Two browser configs: `chrome-desktop` (1280x720) and `chrome-mobile` (Pixel 5)
 
 ### Styling
+
 - **Tailwind CSS 4** via PostCSS
 - Responsive-first: mobile → tablet → desktop breakpoints
 - Utility classes in JSX, minimal custom CSS
 
 ### ESLint Configuration
+
 - Flat config format (`eslint.config.js`)
 - Separate rule sets for `.js/.jsx` and `.ts/.tsx` files
 - `varsIgnorePattern: '^[A-Z_]'` - allows unused constants/types starting with uppercase or underscore
 
 ### Security
+
 - 1-week package release cooldown (`minimumReleaseAge: 2880` in pnpm-workspace.yaml)
 - Protects against supply chain attacks on newly published packages
 
