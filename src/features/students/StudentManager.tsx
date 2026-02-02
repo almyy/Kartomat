@@ -4,6 +4,7 @@ import { Accordion, Button, TextInput, Title, Text, Badge, CloseButton, Group } 
 import { useStore } from '../../store'
 import { Gender } from '../../types/student'
 import { useThrottle } from '../../hooks/useThrottle'
+import { IconGenderFemale, IconGenderMale, IconGenderAgender } from '@tabler/icons-react'
 
 export function StudentManager() {
   const { t } = useTranslation()
@@ -32,19 +33,19 @@ export function StudentManager() {
   const getGenderConfig = (gender?: Gender) => {
     if (!gender) {
       return {
-        icon: '○',
+        icon: <IconGenderAgender />,
         color: 'gray' as const,
         label: t('students.genderNone')
       }
     } else if (gender === 'male') {
       return {
-        icon: '♂',
+        icon: <IconGenderMale />,
         color: 'blue' as const,
         label: t('students.genderMale')
       }
     } else {
       return {
-        icon: '♀',
+        icon: <IconGenderFemale />,
         color: 'pink' as const,
         label: t('students.genderFemale')
       }

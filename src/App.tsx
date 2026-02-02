@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { Accordion, Title, Text } from '@mantine/core'
+import {Accordion, Title, Text} from '@mantine/core'
 import { solveSeatingCSP } from './cspSolver'
 import { StudentManager } from './features/students'
 import { ClassroomConfig } from './features/classroom'
 import { ConstraintManager } from './features/constraints'
 import { SeatingDisplay } from './features/seating'
 import { SolveButton } from './features/solver'
-import { LanguageSelector } from './components/LanguageSelector'
-import { UndoRedoButtons } from './components/UndoRedoButtons'
+import { UndoRedoButtons } from './components'
 import { useStore } from './store'
+import {LanguagePicker, ThemeSwitcher} from "./components";
 
 function App() {
   const { t } = useTranslation()
@@ -33,8 +33,9 @@ function App() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
       <div className="relative mb-4 sm:mb-2 print:hidden">
-        <div className="absolute top-0 right-0">
-          <LanguageSelector />
+        <div className="flex flex-row gap-4 sm:gap-5 lg:gap-6 absolute top-0 right-0">
+          <LanguagePicker />
+          <ThemeSwitcher />
         </div>
         <div className="w-full">
           <Title order={1} ta="center" mb="xs">{t('app.title')}</Title>

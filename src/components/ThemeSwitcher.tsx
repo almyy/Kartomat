@@ -1,0 +1,22 @@
+import {ActionIcon, Group, useComputedColorScheme, useMantineColorScheme} from "@mantine/core";
+import {IconMoon, IconSun} from "@tabler/icons-react";
+
+export function ThemeSwitcher() {
+    const { setColorScheme } = useMantineColorScheme();
+    const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
+
+    return (
+        <Group justify="center">
+            <ActionIcon
+                onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
+                variant="default"
+                size="xl"
+                radius="md"
+                aria-label="Toggle color scheme"
+            >
+                <IconSun className="w-6 h-6 hidden dark:block" stroke={1.5} />
+                <IconMoon className="w-6 h-6 dark:hidden" stroke={1.5} />
+            </ActionIcon>
+        </Group>
+    );
+}

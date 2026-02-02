@@ -3,6 +3,7 @@ import { Accordion, Button, NumberInput, Title, Text } from '@mantine/core'
 import { useStore } from '../../store'
 import { SeatState } from '../../store/classroomSlice'
 import { useThrottle } from '../../hooks/useThrottle'
+import {IconGenderAgender, IconGenderFemale, IconGenderMale} from "@tabler/icons-react";
 
 export function ClassroomConfig() {
   const { t } = useTranslation()
@@ -34,10 +35,9 @@ export function ClassroomConfig() {
   }
 
   const getSeatIcon = (state: SeatState) => {
-    if (state === 'm') return '♂'
-    if (state === 'f') return '♀'
-    if (state === 'n') return '○'
-    return ''
+    if (state === 'm') return <IconGenderMale />
+    if (state === 'f') return <IconGenderFemale />
+    if (state === 'n') return <IconGenderAgender />
   }
 
   const getSeatTitle = (state: SeatState) => {
@@ -95,7 +95,7 @@ export function ClassroomConfig() {
                 <button
                   key={`${rowIndex}-${colIndex}`}
                   onClick={() => throttledCycleSeat(rowIndex, colIndex)}
-                  className={`aspect-square rounded text-xl sm:text-2xl font-bold border transition-all ${getSeatStyle(state)}`}
+                  className={`aspect-square rounded text-xl sm:text-2xl font-bold border transition-all flex items-center justify-center ${getSeatStyle(state)}`}
                   title={getSeatTitle(state)}
                 >
                   {getSeatIcon(state)}
