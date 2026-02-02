@@ -26,7 +26,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark theme */
+/* Dark theme overrides when .dark class is present on root */
 :root.dark {
   color: var(--color-text-dark);
   background-color: var(--color-surface-dark);
