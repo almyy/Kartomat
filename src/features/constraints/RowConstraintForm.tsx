@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { Button, Select, NumberInput } from '@mantine/core'
 import { useStore } from '../../store'
 import { useRowConstraintForm } from './useRowConstraintForm'
-import { Button } from '../../components'
 
 export function RowConstraintForm() {
   const { t } = useTranslation()
@@ -10,34 +10,32 @@ export function RowConstraintForm() {
   const rowStudent = useStore((state) => state.rowStudent)
   const rowNumber = useStore((state) => state.rowNumber)
   const setRowStudent = useStore((state) => state.setRowStudent)
-  const { handleAddConstraint, handleRowNumberChange } = useRowConstraintForm()
+  const setRowNumber = useStore((state) => state.setRowNumber)
+  const { handleAddConstraint } = useRowConstraintForm()
 
   return (
     <>
-      <label htmlFor="row-student" className="sr-only">{t('constraints.selectStudent')}</label>
-      <select
-        id="row-student"
+      <Select
+        label={t('constraints.selectStudent')}
         value={rowStudent}
-        onChange={(e) => setRowStudent(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
-      >
-        <option value="">{t('constraints.selectStudent')}</option>
-        {students.map(s => (
-          <option key={s.name} value={s.name}>{s.name}</option>
-        ))}
-      </select>
-      <input
-        type="number"
-        min="0"
+        onChange={(value) => setRowStudent(value || '')}
+        data={[
+          { value: '', label: t('constraints.selectStudent') },
+          ...students.map(s => ({ value: s.name, label: s.name }))
+        ]}
+        allowDeselect={false}
+      />
+      <NumberInput
+        label={t('constraints.rowNumber')}
+        min={0}
         max={rows - 1}
         value={rowNumber}
-        onChange={handleRowNumberChange}
+        onChange={(value) => setRowNumber(typeof value === 'number' ? value : 0)}
         placeholder={t('constraints.rowNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}
-        variant="primary"
+        className="self-end"
       >
         {t('constraints.addButton')}
       </Button>

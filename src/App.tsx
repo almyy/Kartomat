@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Accordion, Title, Text } from '@mantine/core'
 import { solveSeatingCSP } from './cspSolver'
 import { StudentManager } from './features/students'
 import { ClassroomConfig } from './features/classroom'
@@ -36,20 +37,21 @@ function App() {
           <LanguageSelector />
         </div>
         <div className="w-full">
-          <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
-          <p className="text-center text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
+          <Title order={1} ta="center" mb="xs">{t('app.title')}</Title>
+          <Text ta="center" c="dimmed" size="sm" mb="xl">{t('app.subtitle')}</Text>
         </div>
       </div>
       
       <div className="flex flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
-        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full max-w-2xl print:hidden">
-          <StudentManager />
-          <ClassroomConfig />
-          <ConstraintManager />
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full print:hidden">
+          <Accordion variant="separated" multiple defaultValue={['students', 'classroom', 'constraints']}>
+            <StudentManager />
+            <ClassroomConfig />
+            <ConstraintManager />
+          </Accordion>
           <SolveButton onSolve={solve} disabled={students.length === 0} />
         </div>
-
-        <div className="w-full max-w-2xl">
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full">
           <SeatingDisplay />
         </div>
       </div>

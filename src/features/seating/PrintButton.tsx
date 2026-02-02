@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '../../components'
+import { Button } from '@mantine/core'
 
 interface PrintButtonProps {
   onClick: () => void
@@ -11,7 +11,6 @@ export function PrintButton({ onClick }: PrintButtonProps) {
   return (
     <Button
       onClick={onClick}
-      variant="primary"
       className="flex items-center gap-2 print:hidden"
       aria-label={t('seating.print')}
     >

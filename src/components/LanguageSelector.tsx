@@ -1,27 +1,58 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ChangeEvent } from 'react'
+import { IconChevronDown } from '@tabler/icons-react'
+import { Group, Image, Menu, UnstyledButton } from '@mantine/core'
+
+const data = [
+  { value: 'nb', label: 'Norsk', image: `${import.meta.env.BASE_URL}flags/nb.svg` },
+  { value: 'en', label: 'English', image: `${import.meta.env.BASE_URL}flags/en.svg` },
+]
 
 export function LanguageSelector() {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
+  const [opened, setOpened] = useState(false)
+  const current = data.find((item) => item.value === i18n.language)
+  const [selected, setSelected] = useState(current)
 
-  const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    i18n.changeLanguage(event.target.value)
-  }
+  const items = data.map((item) => (
+    <Menu.Item
+      leftSection={<Image src={item.image} w={18} h={18} alt="" />}
+      onClick={async () => {
+        setSelected(item)
+        await i18n.changeLanguage(item.value)
+      }}
+      key={item.value}
+    >
+      {item.label}
+    </Menu.Item>
+  ))
 
   return (
-    <div className="flex items-center gap-2">
-      <label htmlFor="language-select" className="text-sm font-medium">
-        {t('language.label')}:
-      </label>
-      <select
-        id="language-select"
-        value={i18n.language}
-        onChange={handleLanguageChange}
-        className="px-3 py-1.5 rounded border border-white/20 bg-black/30 text-inherit text-sm cursor-pointer"
-      >
-        <option value="nb">{t('language.nb')}</option>
-        <option value="en">{t('language.en')}</option>
-      </select>
-    </div>
+    <Menu
+      onOpen={() => setOpened(true)}
+      onClose={() => setOpened(false)}
+      radius="md"
+      width="target"
+      withinPortal
+    >
+      <Menu.Target>
+        <UnstyledButton
+          className="w-50 flex justify-between items-center px-4 py-2 rounded-md border border-gray-200 dark:border-gray-700 transition-colors duration-150 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 data-expanded:bg-gray-100 dark:data-expanded:bg-gray-700"
+          data-expanded={opened || undefined}
+        >
+          <Group gap="xs">
+            <Image src={selected?.image} w={22} h={22} alt="" />
+            <span className="font-medium text-sm">{selected?.label}</span>
+          </Group>
+          <IconChevronDown
+            size={16}
+            className="transition-transform duration-150 data-expanded:rotate-180"
+            data-expanded={opened || undefined}
+            stroke={1.5}
+          />
+        </UnstyledButton>
+      </Menu.Target>
+      <Menu.Dropdown>{items}</Menu.Dropdown>
+    </Menu>
   )
 }
