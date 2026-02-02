@@ -58,7 +58,7 @@ export function ClassroomConfig() {
             max="10"
             value={rows}
             onChange={(e) => setRows(parseInt(e.target.value) || 1)}
-            className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+            className="px-3 py-2 rounded border text-inherit text-sm sm:text-base border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30"
           />
         </label>
         <label className="flex flex-col gap-2 flex-1">
@@ -69,14 +69,14 @@ export function ClassroomConfig() {
             max="10"
             value={cols}
             onChange={(e) => setCols(parseInt(e.target.value) || 1)}
-            className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+            className="px-3 py-2 rounded border text-inherit text-sm sm:text-base border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30"
           />
         </label>
       </div>
 
       <div className="mb-3 sm:mb-4">
         <div className="flex justify-between items-center mb-2">
-          <p className="text-xs sm:text-sm text-gray-400">{t('classroom.genderInstruction')}</p>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{t('classroom.genderInstruction')}</p>
           <button
             onClick={alternateGenders}
             className="px-3 py-1 rounded border border-white/20 bg-purple-600/70 text-white cursor-pointer hover:bg-purple-600/90 transition-colors text-xs sm:text-sm whitespace-nowrap"

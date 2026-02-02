@@ -63,7 +63,7 @@ export function StudentManager() {
           onChange={(e) => setStudentInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={t('students.placeholder')}
-          className="flex-1 px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+          className="flex-1 px-3 py-2 rounded border text-inherit text-sm sm:text-base border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30"
         />
         <Button
           onClick={handleAddStudent}
@@ -74,7 +74,7 @@ export function StudentManager() {
         </Button>
       </div>
       
-      <p className="text-xs sm:text-sm text-gray-400 mb-2">
+      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-2">
         {t('students.genderInstruction')}
       </p>
       

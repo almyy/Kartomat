@@ -66,6 +66,11 @@
     "en": "English",
     "nb": "Norsk"
   },
+  "theme": {
+    "label": "Tema",
+    "light": "Lyst",
+    "dark": "Mørkt"
+  },
   "undoRedo": {
     "undo": "Angre",
     "redo": "Gjør om",

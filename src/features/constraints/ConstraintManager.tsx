@@ -23,7 +23,7 @@ export function ConstraintManager() {
           id="constraint-type"
           value={constraintType}
           onChange={(e) => setConstraintType(e.target.value as typeof CONSTRAINT_TYPES[keyof typeof CONSTRAINT_TYPES])}
-          className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+          className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
         >
           <option value={CONSTRAINT_TYPES.NOT_TOGETHER}>{t('constraints.types.notTogether')}</option>
           <option value={CONSTRAINT_TYPES.TOGETHER}>{t('constraints.types.together')}</option>
@@ -45,7 +45,7 @@ export function ConstraintManager() {
 
       <div className="flex flex-col gap-2 min-h-[50px]">
         {constraints.map((constraint, index) => (
-          <div key={index} className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10 text-sm sm:text-base">
+          <div key={index} className="flex justify-between items-center gap-2 px-2 sm:px-3 py-2 sm:py-3 rounded border text-sm sm:text-base bg-gray-100 border-gray-300 dark:bg-white/5 dark:border-white/10">
             <span className="break-words">{getConstraintDescription(constraint, t)}</span>
             <button
               onClick={() => removeConstraint(index)}

@@ -19,7 +19,7 @@ export function RowConstraintForm() {
         id="row-student"
         value={rowStudent}
         onChange={(e) => setRowStudent(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent')}</option>
         {students.map(s => (
@@ -33,7 +33,7 @@ export function RowConstraintForm() {
         value={rowNumber}
         onChange={handleRowNumberChange}
         placeholder={t('constraints.rowNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}

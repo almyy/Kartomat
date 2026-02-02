@@ -6,6 +6,7 @@ import { ConstraintManager } from './features/constraints'
 import { SeatingDisplay } from './features/seating'
 import { SolveButton } from './features/solver'
 import { LanguageSelector } from './components/LanguageSelector'
+import { ThemeSelector } from './components/ThemeSelector'
 import { UndoRedoButtons } from './components/UndoRedoButtons'
 import { useStore } from './store'
 
@@ -32,12 +33,13 @@ function App() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
       <div className="relative mb-4 sm:mb-2 print:hidden">
-        <div className="absolute top-0 right-0">
+        <div className="absolute top-0 right-0 flex gap-4">
+          <ThemeSelector />
           <LanguageSelector />
         </div>
         <div className="w-full">
           <h1 className="text-center mb-1 sm:mb-2">{t('app.title')}</h1>
-          <p className="text-center text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
+          <p className="text-center text-gray-500 dark:text-gray-400 text-sm sm:text-base mb-4 sm:mb-8">{t('app.subtitle')}</p>
         </div>
       </div>
       

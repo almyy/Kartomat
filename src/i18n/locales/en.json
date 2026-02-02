@@ -66,6 +66,11 @@
     "en": "English",
     "nb": "Norwegian"
   },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "undoRedo": {
     "undo": "Undo",
     "redo": "Redo",

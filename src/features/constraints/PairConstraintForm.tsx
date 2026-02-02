@@ -19,7 +19,7 @@ export function PairConstraintForm() {
         id="pair-student1"
         value={pairStudent1}
         onChange={(e) => setPairStudent1(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent1')}</option>
         {students.map(s => (
@@ -31,7 +31,7 @@ export function PairConstraintForm() {
         id="pair-student2"
         value={pairStudent2}
         onChange={(e) => setPairStudent2(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent2')}</option>
         {students.filter(s => s.name !== pairStudent1).map(s => (

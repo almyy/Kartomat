@@ -21,7 +21,7 @@ export function AbsoluteConstraintForm() {
         id="absolute-student"
         value={absoluteStudent}
         onChange={(e) => setAbsoluteStudent(e.target.value)}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       >
         <option value="">{t('constraints.selectStudent')}</option>
         {students.map(s => (
@@ -35,7 +35,7 @@ export function AbsoluteConstraintForm() {
         value={absoluteRow}
         onChange={handleRowChange}
         placeholder={t('constraints.rowNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       />
       <input
         type="number"
@@ -44,7 +44,7 @@ export function AbsoluteConstraintForm() {
         value={absoluteCol}
         onChange={handleColChange}
         placeholder={t('constraints.columnNumber')}
-        className="px-3 py-2 rounded border border-white/20 bg-black/30 text-inherit text-sm sm:text-base"
+        className="px-3 py-2 rounded border text-inherit border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30 text-sm sm:text-base"
       />
       <Button
         onClick={handleAddConstraint}

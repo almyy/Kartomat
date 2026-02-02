@@ -17,7 +17,7 @@ export function LanguageSelector() {
         id="language-select"
         value={i18n.language}
         onChange={handleLanguageChange}
-        className="px-3 py-1.5 rounded border border-white/20 bg-black/30 text-inherit text-sm cursor-pointer"
+        className="px-3 py-1.5 rounded border text-inherit text-sm cursor-pointer border-gray-300 bg-white/90 dark:border-white/20 dark:bg-black/30"
       >
         <option value="nb">{t('language.nb')}</option>
         <option value="en">{t('language.en')}</option>
