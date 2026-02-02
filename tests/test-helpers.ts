@@ -120,7 +120,7 @@ export async function addFarApartConstraint(page: Page, student1: string, studen
 
   // Enter minimum distance - get the spinbutton in the Constraints section
   const constraintSection = page.getByRole('region', { name: 'Begrensninger' });
-  await constraintSection.getByRole('textbox', { name: 'Distanseenheter' }).fill(String(minDistance));
+  await constraintSection.getByRole('textbox', { name: 'Seter' }).fill(String(minDistance));
 
   // Add constraint
   await page.getByRole('button', { name: 'Legg til begrensning' }).click();

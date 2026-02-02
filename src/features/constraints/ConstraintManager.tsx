@@ -54,7 +54,7 @@ export function ConstraintManager() {
               <button
                 onClick={() => removeConstraint(index)}
                 aria-label={t('constraints.removeLabel')}
-                className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg flex-shrink-0 leading-none"
+                className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg shrink-0 leading-none"
               >
                 ×
               </button>

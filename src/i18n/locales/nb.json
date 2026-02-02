@@ -43,7 +43,7 @@
     "selectStudent2": "Velg elev 2",
     "rowNumber": "Radnummer",
     "columnNumber": "Kolonnenummer",
-    "distanceUnits": "Distanseenheter",
+    "distanceUnits": "Seter",
     "descriptions": {
       "absolute": "{{student}} må sitte på rad {{row}}, kolonne {{col}}",
       "notTogether": "{{student1}} og {{student2}} skal IKKE sitte sammen",

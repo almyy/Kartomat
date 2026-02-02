@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwind-preset-mantine";
 
 /* Print styles */
 @media print {

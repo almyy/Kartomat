@@ -35,6 +35,7 @@ export function RowConstraintForm() {
       />
       <Button
         onClick={handleAddConstraint}
+        className="self-end"
       >
         {t('constraints.addButton')}
       </Button>

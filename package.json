@@ -26,6 +26,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-i18next": "^16.5.4",
+    "tailwind-preset-mantine": "^3.0.3",
     "zundo": "^2.3.0",
     "zustand": "^5.0.10"
   },

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconChevronDown } from '@tabler/icons-react'
 import { Group, Image, Menu, UnstyledButton } from '@mantine/core'
@@ -11,22 +11,15 @@ const data = [
 export function LanguageSelector() {
   const { i18n } = useTranslation()
   const [opened, setOpened] = useState(false)
-  const [selected, setSelected] = useState(data[0])
-
-  // Sync selected language with i18n current language
-  useEffect(() => {
-    const current = data.find((item) => item.value === i18n.language)
-    if (current) {
-      setSelected(current)
-    }
-  }, [i18n.language])
+  const current = data.find((item) => item.value === i18n.language)
+  const [selected, setSelected] = useState(current)
 
   const items = data.map((item) => (
     <Menu.Item
       leftSection={<Image src={item.image} w={18} h={18} alt="" />}
-      onClick={() => {
+      onClick={async () => {
         setSelected(item)
-        i18n.changeLanguage(item.value)
+        await i18n.changeLanguage(item.value)
       }}
       key={item.value}
     >
@@ -44,16 +37,16 @@ export function LanguageSelector() {
     >
       <Menu.Target>
         <UnstyledButton
-          className="w-[200px] flex justify-between items-center px-4 py-2 rounded-md border border-gray-200 dark:border-gray-700 transition-colors duration-150 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 data-[expanded]:bg-gray-100 dark:data-[expanded]:bg-gray-700"
+          className="w-50 flex justify-between items-center px-4 py-2 rounded-md border border-gray-200 dark:border-gray-700 transition-colors duration-150 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 data-expanded:bg-gray-100 dark:data-expanded:bg-gray-700"
           data-expanded={opened || undefined}
         >
           <Group gap="xs">
-            <Image src={selected.image} w={22} h={22} alt="" />
-            <span className="font-medium text-sm">{selected.label}</span>
+            <Image src={selected?.image} w={22} h={22} alt="" />
+            <span className="font-medium text-sm">{selected?.label}</span>
           </Group>
           <IconChevronDown
             size={16}
-            className="transition-transform duration-150 data-[expanded]:rotate-180"
+            className="transition-transform duration-150 data-expanded:rotate-180"
             data-expanded={opened || undefined}
             stroke={1.5}
           />
