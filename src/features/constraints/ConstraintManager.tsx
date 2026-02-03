@@ -1,5 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { Accordion, Select, Title, Text } from "@mantine/core";
+import {
+  Accordion,
+  Select,
+  Title,
+  Text,
+  Button,
+  ActionIcon,
+} from "@mantine/core";
 import { CONSTRAINT_TYPES } from "../../cspSolver";
 import { useStore } from "../../store";
 import { getConstraintDescription } from "./constraintUtils";
@@ -7,6 +14,7 @@ import { PairConstraintForm } from "./PairConstraintForm";
 import { RowConstraintForm } from "./RowConstraintForm";
 import { FarApartConstraintForm } from "./FarApartConstraintForm";
 import { AbsoluteConstraintForm } from "./AbsoluteConstraintForm";
+import { IconX } from "@tabler/icons-react";
 
 export function ConstraintManager() {
   const { t } = useTranslation();
@@ -75,13 +83,13 @@ export function ConstraintManager() {
               className="flex justify-between items-center gap-2 bg-white/5 px-2 sm:px-3 py-2 sm:py-3 rounded border border-white/10"
             >
               <Text size="sm">{getConstraintDescription(constraint, t)}</Text>
-              <button
-                onClick={() => removeConstraint(index)}
+              <ActionIcon
                 aria-label={t("constraints.removeLabel")}
-                className="w-6 h-6 rounded-full flex items-center justify-center bg-red-500/70 hover:bg-red-500/90 border-0 text-lg shrink-0 leading-none"
+                onClick={() => removeConstraint(index)}
+                color="red"
               >
-                ×
-              </button>
+                <IconX />
+              </ActionIcon>
             </div>
           ))}
         </div>
