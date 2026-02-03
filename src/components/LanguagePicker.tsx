@@ -25,7 +25,7 @@ export function LanguagePicker() {
   const items = data.map((item) => (
     <Menu.Item
       key={item.label}
-      leftSection={<Image src={item.image} width={18} height={18} alt="" />}
+      leftSection={<Image src={item.image} width={14} height={14} alt="" />}
       onClick={async () => {
         setSelected(item);
         await i18n.changeLanguage(item.value);
