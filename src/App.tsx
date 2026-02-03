@@ -8,7 +8,7 @@ import { SeatingDisplay } from "./features/seating";
 import { SolveButton } from "./features/solver";
 import { UndoRedoButtons } from "./components";
 import { useStore } from "./store";
-import { LanguagePicker, ThemeSwitcher } from "./components";
+import { LanguagePicker, ThemeSwitcher, SettingsMenu } from "./components";
 
 function App() {
   const { t } = useTranslation();
@@ -46,7 +46,12 @@ function App() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
       <div className="relative mb-4 sm:mb-2 print:hidden">
-        <div className="flex flex-row gap-4 sm:gap-5 lg:gap-6 absolute top-0 right-0">
+        {/* Settings menu for small screens */}
+        <div className="flex sm:hidden absolute top-0 right-0">
+          <SettingsMenu />
+        </div>
+        {/* Individual buttons for larger screens */}
+        <div className="hidden sm:flex flex-row gap-4 sm:gap-5 lg:gap-6 absolute top-0 right-0">
           <LanguagePicker />
           <ThemeSwitcher />
         </div>
