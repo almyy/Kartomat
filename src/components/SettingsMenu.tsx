@@ -67,12 +67,8 @@ export function SettingsMenu() {
           }
         >
           {computedColorScheme === "light"
-            ? t("language.label") === "Language"
-              ? "Light"
-              : "Lys"
-            : t("language.label") === "Language"
-              ? "Dark"
-              : "Mørk"}
+            ? t("settings.light")
+            : t("settings.dark")}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Label>{t("settings.language")}</Menu.Label>

@@ -75,6 +75,8 @@
   "settings": {
     "menu": "Settings",
     "theme": "Theme",
-    "language": "Language"
+    "language": "Language",
+    "light": "Light",
+    "dark": "Dark"
   }
 }

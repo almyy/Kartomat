@@ -75,6 +75,8 @@
   "settings": {
     "menu": "Innstillinger",
     "theme": "Tema",
-    "language": "Språk"
+    "language": "Språk",
+    "light": "Lys",
+    "dark": "Mørk"
   }
 }
