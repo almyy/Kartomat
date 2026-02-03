@@ -2,17 +2,19 @@ import { useState } from "react";
 import { IconChevronDown } from "@tabler/icons-react";
 import { Group, Image, Menu, UnstyledButton } from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import nbFlag from "../assets/flags/nb.svg";
+import enFlag from "../assets/flags/en.svg";
 
 const data = [
   {
     value: "nb",
     label: "Norsk",
-    image: `${import.meta.env.BASE_URL}flags/nb.svg`,
+    image: nbFlag,
   },
   {
     value: "en",
     label: "English",
-    image: `${import.meta.env.BASE_URL}flags/en.svg`,
+    image: enFlag,
   },
 ];
 
@@ -23,7 +25,7 @@ export function LanguagePicker() {
   const items = data.map((item) => (
     <Menu.Item
       key={item.label}
-      leftSection={<Image src={item.image} width={18} height={18} alt="" />}
+      leftSection={<Image src={item.image} width={14} height={14} alt="" />}
       onClick={async () => {
         setSelected(item);
         await i18n.changeLanguage(item.value);
