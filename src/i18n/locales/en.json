@@ -71,5 +71,10 @@
     "redo": "Redo",
     "undoShortcut": "Undo (Ctrl+Z)",
     "redoShortcut": "Redo (Ctrl+Shift+Z)"
+  },
+  "settings": {
+    "menu": "Settings",
+    "theme": "Theme",
+    "language": "Language"
   }
 }
