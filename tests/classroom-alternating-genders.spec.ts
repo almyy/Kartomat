@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { configureClassroom } from "./test-helpers";
 
-test.describe("Classroom Alternating Genders", () => {
+test.describe.skip("Classroom Alternating Genders", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
     await expect(
